@@ -1,0 +1,55 @@
+.trust-badge {
+    padding: var(--spacing-xl) 0;
+    background: rgba(255, 255, 255, 0.02);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.trust-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+.trust-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md);
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all var(--transition-base);
+}
+
+.trust-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(99, 102, 241, 0.3);
+    transform: translateY(-3px);
+}
+
+.trust-icon {
+    font-size: 2rem;
+    filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.5));
+}
+
+.trust-text {
+    flex: 1;
+}
+
+.trust-title {
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: 2px;
+}
+
+.trust-subtitle {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+}
+
+@media (max-width: 768px) {
+    .trust-content {
+        grid-template-columns: 1fr;
+    }
+}

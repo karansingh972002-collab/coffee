@@ -7,8 +7,7 @@ const Footer = () => {
                 <div className="footer-content">
                     <div className="footer-section">
                         <div className="footer-logo">
-                            <img src="/hopebox-logo.png" alt="HopeBox" className="logo-image" />
-                            <span className="logo-text">HopeBox</span>
+                            <span className="logo-text">Star Naming</span>
                         </div>
                         <p className="footer-description">
                             Gift a real star in India. Trusted by 100,000+ customers.
@@ -67,7 +66,7 @@ const Footer = () => {
                 </div>
 
                 <div className="footer-bottom">
-                    <p>&copy; 2024 HopeBox. All rights reserved.</p>
+                    <p>&copy; 2024 Star Naming. All rights reserved.</p>
                     <p className="footer-trust">
                         Trusted by 100,000+ customers | Official International Space Registry
                     </p>

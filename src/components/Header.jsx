@@ -18,8 +18,7 @@ const Header = ({ cartCount, onCartClick }) => {
             <div className="container">
                 <div className="header-content">
                     <div className="logo">
-                        <img src="/hopebox-logo.png" alt="HopeBox" className="logo-image" />
-                        <span className="logo-text">HopeBox</span>
+                        <span className="logo-text">Star Naming</span>
                     </div>
 
                     <nav className={`nav ${isMobileMenuOpen ? 'open' : ''}`}>

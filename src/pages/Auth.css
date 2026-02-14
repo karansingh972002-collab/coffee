@@ -1,0 +1,117 @@
+.auth-page {
+    min-height: calc(100vh - 100px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #0f172a;
+    /* Solid deep navy/black */
+}
+
+/* Removed celestial background animations for "Simple & Classic" */
+
+.auth-card {
+    background: rgba(30, 41, 59, 0.7);
+    /* Solid slate with subtle transparency */
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 450px;
+    padding: var(--spacing-3xl);
+    border-radius: var(--radius-xl);
+}
+
+.auth-card h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #f8fafc;
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.auth-subtitle {
+    text-align: center;
+    color: #94a3b8;
+    margin-bottom: 2rem;
+    font-size: 0.95rem;
+}
+
+.auth-form .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.auth-form .form-label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #e2e8f0;
+    margin-bottom: 0.5rem;
+}
+
+.auth-input-group {
+    position: relative;
+}
+
+.auth-input {
+    width: 100%;
+    background: #1e293b !important;
+    border: 1px solid #334155 !important;
+    border-radius: var(--radius-md) !important;
+    padding: 0.75rem 1rem !important;
+    color: #f8fafc !important;
+    font-size: 1rem !important;
+    transition: border-color 0.2s, box-shadow 0.2s !important;
+}
+
+.auth-input:focus {
+    outline: none !important;
+    border-color: #6366f1 !important;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2) !important;
+}
+
+.auth-btn {
+    width: 100%;
+    background: #6366f1 !important;
+    color: white !important;
+    padding: 0.75rem !important;
+    border-radius: var(--radius-md) !important;
+    font-weight: 600 !important;
+    font-size: 1rem !important;
+    border: none !important;
+    margin-top: 1rem !important;
+    transition: background 0.2s !important;
+    cursor: pointer;
+}
+
+.auth-btn:hover {
+    background: #4f46e5 !important;
+}
+
+.auth-footer {
+    margin-top: 1.5rem;
+    text-align: center;
+    font-size: 0.875rem;
+    color: #94a3b8;
+}
+
+.auth-toggle-btn {
+    background: none;
+    border: none;
+    color: #6366f1;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+    margin-left: 0.5rem;
+}
+
+.auth-toggle-btn:hover {
+    text-decoration: underline;
+}
+
+/* Simple icon styling */
+.auth-icon-simple {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    color: #6366f1;
+}

@@ -2,6 +2,13 @@
     background: var(--gradient-dark);
 }
 
+.testimonials-container {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-md);
+    width: 100%;
+}
+
 .testimonials-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -43,6 +50,7 @@
 
 .star {
     display: inline-block;
+    color: #fbbf24;
     animation: twinkle 2s ease-in-out infinite;
 }
 

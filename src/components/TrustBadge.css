@@ -7,30 +7,40 @@
 
 .trust-content {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: var(--spacing-lg);
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-md);
 }
 
 .trust-item {
     display: flex;
     align-items: center;
     gap: var(--spacing-sm);
-    padding: var(--spacing-md);
+    padding: var(--spacing-lg) var(--spacing-md);
     background: rgba(255, 255, 255, 0.03);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-lg);
     border: 1px solid rgba(255, 255, 255, 0.05);
     transition: all var(--transition-base);
+    backdrop-filter: blur(10px);
 }
 
 .trust-item:hover {
-    background: rgba(255, 255, 255, 0.05);
-    border-color: rgba(99, 102, 241, 0.3);
-    transform: translateY(-3px);
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(99, 102, 241, 0.4);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(99, 102, 241, 0.15);
 }
 
 .trust-icon {
-    font-size: 2rem;
-    filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.5));
+    color: var(--color-primary-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-xs);
+    background: rgba(99, 102, 241, 0.1);
+    border-radius: var(--radius-full);
 }
 
 .trust-text {

@@ -1,12 +1,16 @@
 .hero {
-    position: relative;
-    min-height: 100vh;
+    position: absolute;
+    height: 90vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding-top: 80px;
+    padding-top: 100px;
+    margin-top: -100px;
+    /* Exact match to main-content padding */
     overflow: hidden;
-    background: linear-gradient(to bottom, #0a0e27 0%, #1a1f3a 50%, #0f1229 100%);
+    background: #0a0e27;
+    /* Fallback color */
+    width: 100%;
 }
 
 .hero::before {
@@ -20,7 +24,8 @@
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    opacity: 0.8;
+    opacity: 1;
+    /* Full opacity if they want the image to command the space */
     z-index: 0;
 }
 
@@ -59,11 +64,11 @@
 
 .hero-content {
     text-align: center;
-    max-width: 900px;
+    max-width: 100%;
     margin: 0 auto;
     position: relative;
     z-index: 2;
-    padding: var(--spacing-xl) var(--spacing-md);
+    padding: var(--spacing-2xl) var(--spacing-md);
 }
 
 .hero-badge {
@@ -90,8 +95,8 @@
 .hero-title {
     margin-bottom: var(--spacing-lg);
     animation: fadeIn 1s ease-out 0.2s both;
-    font-size: 3.5rem;
-    line-height: 1.2;
+    font-size: 4.5rem;
+    line-height: 1.1;
     text-shadow: 0 0 30px rgba(99, 102, 241, 0.3);
 }
 
@@ -103,13 +108,33 @@
     display: inline-block;
 }
 
+.rotator-text {
+    display: block;
+    animation: fadeSlideUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    min-height: 1.2em;
+}
+
+@keyframes fadeSlideUp {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+        filter: blur(5px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0);
+    }
+}
+
 .hero-description {
-    font-size: 1.15rem;
+    font-size: 1.35rem;
     color: var(--color-text-secondary);
     margin-bottom: var(--spacing-2xl);
-    line-height: 1.9;
+    line-height: 1.8;
     animation: fadeIn 1s ease-out 0.4s both;
-    max-width: 700px;
+    max-width: 1600px;
     margin-left: auto;
     margin-right: auto;
 }
@@ -145,13 +170,14 @@
     background: rgba(255, 255, 255, 0.08);
     border-color: rgba(99, 102, 241, 0.4);
     transform: translateY(-8px) scale(1.02);
-    box-shadow: 0 10px 30px rgba(99, 102, 241, 0.2);
+    box-shadow: 0 15px 40px rgba(99, 102, 241, 0.25);
 }
 
 .stat-icon {
-    font-size: 2rem;
-    margin-bottom: var(--spacing-xs);
+    font-size: 2.2rem;
+    margin-bottom: var(--spacing-sm);
     animation: float 3s ease-in-out infinite;
+    color: var(--color-primary-light);
 }
 
 .stat-number {
@@ -208,17 +234,19 @@
 
 @media (max-width: 768px) {
     .hero {
-        min-height: auto;
-        padding: var(--spacing-3xl) 0;
+        min-height: 85vh;
+        padding: 150px 0 var(--spacing-3xl);
     }
 
     .hero-title {
-        font-size: 2.2rem;
+        font-size: 2.8rem;
+        line-height: 1.2;
     }
 
     .hero-description {
-        font-size: 1rem;
-        padding: 0 var(--spacing-md);
+        font-size: 1.15rem;
+        padding: 0 var(--spacing-lg);
+        max-width: 100%;
     }
 
     .hero-badge {

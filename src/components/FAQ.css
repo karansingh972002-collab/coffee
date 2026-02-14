@@ -2,18 +2,26 @@
     background: var(--gradient-dark);
 }
 
+.faq-container {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-md);
+    width: 100%;
+}
+
 .faq-list {
     max-width: 900px;
     margin: 0 auto;
 }
 
 .faq-item {
-    background: var(--color-bg-card);
+    background: rgba(255, 255, 255, 0.03);
     border-radius: var(--radius-lg);
     margin-bottom: var(--spacing-md);
     border: 1px solid rgba(255, 255, 255, 0.05);
     overflow: hidden;
     transition: all var(--transition-base);
+    backdrop-filter: blur(10px);
 }
 
 .faq-item:hover {
@@ -46,9 +54,16 @@
 }
 
 .faq-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
     flex-shrink: 0;
     transition: transform var(--transition-base);
     color: var(--color-primary);
+    background: rgba(99, 102, 241, 0.1);
+    border-radius: var(--radius-full);
 }
 
 .faq-item.open .faq-icon {

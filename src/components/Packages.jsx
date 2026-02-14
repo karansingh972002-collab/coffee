@@ -1,80 +1,64 @@
 import './Packages.css';
 
+import { useState, useEffect } from 'react';
+import { api } from '../services/api';
+import './Packages.css';
+
 const Packages = ({ onAddToCart }) => {
-    const packages = [
-        {
-            id: 'silvernova',
-            name: 'SILVERNOVA',
-            subtitle: 'Our Entry Package',
-            description: 'A meaningful gift at an unbeatable price – start your journey to the stars!',
-            price: 1999,
-            features: [
-                'Name a guaranteed visible star',
-                'Lifetime registration in the International Space Registry',
-                'Digital or Physical Package – Includes certificate & documents',
-                'Localize your star anytime with our AR app'
-            ],
-            delivery: {
-                digital: 'Ready in 15 minutes',
-                physical: 'Arrives in 2–4 days'
-            },
-            badge: null,
-            gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
-        },
-        {
-            id: 'supernova',
-            name: 'SUPERNOVA',
-            subtitle: 'Our Most Popular Package',
-            description: 'A best-selling gift that shines bright – perfect for any occasion!',
-            price: 2999,
-            features: [
-                'Name a guaranteed visible star in a constellation of your choice',
-                'Easier to locate in the night sky',
-                'Lifetime registration in the International Space Registry',
-                'Digital or Physical Package – Includes certificate & documents',
-                'Localize your star anytime with our AR app'
-            ],
-            delivery: {
-                digital: 'Ready in 15 minutes',
-                physical: 'Arrives in 2–4 days'
-            },
-            badge: 'Most Popular',
-            gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)'
-        },
-        {
-            id: 'duonova',
-            name: 'DUONOVA',
-            subtitle: 'A Star Pair',
-            description: 'A unique celestial bond – because some stars are meant to shine together!',
-            price: 3999,
-            features: [
-                'Name two guaranteed visible stars that orbit together – a rare and meaningful pairing',
-                'Perfect for couples, best friends, or a symbol of eternal connection',
-                'Two personalized certificates featuring both stars\' coordinates',
-                'Lifetime registration in the International Space Registry',
-                'Digital or Physical Package – Includes all documents & certificates',
-                'Localize your stars anytime with our AR app'
-            ],
-            delivery: {
-                digital: 'Ready in 15 minutes',
-                physical: 'Arrives in 2–4 days'
-            },
-            badge: null,
-            gradient: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)'
-        }
-    ];
+    const [packages, setPackages] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const fetchPackages = async () => {
+            try {
+                const response = await api.getPackages();
+                if (response.success) {
+                    setPackages(response.data);
+                } else {
+                    setError('Failed to load packages');
+                }
+            } catch (err) {
+                console.error('Error fetching packages:', err);
+                setError('Failed to load packages. Please try again later.');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchPackages();
+    }, []);
+
+    if (loading) {
+        return (
+            <section id="packages" className="packages section text-center py-5">
+                <div className="spinner-border text-primary" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                </div>
+            </section>
+        );
+    }
+
+    if (error) {
+        return (
+            <section id="packages" className="packages section text-center py-5">
+                <p className="text-danger">{error}</p>
+            </section>
+        );
+    }
 
     return (
         <section id="packages" className="packages section">
-            <div className="container">
+            <div className="packages-container">
                 <div className="section-header text-center">
+                    <div className="section-badge">Premium Collection</div>
                     <h2>Discover Our Gift Sets</h2>
-                    <p>Choose the perfect package to create an unforgettable memory</p>
+                    <p>Choose the perfect package to create an unforgettable memory with the highest standards of celestial registry.</p>
                 </div>
 
                 <div className="packages-grid">
                     {packages.map((pkg) => (
-                        <div key={pkg.id} className="package-card">
+                        <div key={pkg._id} className="package-card" style={{ '--pkg-gradient': pkg.gradient }}>
                             {pkg.badge && (
                                 <div className="package-badge" style={{ background: pkg.gradient }}>
                                     {pkg.badge}
@@ -82,7 +66,7 @@ const Packages = ({ onAddToCart }) => {
                             )}
 
                             <div className="package-header">
-                                <h3 className="package-name">{pkg.name}</h3>
+                                <h3 className="package-name" style={{ backgroundImage: pkg.gradient }}>{pkg.name}</h3>
                                 <p className="package-subtitle">{pkg.subtitle}</p>
                                 <p className="package-description">{pkg.description}</p>
                             </div>
@@ -95,8 +79,8 @@ const Packages = ({ onAddToCart }) => {
                             <ul className="package-features">
                                 {pkg.features.map((feature, index) => (
                                     <li key={index} className="feature-item">
-                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                            <polyline points="20 6 9 17 4 12" />
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                            <polyline points="20 6 9 17 4 12"></polyline>
                                         </svg>
                                         <span>{feature}</span>
                                     </li>
@@ -105,19 +89,37 @@ const Packages = ({ onAddToCart }) => {
 
                             <div className="package-delivery">
                                 <div className="delivery-info">
-                                    <strong>Delivery:</strong>
-                                    <div>Digital Documents: {pkg.delivery.digital}</div>
-                                    <div>Gift Package: {pkg.delivery.physical}</div>
+                                    <strong>
+                                        <span className="info-icon">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                <rect x="1" y="3" width="15" height="13"></rect>
+                                                <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                                                <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                                                <circle cx="18.5" cy="18.5" r="2.5"></circle>
+                                            </svg>
+                                        </span>
+                                        Logistics & Delivery
+                                    </strong>
+                                    <div>
+                                        <span>Digital Documents:</span>
+                                        <strong>{pkg.delivery.digital}</strong>
+                                    </div>
+                                    <div>
+                                        <span>Gift Package:</span>
+                                        <strong>{pkg.delivery.physical}</strong>
+                                    </div>
                                 </div>
                             </div>
+
 
                             <button
                                 className="btn btn-primary package-btn"
                                 onClick={() => onAddToCart({
-                                    id: pkg.id,
+                                    id: pkg._id,
                                     name: pkg.name,
                                     price: pkg.price,
-                                    type: 'digital'
+                                    type: 'digital',
+                                    image: pkg.image || 'https://via.placeholder.com/150' // Fallback if no image in DB
                                 })}
                                 style={{ background: pkg.gradient }}
                             >

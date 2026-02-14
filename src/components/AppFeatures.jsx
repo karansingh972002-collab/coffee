@@ -3,7 +3,7 @@ import './AppFeatures.css';
 const AppFeatures = () => {
     return (
         <section id="app" className="app-features section">
-            <div className="container">
+            <div className="app-features-container">
                 <div className="app-content">
                     <div className="app-text">
                         <h2>Find & Track Your Star with Our App</h2>
@@ -15,7 +15,11 @@ const AppFeatures = () => {
 
                         <div className="app-features-list">
                             <div className="app-feature">
-                                <div className="feature-icon">🌟</div>
+                                <div className="feature-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                                    </svg>
+                                </div>
                                 <div className="feature-content">
                                     <h4>Augmented Reality</h4>
                                     <p>Point your phone at the sky and see your star highlighted in real-time</p>
@@ -23,7 +27,12 @@ const AppFeatures = () => {
                             </div>
 
                             <div className="app-feature">
-                                <div className="feature-icon">📍</div>
+                                <div className="feature-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                        <circle cx="12" cy="10" r="3"></circle>
+                                    </svg>
+                                </div>
                                 <div className="feature-content">
                                     <h4>Precise Location</h4>
                                     <p>Get exact coordinates and easy-to-follow directions to your star</p>
@@ -31,7 +40,12 @@ const AppFeatures = () => {
                             </div>
 
                             <div className="app-feature">
-                                <div className="feature-icon">📱</div>
+                                <div className="feature-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                                        <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+                                        <line x1="12" y1="18" x2="12.01" y2="18"></line>
+                                    </svg>
+                                </div>
                                 <div className="feature-content">
                                     <h4>Available on iOS & Android</h4>
                                     <p>Download for free from App Store or Google Play</p>
@@ -39,7 +53,13 @@ const AppFeatures = () => {
                             </div>
 
                             <div className="app-feature">
-                                <div className="feature-icon">🔭</div>
+                                <div className="feature-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                                    </svg>
+                                </div>
                                 <div className="feature-content">
                                     <h4>Constellation Guide</h4>
                                     <p>Learn about constellations and celestial objects around your star</p>
@@ -77,7 +97,12 @@ const AppFeatures = () => {
                                         <div className="dot"></div>
                                     </div>
                                     <div className="star-label">
-                                        <div className="label-text">Your Star ⭐</div>
+                                        <div className="label-text">
+                                            Your Star
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none" style={{ marginLeft: '4px', verticalAlign: 'middle', color: '#fbbf24' }}>
+                                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                            </svg>
+                                        </div>
                                         <div className="label-coords">RA: 12h 34m 56s | Dec: +45° 12' 34"</div>
                                     </div>
                                 </div>

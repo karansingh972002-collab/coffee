@@ -25,16 +25,29 @@
 .logo {
     display: flex;
     align-items: center;
-    gap: var(--spacing-xs);
-    font-family: var(--font-display);
-    font-size: 1.5rem;
-    font-weight: 700;
     cursor: pointer;
     transition: transform var(--transition-base);
+    text-decoration: none;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.logo-svg {
+    filter: drop-shadow(0 0 5px rgba(129, 140, 248, 0.3));
+    transition: all var(--transition-base);
+}
+
+.logo:hover .logo-svg {
+    transform: rotate(15deg) scale(1.1);
+    filter: drop-shadow(0 0 10px rgba(129, 140, 248, 0.6));
 }
 
 .logo:hover {
-    transform: scale(1.05);
+    transform: none;
 }
 
 .logo-icon {
@@ -43,7 +56,7 @@
 }
 
 .logo-image {
-    height: 40px;
+    height: 32px;
     width: auto;
     object-fit: contain;
     transition: transform var(--transition-base);

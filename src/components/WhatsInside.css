@@ -10,6 +10,13 @@
     align-items: center;
 }
 
+.whats-inside-container {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-md);
+    width: 100%;
+}
+
 .showcase-main {
     position: relative;
     border-radius: var(--radius-xl);
@@ -90,10 +97,18 @@
 }
 
 .item-icon {
-    font-size: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin-bottom: var(--spacing-md);
-    filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.5));
     animation: float 3s ease-in-out infinite;
+    color: var(--color-primary-light);
+}
+
+.item-icon svg {
+    width: 48px;
+    height: 48px;
+    filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.5));
 }
 
 .item-title {

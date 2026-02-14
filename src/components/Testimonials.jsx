@@ -36,7 +36,7 @@ const Testimonials = () => {
 
     return (
         <section id="testimonials" className="testimonials section">
-            <div className="container">
+            <div className="testimonials-container">
                 <div className="section-header text-center">
                     <h2>Be Inspired</h2>
                     <p>Over 100,000 hearts touched by the magic of star naming</p>
@@ -47,7 +47,11 @@ const Testimonials = () => {
                         <div key={index} className="testimonial-card">
                             <div className="testimonial-rating">
                                 {[...Array(testimonial.rating)].map((_, i) => (
-                                    <span key={i} className="star">⭐</span>
+                                    <span key={i} className="star">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                        </svg>
+                                    </span>
                                 ))}
                             </div>
                             <h4 className="testimonial-title">{testimonial.title}</h4>
@@ -60,7 +64,13 @@ const Testimonials = () => {
                 <div className="trustpilot-section">
                     <div className="trustpilot-badge">
                         <div className="trustpilot-stars">
-                            ⭐⭐⭐⭐⭐
+                            {[1, 2, 3, 4, 5].map((i) => (
+                                <span key={i} className="tp-star">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="#00b67a" stroke="none">
+                                        <path d="M23.9986 9.6l-9.1432 0-2.8335-8.7L9.1906 9.6L.0452 9.6l7.387 5.378-2.822 8.685 7.412-5.395 7.411 5.395-2.822-8.685 7.389-5.378z"></path>
+                                    </svg>
+                                </span>
+                            ))}
                         </div>
                         <div className="trustpilot-text">
                             <strong>Excellent</strong> 4.9 out of 5

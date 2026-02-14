@@ -2,6 +2,13 @@
     background: var(--color-bg-darker);
 }
 
+.app-features-container {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-md);
+    width: 100%;
+}
+
 .app-content {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -43,8 +50,20 @@
 }
 
 .feature-icon {
-    font-size: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--color-primary-light);
     flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    background: rgba(99, 102, 241, 0.1);
+    border-radius: var(--radius-full);
+}
+
+.feature-icon svg {
+    width: 24px;
+    height: 24px;
 }
 
 .feature-content h4 {

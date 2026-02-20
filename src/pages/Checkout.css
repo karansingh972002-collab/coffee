@@ -1,0 +1,397 @@
+.checkout-page {
+    min-height: calc(100vh - 100px);
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    padding: 3rem 0;
+}
+
+.checkout-page h2 {
+    color: #f8fafc;
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 3rem;
+    background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Empty Cart State */
+.checkout-page .container.py-5.text-center {
+    min-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.checkout-page .container.py-5.text-center h2 {
+    color: #94a3b8;
+    margin-bottom: 1.5rem;
+}
+
+/* Error Alert */
+.checkout-page .alert-danger {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #fca5a5;
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 2rem;
+}
+
+/* Shipping Form */
+.shipping-form {
+    background: rgba(30, 41, 59, 0.6);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 2.5rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+}
+
+.shipping-form h4 {
+    color: #f8fafc;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.shipping-form h4::before {
+    content: '📋';
+    font-size: 1.25rem;
+}
+
+/* Form Labels */
+.shipping-form .form-label {
+    color: #e2e8f0;
+    font-weight: 500;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+/* Form Inputs */
+.shipping-form .form-control,
+.shipping-form textarea {
+    background: rgba(15, 23, 42, 0.8) !important;
+    border: 1px solid rgba(148, 163, 184, 0.2) !important;
+    border-radius: 10px !important;
+    color: #f8fafc !important;
+    padding: 0.75rem 1rem !important;
+    font-size: 1rem !important;
+    transition: all 0.3s ease !important;
+}
+
+.shipping-form .form-control:focus,
+.shipping-form textarea:focus {
+    outline: none !important;
+    border-color: #6366f1 !important;
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15) !important;
+    background: rgba(15, 23, 42, 0.95) !important;
+}
+
+.shipping-form textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* Payment Section */
+.shipping-form h4:nth-of-type(2) {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+.shipping-form h4:nth-of-type(2)::before {
+    content: '💳';
+}
+
+/* Payment Options Grid */
+.payment-options-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1rem;
+}
+
+.payment-option {
+    background: rgba(15, 23, 42, 0.6);
+    border: 2px solid rgba(148, 163, 184, 0.2);
+    border-radius: 12px;
+    padding: 1.25rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.payment-option:hover {
+    background: rgba(15, 23, 42, 0.8);
+    border-color: rgba(99, 102, 241, 0.4);
+    transform: translateY(-2px);
+}
+
+.payment-option.selected {
+    background: rgba(99, 102, 241, 0.15);
+    border-color: #6366f1;
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.2);
+}
+
+.payment-option input[type="radio"] {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 20px;
+    height: 20px;
+    accent-color: #6366f1;
+    cursor: pointer;
+}
+
+.payment-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.payment-icon {
+    font-size: 2rem;
+    line-height: 1;
+}
+
+.payment-option label {
+    color: #f8fafc;
+    font-weight: 600;
+    font-size: 1rem;
+    margin: 0;
+    cursor: pointer;
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+.payment-option p {
+    color: #94a3b8;
+    font-size: 0.85rem;
+    margin: 0;
+    line-height: 1.4;
+}
+
+
+/* Submit Button */
+.shipping-form .btn-primary {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    border: none;
+    border-radius: 12px;
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: white;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+}
+
+.shipping-form .btn-primary:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 30px rgba(99, 102, 241, 0.4);
+}
+
+.shipping-form .btn-primary:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.shipping-form .btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Order Summary */
+.order-summary-box {
+    background: rgba(30, 41, 59, 0.6);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+    position: sticky;
+    top: 2rem;
+}
+
+.order-summary-box h4 {
+    color: #f8fafc;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.order-summary-box h4::before {
+    content: '🛒';
+    font-size: 1.25rem;
+}
+
+/* Order Items */
+.order-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.order-item:last-of-type {
+    border-bottom: none;
+}
+
+.order-item-name {
+    color: #cbd5e1;
+    font-size: 0.95rem;
+}
+
+.order-item-price {
+    color: #f8fafc;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+/* Summary Divider */
+.order-summary-box hr {
+    border-color: rgba(148, 163, 184, 0.2);
+    margin: 1.5rem 0;
+}
+
+/* Total */
+.order-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 2px solid rgba(99, 102, 241, 0.3);
+}
+
+.order-total-label {
+    color: #f8fafc;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.order-total-amount {
+    color: #6366f1;
+    font-size: 1.75rem;
+    font-weight: 700;
+}
+
+/* Security Badge */
+.security-badge {
+    background: rgba(34, 197, 94, 0.1);
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    border-radius: 10px;
+    padding: 0.75rem;
+    margin-top: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: #86efac;
+}
+
+.security-badge::before {
+    content: '🔒';
+    font-size: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .checkout-page {
+        padding: 2rem 0;
+    }
+
+    .checkout-page h2 {
+        font-size: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .shipping-form,
+    .order-summary-box {
+        padding: 1.5rem;
+    }
+
+    .order-summary-box {
+        position: static;
+        margin-top: 2rem;
+    }
+
+    .order-total-amount {
+        font-size: 1.5rem;
+    }
+}
+
+/* Loading Spinner on Button */
+.btn-primary.loading::after {
+    content: '';
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin-left: 10px;
+    border: 2px solid #ffffff;
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: spinner 0.8s linear infinite;
+}
+
+@keyframes spinner {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Processing Overlay */
+.processing-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(8px);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s ease;
+}
+
+.processing-content {
+    background: rgba(30, 41, 59, 0.8);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    padding: 3rem;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    max-width: 400px;
+    width: 90%;
+}
+
+.processing-content h3 {
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: #f8fafc;
+    font-size: 1.5rem;
+}
+
+.processing-content p {
+    color: #94a3b8;
+    margin: 0;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}

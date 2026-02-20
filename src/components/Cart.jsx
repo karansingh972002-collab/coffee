@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import './Cart.css';
 
 const Cart = ({ isOpen, onClose, items, onUpdateQuantity, onRemove }) => {
@@ -84,9 +85,9 @@ const Cart = ({ isOpen, onClose, items, onUpdateQuantity, onRemove }) => {
                                     <span>Total</span>
                                     <span>₹{total.toLocaleString()}</span>
                                 </div>
-                                <button className="btn btn-primary checkout-btn">
+                                <Link to="/checkout" className="btn btn-primary checkout-btn" onClick={onClose}>
                                     Proceed to Checkout
-                                </button>
+                                </Link>
                                 <button className="btn btn-outline continue-btn" onClick={onClose}>
                                     Continue Shopping
                                 </button>

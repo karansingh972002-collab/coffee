@@ -1,0 +1,83 @@
+.live-purchase-toast {
+    position: fixed;
+    bottom: -100px;
+    left: 20px;
+    background: rgba(17, 24, 39, 0.95);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff;
+    padding: 12px 15px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    z-index: 10000;
+    transition: bottom 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    max-width: 320px;
+}
+
+.live-purchase-toast.visible {
+    bottom: 20px;
+}
+
+.live-purchase-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+    padding-right: 20px;
+}
+
+.live-purchase-icon {
+    width: 35px;
+    height: 35px;
+    background: linear-gradient(135deg, #6366f1, #a855f7);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+.live-purchase-text {
+    flex: 1;
+}
+
+.purchase-info {
+    margin: 0;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    color: #cbd5e1;
+}
+
+.purchase-info strong {
+    color: #fff;
+}
+
+.purchase-time {
+    margin: 0;
+    font-size: 0.7rem;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-top: 2px;
+}
+
+.close-toast {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: none;
+    border: none;
+    color: #64748b;
+    font-size: 1.2rem;
+    cursor: pointer;
+    line-height: 1;
+}
+
+@media (max-width: 576px) {
+    .live-purchase-toast {
+        left: 10px;
+        right: 10px;
+        max-width: none;
+    }
+}

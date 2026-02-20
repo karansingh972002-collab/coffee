@@ -3,23 +3,15 @@ const dotenv = require('dotenv');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const cors = require('cors');
-const mongoose = require('mongoose');
+
+const connectDB = require('./config/db');
 
 // Load env vars
 dotenv.config();
 
 // Connect to database
-const connectDB = async () => {
-    try {
-        const conn = await mongoose.connect(process.env.MONGODB_URI);
-        console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
-    } catch (err) {
-        console.error(`❌ Error: ${err.message}`);
-        process.exit(1);
-    }
-};
-
 connectDB();
+
 
 // Route files
 const auth = require('./routes/auth.routes');
@@ -50,6 +42,11 @@ app.use('/api/orders', orders);
 // Health check route
 app.get('/api/health', (req, res) => {
     res.status(200).json({ status: 'success', message: 'API is running' });
+});
+
+// Root route
+app.get('/', (req, res) => {
+    res.send('API is running. Access the frontend at <a href="http://localhost:5173">http://localhost:5173</a>');
 });
 
 const PORT = process.env.PORT || 5000;

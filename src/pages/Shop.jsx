@@ -1,70 +1,69 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { api } from '../services/api';
+import StarCustomizer from '../components/StarCustomizer';
+import KnownFrom from '../components/KnownFrom';
+import HeartsTouched from '../components/HeartsTouched';
 import './Shop.css';
 
-const Shop = ({ onAddToCart }) => {
+const Shop = ({ onAddToCart, onAddToWishlist }) => {
+    const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const [filterType, setFilterType] = useState('All');
 
-    // Star Naming Products
-    const products = [
-        {
-            id: 'silvernova-digital',
-            name: 'Silvernova - Digital',
-            type: 'Standard',
-            price: 1999,
-            features: 'Visible Star | Digital Cert',
-            image: 'https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?auto=format&fit=crop&w=800&q=80',
-            badge: 'Entry Level'
-        },
-        {
-            id: 'silvernova-gift',
-            name: 'Silvernova - Gift Pack',
-            type: 'Standard',
-            price: 2499,
-            features: 'Visible Star | Physical Pack',
-            image: 'https://images.unsplash.com/photo-1516339901601-2e1b62dc0c45?auto=format&fit=crop&w=800&q=80',
-            badge: 'Best Value'
-        },
-        {
-            id: 'supernova-digital',
-            name: 'Supernova - Digital',
-            type: 'Premium',
-            price: 2999,
-            features: 'Brightest Star | Constellation Choice',
-            image: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=800&q=80',
-            badge: 'Most Popular'
-        },
-        {
-            id: 'supernova-gift',
-            name: 'Supernova - Gift Pack',
-            type: 'Premium',
-            price: 3499,
-            features: 'Brightest Star | Full Gift Set',
-            image: 'https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?auto=format&fit=crop&w=800&q=80',
-            badge: 'Top Choice'
-        },
-        {
-            id: 'duonova-digital',
-            name: 'Duonova - Digital',
-            type: 'Binary',
-            price: 3999,
-            features: 'Two Stars | Orbiting Pair',
-            image: 'https://images.unsplash.com/photo-1506318137071-a8bcbf675b27?auto=format&fit=crop&w=800&q=80',
-            badge: 'Romantic Gift'
-        },
-        {
-            id: 'duonova-gift',
-            name: 'Duonova - Gift Pack',
-            type: 'Binary',
-            price: 4499,
-            features: 'Two Stars | Premium Double Set',
-            image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80',
-            badge: 'Luxury'
-        },
-    ];
+    // Customization State
+    const [selectedPkg, setSelectedPkg] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const response = await api.getPackages();
+                if (response.success) {
+                    setProducts(response.data);
+                } else {
+                    setError('Failed to load products');
+                }
+            } catch (err) {
+                console.error('Error fetching products:', err);
+                setError('Unable to connect to server. Please ensure the backend is running.');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchProducts();
+    }, []);
 
     const filteredProducts = filterType === 'All'
         ? products
         : products.filter(p => p.type === filterType);
+
+    if (loading) {
+        return (
+            <div className="shop-page d-flex justify-content-center align-items-center">
+                <div className="spinner-border text-primary" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="shop-page d-flex justify-content-center align-items-center" style={{ minHeight: '60vh', flexDirection: 'column', gap: '1rem' }}>
+                <div className="text-danger text-center">
+                    <h4>{error}</h4>
+                    <p className="text-muted">
+                        Make sure the backend server is running on port 5000.
+                    </p>
+                    <button className="btn btn-primary mt-3" onClick={() => window.location.reload()}>
+                        Retry
+                    </button>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="shop-page">
@@ -98,31 +97,78 @@ const Shop = ({ onAddToCart }) => {
                                 <option value="Standard">Standard (Silvernova)</option>
                                 <option value="Premium">Premium (Supernova)</option>
                                 <option value="Binary">Binary (Duonova)</option>
+                                <option value="Luxury">Luxury (Diamondnova)</option>
+                                <option value="Zodiac">Zodiac (Special)</option>
+                                <option value="Kids">Kids (Little Star)</option>
                             </select>
+                        </div>
+
+                        <div className="filter-group">
+                            <label className="filter-label">Price Range</label>
+                            <div className="price-pills">
+                                <div className="price-pill">Under ₹2,000</div>
+                                <div className="price-pill">₹2,000 - ₹3,000</div>
+                                <div className="price-pill">₹3,000+</div>
+                            </div>
+                        </div>
+
+                        <div className="filter-info">
+                            <p className="showing-count">{filteredProducts.length} {filteredProducts.length === 1 ? 'package' : 'packages'} available</p>
                         </div>
                     </aside>
 
                     <main className="products-grid">
                         {filteredProducts.map(product => (
-                            <div key={product.id} className="product-card">
+                            <div key={product._id} className="product-card">
                                 <div className="product-image-container">
                                     <img src={product.image} alt={product.name} className="product-image" />
                                     {product.badge && <div className="product-badge">{product.badge}</div>}
+                                    <button
+                                        className="wishlist-btn-overlay"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            onAddToWishlist && onAddToWishlist({
+                                                id: product._id,
+                                                name: product.name,
+                                                type: product.type,
+                                                price: product.price,
+                                                image: product.image
+                                            });
+                                        }}
+                                    >
+                                        ♥
+                                    </button>
+                                    <div className="product-overlay">
+                                        <div className="overlay-features">
+                                            {product.features.slice(0, 3).map((feature, idx) => (
+                                                <div key={idx} className="feature-item-overlay">
+                                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                                    </svg>
+                                                    {feature}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
                                 </div>
                                 <div className="product-info">
                                     <h4>{product.name}</h4>
+                                    <p className="product-subtitle">{product.subtitle}</p>
                                     <div className="product-specs">
-                                        <span>{product.type}</span> • <span>{product.features}</span>
+                                        <span>{product.type}</span> • <span>{product.features.length} features</span>
                                     </div>
                                     <div className="product-footer">
                                         <div className="product-price">₹{product.price.toLocaleString()}</div>
-                                        <button className="add-cart-btn" onClick={() => onAddToCart(product)}>
+                                        <button className="add-cart-btn" onClick={() => {
+                                            setSelectedPkg(product);
+                                            setIsModalOpen(true);
+                                        }}>
                                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                                 <circle cx="9" cy="21" r="1"></circle>
                                                 <circle cx="20" cy="21" r="1"></circle>
                                                 <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
                                             </svg>
-                                            Add
+                                            Name It
                                         </button>
                                     </div>
                                 </div>
@@ -131,6 +177,19 @@ const Shop = ({ onAddToCart }) => {
                     </main>
                 </div>
             </div>
+
+            <KnownFrom />
+            <HeartsTouched />
+
+            <StarCustomizer
+                pkg={selectedPkg}
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onConfirm={(customized) => {
+                    onAddToCart(customized);
+                    setIsModalOpen(false);
+                }}
+            />
         </div>
     );
 };

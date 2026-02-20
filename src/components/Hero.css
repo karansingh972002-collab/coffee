@@ -1,16 +1,15 @@
 .hero {
-    position: absolute;
+    position: relative;
     height: 90vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding-top: 100px;
+    padding-top: 180px;
     margin-top: -100px;
-    /* Exact match to main-content padding */
     overflow: hidden;
-    background: #0a0e27;
-    /* Fallback color */
+    background: linear-gradient(to bottom, #0a0e27 0%, #1a1f3a 50%, #0f1229 100%);
     width: 100%;
+    min-width: 100%;
 }
 
 .hero::before {
@@ -20,12 +19,9 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url('../assets/hero-space-bg.png');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    opacity: 1;
-    /* Full opacity if they want the image to command the space */
+    /* background-image removed */
+    background-color: transparent;
+    opacity: 0.8;
     z-index: 0;
 }
 
@@ -57,7 +53,7 @@
         radial-gradient(1px 1px at 200px 40px, white, transparent),
         radial-gradient(2px 2px at 140px 190px, white, transparent);
     background-size: 200px 200px;
-    animation: twinkle 5s ease-in-out infinite;
+    /* animation: twinkle 5s ease-in-out infinite; removed */
     opacity: 0.7;
     z-index: 1;
 }
@@ -235,6 +231,7 @@
 @media (max-width: 768px) {
     .hero {
         min-height: 85vh;
+        height: auto;
         padding: 150px 0 var(--spacing-3xl);
     }
 
@@ -282,5 +279,35 @@
 
     .stat-number {
         font-size: 1.8rem;
+    }
+}
+
+/* Lotus Mandala Styles */
+.hero-visual {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 1;
+    mix-blend-mode: normal;
+}
+
+.lotus-mandala-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+
+
+
+
+@media (max-width: 768px) {
+    .hero-visual {
+        opacity: 0.8;
     }
 }

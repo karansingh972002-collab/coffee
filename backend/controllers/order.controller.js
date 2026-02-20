@@ -1,14 +1,25 @@
-const Order = require('../models/Order.model');
-const Package = require('../models/Package.model');
+const Order = require('../models/Order');
+const Package = require('../models/Package');
+const mongoose = require('mongoose');
+const { orderStore, packageStore } = require('../db/memory-store');
 
 // @desc    Create new order
 // @route   POST /api/orders
 // @access  Private
 exports.createOrder = async (req, res, next) => {
     try {
-        req.body.user = req.user.id;
+        const userId = req.user._id || req.user.id;
+        let pkg;
 
-        const pkg = await Package.findById(req.body.packageId);
+        // Try getting package from DB
+        if (mongoose.connection.readyState === 1) {
+            pkg = await Package.findById(req.body.packageId);
+        }
+
+        // Fallback to memory store
+        if (!pkg) {
+            pkg = packageStore.getById(req.body.packageId);
+        }
 
         if (!pkg) {
             return res.status(404).json({
@@ -17,10 +28,34 @@ exports.createOrder = async (req, res, next) => {
             });
         }
 
-        req.body.package = req.body.packageId;
-        req.body.totalAmount = pkg.price;
+        const orderData = {
+            user: userId,
+            package: req.body.packageId,
+            totalAmount: pkg.price,
+            starName: req.body.starName || 'Unnamed Star',
+            dedicationMessage: req.body.dedicationMessage || '',
+            dedicationDate: req.body.dedicationDate,
+            recipientInfo: req.body.recipientInfo || {},
+            shippingAddress: req.body.shippingAddress || {},
+            paymentMethod: req.body.paymentMethod || 'cod',
+            paymentStatus: req.body.paymentStatus || 'pending',
+            orderStatus: req.body.orderStatus || 'processing',
+            deliveryType: req.body.deliveryType || 'digital'
+        };
 
-        const order = await Order.create(req.body);
+        let order;
+        // Try creating in DB
+        if (mongoose.connection.readyState === 1) {
+            order = await Order.create(orderData);
+        }
+
+        // Always sync with memory store
+        const memoryOrder = orderStore.create({
+            ...orderData,
+            _id: order ? order._id.toString() : undefined
+        });
+
+        if (!order) order = memoryOrder;
 
         res.status(201).json({
             success: true,
@@ -39,16 +74,26 @@ exports.createOrder = async (req, res, next) => {
 // @access  Private
 exports.getOrders = async (req, res, next) => {
     try {
-        let query;
+        let orders = [];
+        const userId = req.user._id || req.user.id;
 
-        // If user is not admin, only show their orders
-        if (req.user.role !== 'admin') {
-            query = Order.find({ user: req.user.id }).populate('package');
-        } else {
-            query = Order.find().populate('user package');
+        // Try getting from DB
+        if (mongoose.connection.readyState === 1) {
+            if (req.user.role !== 'admin') {
+                orders = await Order.find({ user: userId }).populate('package');
+            } else {
+                orders = await Order.find().populate('package');
+            }
         }
 
-        const orders = await query;
+        // If DB returned nothing or is down, check memory store
+        if (orders.length === 0) {
+            if (req.user.role !== 'admin') {
+                orders = orderStore.getByUserId(userId);
+            } else {
+                orders = orderStore.getAll();
+            }
+        }
 
         res.status(200).json({
             success: true,
@@ -68,7 +113,20 @@ exports.getOrders = async (req, res, next) => {
 // @access  Private
 exports.getOrder = async (req, res, next) => {
     try {
-        const order = await Order.findById(req.params.id).populate('user package');
+        let order;
+        const userId = req.user._id || req.user.id;
+
+        // Try getting from DB
+        if (mongoose.connection.readyState === 1) {
+            order = await Order.findById(req.params.id)
+                .populate('package')
+                .populate('user', 'name email');
+        }
+
+        // Fallback to memory store
+        if (!order) {
+            order = orderStore.getById(req.params.id);
+        }
 
         if (!order) {
             return res.status(404).json({
@@ -78,7 +136,8 @@ exports.getOrder = async (req, res, next) => {
         }
 
         // Make sure user is order owner or admin
-        if (order.user._id.toString() !== req.user.id && req.user.role !== 'admin') {
+        const orderUserId = order.user._id || order.user.id || order.user;
+        if (orderUserId.toString() !== userId.toString() && req.user.role !== 'admin') {
             return res.status(401).json({
                 success: false,
                 message: 'Not authorized to access this order',
@@ -102,7 +161,18 @@ exports.getOrder = async (req, res, next) => {
 // @access  Private
 exports.updatePaymentStatus = async (req, res, next) => {
     try {
-        let order = await Order.findById(req.params.id);
+        let order;
+        const userId = req.user._id || req.user.id;
+
+        // Try getting from DB
+        if (mongoose.connection.readyState === 1) {
+            order = await Order.findById(req.params.id);
+        }
+
+        // Fallback to memory store
+        if (!order) {
+            order = orderStore.getById(req.params.id);
+        }
 
         if (!order) {
             return res.status(404).json({
@@ -112,21 +182,24 @@ exports.updatePaymentStatus = async (req, res, next) => {
         }
 
         // Make sure user is order owner or admin
-        if (order.user.toString() !== req.user.id && req.user.role !== 'admin') {
+        const orderUserId = order.user._id || order.user.id || order.user;
+        if (orderUserId.toString() !== userId.toString() && req.user.role !== 'admin') {
             return res.status(401).json({
                 success: false,
                 message: 'Not authorized to update this order',
             });
         }
 
-        order = await Order.findByIdAndUpdate(
-            req.params.id,
-            { paymentStatus: req.body.paymentStatus },
-            {
-                new: true,
-                runValidators: true,
-            }
-        );
+        // Update in DB
+        if (mongoose.connection.readyState === 1 && order.save) {
+            order.paymentStatus = req.body.paymentStatus;
+            await order.save();
+        }
+
+        // Always sync with memory store
+        orderStore.update(req.params.id, {
+            paymentStatus: req.body.paymentStatus
+        });
 
         res.status(200).json({
             success: true,

@@ -1,0 +1,133 @@
+.hearts-touched {
+    background-color: var(--bg-dark);
+    position: relative;
+    padding: 8rem 0;
+}
+
+.hearts-bg-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(255, 63, 108, 0.08) 0%, transparent 70%);
+    z-index: 0;
+    pointer-events: none;
+}
+
+.heart-icon-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.main-heart {
+    font-size: 5rem;
+    filter: drop-shadow(0 0 20px rgba(255, 63, 108, 0.4));
+    animation: pulse-heart 2s infinite ease-in-out;
+}
+
+.floating-hearts .float-heart {
+    position: absolute;
+    opacity: 0;
+    font-size: 1.5rem;
+}
+
+.float-heart.h1 {
+    top: -20px;
+    left: -20px;
+    animation: float-up-fade 2.5s infinite 0.5s;
+}
+
+.float-heart.h2 {
+    top: -40px;
+    left: 20px;
+    animation: float-up-fade 3s infinite 1s;
+}
+
+.float-heart.h3 {
+    top: 0px;
+    left: 40px;
+    animation: float-up-fade 2.8s infinite 1.5s;
+}
+
+@keyframes pulse-heart {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+@keyframes float-up-fade {
+    0% {
+        transform: translateY(0) scale(0.5);
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 0.8;
+    }
+
+    100% {
+        transform: translateY(-80px) scale(1.2);
+        opacity: 0;
+    }
+}
+
+.hearts-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.03em;
+}
+
+.highlight-count {
+    color: #ff3f6c;
+    -webkit-text-fill-color: #ff3f6c;
+}
+
+.hearts-subtitle {
+    max-width: 700px;
+    color: #94a3b8;
+    line-height: 1.6;
+}
+
+.stat-item {
+    padding: 1rem 2rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    min-width: 180px;
+}
+
+.stat-value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 0.25rem;
+}
+
+.stat-label {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #64748b;
+}
+
+@media (max-width: 768px) {
+    .hearts-title {
+        font-size: 2.25rem;
+    }
+
+    .main-heart {
+        font-size: 3.5rem;
+    }
+}

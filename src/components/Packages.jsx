@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { api } from '../services/api';
 import './Packages.css';
 
-const Packages = ({ onAddToCart }) => {
+const Packages = ({ onAddToCart, onCustomize }) => {
     const [packages, setPackages] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -14,7 +14,9 @@ const Packages = ({ onAddToCart }) => {
             try {
                 const response = await api.getPackages();
                 if (response.success) {
-                    setPackages(response.data);
+                    // Filter to show only Gift Packs for the home page
+                    const giftPacks = response.data.filter(pkg => pkg.name.includes('Gift Pack'));
+                    setPackages(giftPacks);
                 } else {
                     setError('Failed to load packages');
                 }
@@ -114,13 +116,19 @@ const Packages = ({ onAddToCart }) => {
 
                             <button
                                 className="btn btn-primary package-btn"
-                                onClick={() => onAddToCart({
-                                    id: pkg._id,
-                                    name: pkg.name,
-                                    price: pkg.price,
-                                    type: 'digital',
-                                    image: pkg.image || 'https://via.placeholder.com/150' // Fallback if no image in DB
-                                })}
+                                onClick={() => {
+                                    if (onCustomize) {
+                                        onCustomize(pkg);
+                                    } else {
+                                        onAddToCart({
+                                            id: pkg._id,
+                                            name: pkg.name,
+                                            price: pkg.price,
+                                            type: pkg.type,
+                                            image: pkg.image || 'https://via.placeholder.com/150'
+                                        });
+                                    }
+                                }}
                                 style={{ background: pkg.gradient }}
                             >
                                 Name Your Star

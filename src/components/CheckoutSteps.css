@@ -1,0 +1,42 @@
+.checkout-steps {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 0;
+    max-width: 600px;
+    margin: 0 auto 30px;
+    font-family: 'Inter', sans-serif;
+}
+
+.step-item {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: var(--color-text-muted);
+    /* Gray-600 */
+    text-transform: uppercase;
+    position: relative;
+    padding: 0 10px;
+}
+
+.step-item.active {
+    color: var(--myntra-pink);
+    /* Pink Accent */
+    border-bottom: 2px solid var(--myntra-pink);
+    padding-bottom: 4px;
+}
+
+.step-item.completed {
+    color: var(--myntra-green);
+}
+
+.step-divider {
+    height: 1px;
+    width: 40px;
+    background-color: rgba(255, 255, 255, 0.1);
+    /* Gray-200 */
+    margin: 0 10px;
+    border-top: 1px dashed rgba(255, 255, 255, 0.3);
+}
+
+/* Dark mode compatibility is now default */

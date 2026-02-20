@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import './Hero.css';
 
 const Hero = () => {
@@ -49,12 +50,12 @@ const Hero = () => {
 
 
                 <div className="hero-actions">
-                    <a href="#packages" className="btn btn-primary">
-                        <span>Choose Your Package</span>
+                    <Link to="/shop" className="btn btn-primary">
+                        <span>Shop Now</span>
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                             <path d="M5 12h14M12 5l7 7-7 7" />
                         </svg>
-                    </a>
+                    </Link>
                     <a href="#app" className="btn btn-outline">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                             <polygon points="5 3 19 12 5 21 5 3" />
@@ -95,6 +96,11 @@ const Hero = () => {
                         <div className="stat-label">Instant Delivery</div>
                     </div>
                 </div>
+            </div>
+
+
+            <div className="hero-visual">
+                <img src="/src/assets/hero-mandala.png" alt="Glowing Lotus Mandala" className="lotus-mandala-img" />
             </div>
         </section>
     );

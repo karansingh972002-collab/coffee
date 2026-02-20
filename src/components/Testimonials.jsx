@@ -39,7 +39,7 @@ const Testimonials = () => {
             <div className="testimonials-container">
                 <div className="section-header text-center">
                     <h2>Be Inspired</h2>
-                    <p>Over 100,000 hearts touched by the magic of star naming</p>
+                    <p>Experience the magic of star naming through our community</p>
                 </div>
 
                 <div className="testimonials-grid">

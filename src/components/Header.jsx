@@ -1,12 +1,15 @@
 import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { isAuthenticated, logout } from '../services/api';
 import logo from '../assets/logo.svg';
 import './Header.css';
 
 const Header = ({ cartCount, onCartClick }) => {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const location = useLocation();
+    const navigate = useNavigate();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -16,46 +19,144 @@ const Header = ({ cartCount, onCartClick }) => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
+    // Check authentication status
+    useEffect(() => {
+        const authStatus = isAuthenticated();
+        if (isLoggedIn !== authStatus) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
+            setIsLoggedIn(authStatus);
+        }
+    }, [location, isLoggedIn]);
+
     // Close mobile menu on route change
     useEffect(() => {
-        setIsMobileMenuOpen(false);
-    }, [location]);
+        if (isMobileMenuOpen) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
+            setIsMobileMenuOpen(false);
+        }
+    }, [location, isMobileMenuOpen]);
+
+    const handleLogout = () => {
+        logout();
+        setIsLoggedIn(false);
+        navigate('/');
+    };
 
     return (
         <header className={`header ${isScrolled ? 'scrolled' : ''}`}>
-            <div className="container">
+            <div className="container" style={{ maxWidth: '95%' }}>
                 <div className="header-content">
-                    <Link to="/" className="logo text-decoration-none">
+                    <a href="/" className="logo text-decoration-none">
                         <div className="logo-container">
                             <img src={logo} alt="Star Naming Logo" className="logo-img" width="50" height="50" />
                             <span className="logo-text">Star Naming</span>
                         </div>
-                    </Link>
+                    </a>
 
                     <nav className={`nav ${isMobileMenuOpen ? 'open' : ''}`}>
                         <Link to="/" className="nav-link">Home</Link>
                         <Link to="/shop" className="nav-link">Shop</Link>
-                        {location.pathname === '/' && (
-                            <>
-                                <a href="#packages" className="nav-link">Packages</a>
-                                <a href="#testimonials" className="nav-link">Reviews</a>
-                            </>
-                        )}
+                        <Link to="/order" className="nav-link">Order Now</Link>
+                        <a href="/#packages" className="nav-link">Packages</a>
+                        <a href="/#testimonials" className="nav-link">Reviews</a>
                         <Link to="/wishlist" className="nav-link">Wishlist</Link>
-                        <Link to="/account" className="nav-link">Dashboard</Link>
+                        {isLoggedIn && (
+                            <Link to="/account" className="nav-link">Dashboard</Link>
+                        )}
                     </nav>
 
-                    <div className="header-actions">
-                        <button className="cart-btn" onClick={onCartClick}>
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                <circle cx="9" cy="21" r="1" />
-                                <circle cx="20" cy="21" r="1" />
-                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
-                            </svg>
-                            {cartCount > 0 && <span className="cart-count">{cartCount}</span>}
-                        </button>
 
-                        <Link to="/auth" className="btn btn-primary d-none d-md-inline-block ms-3">Login</Link>
+                    <div className="header-actions">
+                        <div className="profile-container">
+                            <div className="profile-btn">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                                    <circle cx="12" cy="7" r="4" />
+                                </svg>
+                                <span className="profile-text">Profile</span>
+                            </div>
+
+                            <div className="profile-dropdown">
+                                <div className="profile-dropdown-content">
+                                    {!isLoggedIn ? (
+                                        <div className="profile-header-section">
+                                            <div style={{ fontWeight: 700, marginBottom: '4px', color: 'white' }}>Welcome</div>
+                                            <p style={{ fontSize: '13px', color: 'var(--color-text-secondary)', marginBottom: '16px' }}>To access account and manage orders</p>
+                                            <Link to="/auth" className="login-btn-header">LOGIN / SIGNUP</Link>
+                                        </div>
+                                    ) : (
+                                        <div className="profile-header-section">
+                                            <div style={{ fontWeight: 700, marginBottom: '4px', color: 'white' }}>Hello User</div>
+                                            <p style={{ fontSize: '13px', color: 'var(--color-text-secondary)' }}>{localStorage.getItem('userEmail') || 'Welcome back'}</p>
+                                        </div>
+                                    )}
+
+                                    <div className="profile-menu-items">
+                                        <Link to="/account" className="profile-menu-item">
+                                            Orders
+                                        </Link>
+                                        <Link to="/wishlist" className="profile-menu-item">
+                                            Wishlist
+                                        </Link>
+                                        <div className="profile-menu-item">
+                                            Gift Cards
+                                        </div>
+                                        <div className="profile-menu-item">
+                                            Contact Us
+                                        </div>
+                                        <div className="profile-menu-item">
+                                            Star Naming Insider <span style={{ fontSize: '10px', background: '#ff3f6c', color: 'white', padding: '0 4px', borderRadius: '2px', marginLeft: '6px', textTransform: 'uppercase' }}>New</span>
+                                        </div>
+
+                                        <div style={{ height: '1px', background: 'rgba(255,255,255,0.1)', margin: '8px 0' }}></div>
+
+                                        <div className="profile-menu-item">
+                                            Star Naming Credit
+                                        </div>
+                                        <div className="profile-menu-item">
+                                            Coupons
+                                        </div>
+                                        <div className="profile-menu-item">
+                                            Saved Cards
+                                        </div>
+                                        <div className="profile-menu-item">
+                                            Saved Vouchers
+                                        </div>
+                                        <div className="profile-menu-item">
+                                            Saved Addresses
+                                        </div>
+
+                                        {isLoggedIn && (
+                                            <>
+                                                <div style={{ height: '1px', background: 'rgba(255,255,255,0.1)', margin: '8px 0' }}></div>
+                                                <div className="profile-menu-item" onClick={handleLogout}>
+                                                    Logout
+                                                </div>
+                                            </>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <Link to="/wishlist" className="cart-btn action-icon-btn">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                            </svg>
+                            <span className="profile-text">Wishlist</span>
+                        </Link>
+
+                        <Link to="/cart" className="cart-btn action-icon-btn">
+                            <div style={{ position: 'relative' }}>
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                    <circle cx="9" cy="21" r="1" />
+                                    <circle cx="20" cy="21" r="1" />
+                                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+                                </svg>
+                                {cartCount > 0 && <span className="cart-count">{cartCount}</span>}
+                            </div>
+                            <span className="profile-text">Bag</span>
+                        </Link>
 
                         <button
                             className="mobile-menu-btn"
@@ -73,4 +174,3 @@ const Header = ({ cartCount, onCartClick }) => {
 };
 
 export default Header;
-

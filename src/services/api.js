@@ -329,4 +329,6 @@ export const getStoredUser = () => {
     return user ? JSON.parse(user) : null;
 };
 
+export const logout = api.logout;
+
 export default api;

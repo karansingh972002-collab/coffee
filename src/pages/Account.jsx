@@ -1,17 +1,91 @@
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { api, logout } from '../services/api';
 import './Account.css';
 
 const Account = () => {
-    const user = {
-        name: 'Karan Singh',
-        email: 'karan@example.com',
-        memberSince: 'Feb 2026',
-        starsNamed: 2
+    const navigate = useNavigate();
+    const [user, setUser] = useState(null);
+    const [orders, setOrders] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState('');
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                // Fetch user profile
+                const userResponse = await api.getCurrentUser();
+                if (userResponse.success) {
+                    setUser(userResponse.data);
+                }
+
+                // Fetch orders
+                const ordersResponse = await api.getOrders();
+                if (ordersResponse.success) {
+                    setOrders(ordersResponse.data);
+                }
+            } catch (err) {
+                console.error('Error fetching account data:', err);
+                setError('Failed to load account data');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    const handleLogout = () => {
+        logout();
+        navigate('/auth');
     };
 
-    const orders = [
-        { id: 'STR-A92J4N', date: 'Feb 13, 2026', total: 3499, status: 'Delivered' },
-        { id: 'STR-B21X8M', date: 'Feb 10, 2026', total: 1999, status: 'Processing' }
-    ];
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+    };
+
+    if (loading) {
+        return (
+            <div className="account-page d-flex justify-content-center align-items-center" style={{ minHeight: '60vh' }}>
+                <div className="spinner-border text-primary" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="account-page">
+                <div className="container py-5 text-center">
+                    <h3 className="text-danger">{error}</h3>
+                    <p className="text-secondary mt-2">Your session may have expired.</p>
+                    <div className="d-flex gap-3 justify-content-center mt-3">
+                        <button className="btn btn-outline-danger" onClick={() => { logout(); navigate('/auth'); }}>
+                            Login Again
+                        </button>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    if (!user) {
+        return (
+            <div className="account-page">
+                <div className="container py-5 text-center">
+                    <h3>Please log in to view your account</h3>
+                    <button className="btn btn-primary mt-3" onClick={() => navigate('/auth')}>
+                        Go to Login
+                    </button>
+                </div>
+            </div>
+        );
+    }
+
+    const memberSince = formatDate(user.createdAt || new Date());
+    const starsNamed = orders.length;
 
     return (
         <div className="account-page">
@@ -24,7 +98,7 @@ const Account = () => {
                 <div className="account-layout">
                     <aside className="profile-sidebar">
                         <div className="profile-avatar-container">
-                            <div className="avatar-main">{user.name[0]}</div>
+                            <div className="avatar-main">{user.name ? user.name[0].toUpperCase() : 'U'}</div>
                             <div className="avatar-ring"></div>
                         </div>
                         <h3 className="profile-name">{user.name}</h3>
@@ -33,15 +107,15 @@ const Account = () => {
                         <div className="profile-stats">
                             <div className="stat-item">
                                 <span>Stars Named</span>
-                                <span>{user.starsNamed}</span>
+                                <span>{starsNamed}</span>
                             </div>
                             <div className="stat-item">
                                 <span>Member Since</span>
-                                <span>{user.memberSince}</span>
+                                <span>{memberSince}</span>
                             </div>
                         </div>
 
-                        <button className="logout-btn-premium">
+                        <button className="logout-btn-premium" onClick={handleLogout}>
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                 <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
                                 <polyline points="16 17 21 12 16 7"></polyline>
@@ -66,36 +140,103 @@ const Account = () => {
                             </div>
 
                             <div className="premium-table-wrapper">
-                                <table className="premium-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Registry ID</th>
-                                            <th>Purchase Date</th>
-                                            <th>Total</th>
-                                            <th>Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {orders.map(order => (
-                                            <tr key={order.id} className="order-row">
-                                                <td className="order-id">{order.id}</td>
-                                                <td>{order.date}</td>
-                                                <td className="fw-bold text-white">₹{order.total.toLocaleString()}</td>
-                                                <td>
-                                                    <span className={`badge-celestial ${order.status.toLowerCase()}`}>
-                                                        {order.status}
-                                                    </span>
-                                                </td>
+                                {orders.length === 0 ? (
+                                    <div className="text-center py-5">
+                                        <p className="text-secondary">No orders yet. Start naming your stars!</p>
+                                        <button className="btn btn-primary mt-3" onClick={() => navigate('/shop')}>
+                                            Browse Packages
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <table className="premium-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Registry ID</th>
+                                                <th>Star Name</th>
+                                                <th>Date</th>
+                                                <th>Payment</th>
+                                                <th>Total</th>
+                                                <th>Status</th>
+                                                <th></th>
                                             </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody>
+                                            {orders.map(order => (
+                                                <OrderRow key={order._id} order={order} formatDate={formatDate} />
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                )}
                             </div>
                         </div>
                     </main>
                 </div>
             </div>
         </div>
+    );
+};
+
+const OrderRow = ({ order, formatDate }) => {
+    const [expanded, setExpanded] = useState(false);
+
+    return (
+        <>
+            <tr className={`order-row ${expanded ? 'expanded' : ''}`} onClick={() => setExpanded(!expanded)}>
+                <td className="order-id">ORD-{order._id.slice(-6).toUpperCase()}</td>
+                <td className="text-white fw-medium">{order.starName || 'Unnamed Star'}</td>
+                <td>{formatDate(order.createdAt)}</td>
+                <td className="text-capitalize">{order.paymentMethod || 'COD'}</td>
+                <td className="fw-bold text-white">₹{order.totalAmount.toLocaleString()}</td>
+                <td>
+                    <span className={`badge-celestial ${order.orderStatus || 'processing'}`}>
+                        {order.orderStatus || 'Processing'}
+                    </span>
+                </td>
+                <td>
+                    <button className="btn-icon">
+                        <svg
+                            width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            style={{ transform: expanded ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.3s' }}
+                        >
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </button>
+                </td>
+            </tr>
+            {expanded && (
+                <tr className="order-details-row">
+                    <td colSpan="7">
+                        <div className="order-details-content">
+                            <div className="detail-grid">
+                                <div className="detail-section">
+                                    <h5>Dedication</h5>
+                                    <p><strong>To:</strong> {order.recipientInfo?.name || 'N/A'}</p>
+                                    <p><strong>Message:</strong> {order.dedicationMessage || 'No message'}</p>
+                                </div>
+                                <div className="detail-section">
+                                    <h5>Shipping Details</h5>
+                                    <p>{order.shippingAddress?.address}</p>
+                                    <p>{order.shippingAddress?.city}, {order.shippingAddress?.postalCode}</p>
+                                    <p>Phone: {order.recipientInfo?.phone}</p>
+                                </div>
+                                <div className="detail-section">
+                                    <h5>Package Info</h5>
+                                    <p><strong>Package ID:</strong> {order.package}</p>
+                                    <p><strong>Payment Status:</strong> <span className={`status-text ${order.paymentStatus}`}>{order.paymentStatus}</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            )}
+        </>
     );
 };
 

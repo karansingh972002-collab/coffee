@@ -21,7 +21,7 @@
 }
 
 .wishlist-container {
-    max-width: 1600px;
+    max-width: 1400px;
     margin: 0 auto;
     padding: 0 var(--spacing-md);
     position: relative;
@@ -34,104 +34,98 @@
 }
 
 .wishlist-header h1 {
-    font-size: 3rem;
+    font-size: 3.5rem;
+    font-weight: 800;
+    letter-spacing: -1px;
     background: var(--gradient-text);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    margin-bottom: var(--spacing-sm);
+    margin-bottom: var(--spacing-xs);
 }
 
 .wishlist-count {
     color: var(--color-text-secondary);
     font-size: 1.1rem;
     font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 2px;
 }
 
 /* Empty State */
 .wishlist-empty {
-    max-width: 600px;
+    max-width: 500px;
     margin: 4rem auto;
-    padding: var(--spacing-3xl);
+    padding: 3rem;
     text-align: center;
-    background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(20px);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);
     border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: var(--radius-2xl);
+    border-radius: 24px;
 }
 
 .empty-icon-wrapper {
-    width: 100px;
-    height: 100px;
-    background: rgba(129, 140, 248, 0.1);
-    border-radius: var(--radius-full);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto var(--spacing-xl);
-    color: var(--color-primary-light);
-}
-
-.empty-icon-wrapper svg {
-    filter: drop-shadow(0 0 10px rgba(129, 140, 248, 0.5));
+    margin-bottom: 2rem;
+    animation: float 4s ease-in-out infinite;
 }
 
 .wishlist-empty h2 {
     font-size: 1.75rem;
-    margin-bottom: var(--spacing-md);
+    margin-bottom: 1rem;
     color: var(--color-text-primary);
 }
 
 .wishlist-empty p {
     color: var(--color-text-secondary);
-    margin-bottom: var(--spacing-2xl);
+    margin-bottom: 2rem;
     line-height: 1.6;
 }
 
 .browse-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--spacing-sm);
-    padding: var(--spacing-md) var(--spacing-2xl);
-    background: var(--gradient-primary);
+    display: inline-block;
+    padding: 14px 32px;
+    background: var(--color-primary);
     color: white;
     text-decoration: none;
-    border-radius: var(--radius-xl);
+    border-radius: 50px;
     font-weight: 600;
-    transition: all var(--transition-base);
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
 }
 
 .browse-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.5);
+    background: var(--color-primary-dark);
 }
 
 /* Items Grid */
 .wishlist-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-    gap: var(--spacing-xl);
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 30px;
 }
 
 .wishlist-card {
-    background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(20px);
+    background: rgba(30, 41, 59, 0.4);
     border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: var(--radius-xl);
+    border-radius: 16px;
     overflow: hidden;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.4s ease;
     position: relative;
+    group: hover;
 }
 
 .wishlist-card:hover {
-    transform: translateY(-10px);
+    transform: translateY(-8px);
     border-color: rgba(99, 102, 241, 0.3);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
 }
 
 .card-image-wrapper {
     position: relative;
-    height: 240px;
+    height: 380px;
+    /* Taller, premium aspect ratio */
     overflow: hidden;
 }
 
@@ -139,30 +133,67 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.6s ease;
+    transition: transform 0.8s ease;
 }
 
 .wishlist-card:hover .item-image {
-    transform: scale(1.1);
+    transform: scale(1.05);
+}
+
+/* Overlay & Action Buttons */
+.card-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+    display: flex;
+    justify-content: center;
+}
+
+.wishlist-card:hover .card-overlay {
+    transform: translateY(0);
+}
+
+.quick-add-btn {
+    background: white;
+    color: black;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    width: 100%;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: background 0.2s;
+}
+
+.quick-add-btn:hover {
+    background: #f0f0f0;
 }
 
 .remove-btn {
     position: absolute;
-    top: var(--spacing-sm);
-    right: var(--spacing-sm);
-    width: 36px;
-    height: 36px;
-    background: rgba(0, 0, 0, 0.5);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: var(--radius-full);
+    top: 15px;
+    right: 15px;
+    width: 32px;
+    height: 32px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
     color: white;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    backdrop-filter: blur(10px);
-    transition: all 0.3s ease;
-    z-index: 2;
+    backdrop-filter: blur(4px);
+    transition: all 0.2s ease;
+    z-index: 10;
 }
 
 .remove-btn:hover {
@@ -171,71 +202,62 @@
 }
 
 .card-content {
-    padding: var(--spacing-xl);
+    padding: 20px;
 }
 
 .item-badge {
-    color: var(--color-primary-light);
+    color: var(--color-text-secondary);
     font-size: 0.75rem;
-    font-weight: 700;
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: var(--spacing-xs);
+    letter-spacing: 1.5px;
+    margin-bottom: 8px;
     display: block;
 }
 
 .card-content h3 {
-    font-size: 1.4rem;
-    margin-bottom: var(--spacing-sm);
+    font-size: 1.25rem;
+    margin-bottom: 12px;
     color: var(--color-text-primary);
-}
-
-.item-meta {
-    font-size: 0.9rem;
-    color: var(--color-text-secondary);
-    margin-bottom: var(--spacing-lg);
+    font-weight: 600;
 }
 
 .card-footer {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-top: var(--spacing-lg);
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .item-price {
-    font-size: 1.4rem;
+    font-size: 1.1rem;
     font-weight: 700;
     color: var(--color-text-primary);
 }
 
-.move-to-cart-btn {
-    background: rgba(99, 102, 241, 0.1);
-    color: var(--color-primary-light);
-    border: 1px solid rgba(99, 102, 241, 0.2);
-    padding: var(--spacing-sm) var(--spacing-md);
-    border-radius: var(--radius-lg);
-    cursor: pointer;
-    font-weight: 600;
-    transition: all 0.3s ease;
+.rating-pill {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    color: #fbbf24;
     display: flex;
     align-items: center;
-    gap: var(--spacing-xs);
-}
-
-.move-to-cart-btn:hover {
-    background: var(--color-primary);
-    color: white;
-    border-color: var(--color-primary);
+    gap: 4px;
+    font-weight: 600;
 }
 
 @media (max-width: 768px) {
     .wishlist-header h1 {
-        font-size: 2.25rem;
+        font-size: 2.5rem;
     }
 
     .wishlist-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
     }
+
+    .card-image-wrapper {
+        height: 300px;
+    }
+
+    /* On mobile, show the add button always or handle differently. For now, we rely on hover which maps to tap often, or user clicks card */
 }

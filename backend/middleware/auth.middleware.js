@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const User = require('../models/User.model');
+const { userStore } = require('../db/memory-store');
 
 // Protect routes
 exports.protect = async (req, res, next) => {
@@ -23,12 +23,31 @@ exports.protect = async (req, res, next) => {
 
     try {
         // Verify token
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret');
 
-        req.user = await User.findById(decoded.id);
+        const User = require('../models/User');
+        const mongoose = require('mongoose');
+
+        // Try getting from DB first if connected
+        if (mongoose.connection.readyState === 1) {
+            req.user = await User.findById(decoded.id);
+        }
+
+        // If not found in DB or DB down, check memory store
+        if (!req.user) {
+            req.user = userStore.getById(decoded.id);
+        }
+
+        if (!req.user) {
+            return res.status(401).json({
+                success: false,
+                message: 'User not found or not authorized',
+            });
+        }
 
         next();
     } catch (err) {
+        console.error('Auth Middleware Error:', err.message);
         return res.status(401).json({
             success: false,
             message: 'Not authorized to access this route',

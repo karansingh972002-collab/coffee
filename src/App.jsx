@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 import Header from './components/Header';
 import Footer from './components/Footer';
-import Cart from './components/Cart';
+import LivePurchase from './components/LivePurchase';
 
 // Pages
 import Home from './pages/Home';
@@ -12,26 +12,29 @@ import ProductDetails from './pages/ProductDetails';
 import CartPage from './pages/CartPage';
 import Checkout from './pages/Checkout';
 import OrderSuccess from './pages/OrderSuccess';
+import OrderPage from './pages/OrderPage';
 import Auth from './pages/Auth';
 import Wishlist from './pages/Wishlist';
 import Account from './pages/Account';
 
 function App() {
   const [cartItems, setCartItems] = useState([]);
-  const [isCartOpen, setIsCartOpen] = useState(false);
 
   const addToCart = (item) => {
     setCartItems(prev => {
-      const existing = prev.find(i => i.id === item.id);
+      const existing = prev.find(i =>
+        i.id === item.id &&
+        JSON.stringify(i.customization) === JSON.stringify(item.customization)
+      );
       if (existing) {
         return prev.map(i =>
-          i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
+          (i.id === item.id && JSON.stringify(i.customization) === JSON.stringify(item.customization))
+            ? { ...i, quantity: i.quantity + (item.quantity || 1) }
+            : i
         );
       }
-      return [...prev, { ...item, quantity: 1 }];
+      return [...prev, { ...item, quantity: item.quantity || 1 }];
     });
-    // For smoother experience, don't auto-open side cart on full-page shop
-    // setIsCartOpen(true);
   };
 
   const removeFromCart = (itemId) => {
@@ -50,38 +53,49 @@ function App() {
     );
   };
 
+  const clearCart = () => {
+    setCartItems([]);
+  };
+
+  const [wishlistItems, setWishlistItems] = useState([]);
+
+  const addToWishlist = (item) => {
+    setWishlistItems(prev => {
+      if (prev.find(i => i.id === item.id)) return prev;
+      return [...prev, item];
+    });
+    // Optional: Show a toast or feedback
+  };
+
+  const removeFromWishlist = (itemId) => {
+    setWishlistItems(prev => prev.filter(item => item.id !== itemId));
+  };
+
   return (
     <Router>
       <div className="App">
         <Header
           cartCount={cartItems.reduce((sum, item) => sum + item.quantity, 0)}
-          onCartClick={() => setIsCartOpen(true)}
         />
 
         <main className="main-content">
           <Routes>
             <Route path="/" element={<Home onAddToCart={addToCart} />} />
-            <Route path="/shop" element={<Shop onAddToCart={addToCart} />} />
-            <Route path="/product/:id" element={<ProductDetails onAddToCart={addToCart} />} />
-            <Route path="/cart" element={<CartPage items={cartItems} onUpdateQuantity={updateQuantity} onRemove={removeFromCart} />} />
-            <Route path="/checkout" element={<Checkout items={cartItems} />} />
+            <Route path="/shop" element={<Shop onAddToCart={addToCart} onAddToWishlist={addToWishlist} />} />
+            <Route path="/product/:id" element={<ProductDetails onAddToCart={addToCart} onAddToWishlist={addToWishlist} />} />
+            <Route path="/cart" element={<CartPage items={cartItems} onUpdateQuantity={updateQuantity} onRemove={removeFromCart} onAddToWishlist={addToWishlist} />} />
+            <Route path="/checkout" element={<Checkout items={cartItems} clearCart={clearCart} />} />
             <Route path="/success" element={<OrderSuccess />} />
+            <Route path="/order" element={<OrderPage onAddToCart={addToCart} />} />
             <Route path="/auth" element={<Auth />} />
-            <Route path="/wishlist" element={<Wishlist items={[]} onAddToCart={addToCart} />} />
+            <Route path="/wishlist" element={<Wishlist items={wishlistItems} onAddToCart={addToCart} onRemoveFromWishlist={removeFromWishlist} />} />
             <Route path="/account" element={<Account />} />
             <Route path="/dashboard" element={<Account />} />
           </Routes>
         </main>
 
+        <LivePurchase />
         <Footer />
-
-        <Cart
-          isOpen={isCartOpen}
-          onClose={() => setIsCartOpen(false)}
-          items={cartItems}
-          onUpdateQuantity={updateQuantity}
-          onRemove={removeFromCart}
-        />
       </div>
     </Router>
   );

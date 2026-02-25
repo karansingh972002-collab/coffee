@@ -38,17 +38,22 @@ const Testimonials = () => {
         <section id="testimonials" className="testimonials section">
             <div className="testimonials-container">
                 <div className="section-header text-center">
-                    <h2>Be Inspired</h2>
-                    <p>Experience the magic of star naming through our community</p>
+                    <span className="section-badge fade-in">Customer Trust</span>
+                    <div className="header-title-wrapper">
+                        <div className="header-decoration left"></div>
+                        <h2 className="premium-title">Hearts Touched by Stars</h2>
+                        <div className="header-decoration right"></div>
+                    </div>
+                    <p className="section-subtitle fade-in">Experience the <span className="magic-text">magic of star naming</span> through our community</p>
                 </div>
 
                 <div className="testimonials-grid">
                     {testimonials.map((testimonial, index) => (
-                        <div key={index} className="testimonial-card">
+                        <div key={index} className="testimonial-card glass">
                             <div className="testimonial-rating">
                                 {[...Array(testimonial.rating)].map((_, i) => (
                                     <span key={i} className="star">
-                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                                             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
                                         </svg>
                                     </span>
@@ -56,30 +61,25 @@ const Testimonials = () => {
                             </div>
                             <h4 className="testimonial-title">{testimonial.title}</h4>
                             <p className="testimonial-text">"{testimonial.text}"</p>
-                            <div className="testimonial-author">— {testimonial.name}</div>
+                            <div className="testimonial-author">{testimonial.name}</div>
                         </div>
                     ))}
                 </div>
 
-                <div className="trustpilot-section">
-                    <div className="trustpilot-badge">
+                <div className="trustpilot-section fade-in">
+                    <div className="trustpilot-badge glass">
                         <div className="trustpilot-stars">
-                            {[1, 2, 3, 4, 5].map((i) => (
-                                <span key={i} className="tp-star">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="#00b67a" stroke="none">
-                                        <path d="M23.9986 9.6l-9.1432 0-2.8335-8.7L9.1906 9.6L.0452 9.6l7.387 5.378-2.822 8.685 7.412-5.395 7.411 5.395-2.822-8.685 7.389-5.378z"></path>
-                                    </svg>
-                                </span>
+                            {[...Array(5)].map((_, i) => (
+                                <svg key={i} width="24" height="24" viewBox="0 0 24 24" fill="#00b67e">
+                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                                </svg>
                             ))}
                         </div>
-                        <div className="trustpilot-text">
-                            <strong>Excellent</strong> 4.9 out of 5
-                        </div>
-                        <div className="trustpilot-reviews">
-                            Based on 100,000+ reviews
-                        </div>
+                        <div className="trustpilot-text">Rated Excellent on <strong>Trustpilot</strong></div>
+                        <div className="trustpilot-reviews">Based on 1,200+ global registry reviews</div>
                     </div>
                 </div>
+
             </div>
         </section>
     );

@@ -14,9 +14,7 @@ const Packages = ({ onAddToCart, onCustomize }) => {
             try {
                 const response = await api.getPackages();
                 if (response.success) {
-                    // Filter to show only Gift Packs for the home page
-                    const giftPacks = response.data.filter(pkg => pkg.name.includes('Gift Pack'));
-                    setPackages(giftPacks);
+                    setPackages(response.data);
                 } else {
                     setError('Failed to load packages');
                 }
@@ -53,9 +51,13 @@ const Packages = ({ onAddToCart, onCustomize }) => {
         <section id="packages" className="packages section">
             <div className="packages-container">
                 <div className="section-header text-center">
-                    <div className="section-badge">Premium Collection</div>
-                    <h2>Discover Our Gift Sets</h2>
-                    <p>Choose the perfect package to create an unforgettable memory with the highest standards of celestial registry.</p>
+                    <span className="section-badge fade-in">Premium Registry</span>
+                    <div className="header-title-wrapper">
+                        <div className="header-decoration left"></div>
+                        <h2 className="premium-title">Discover Our Gift Sets</h2>
+                        <div className="header-decoration right"></div>
+                    </div>
+                    <p className="section-subtitle fade-in">Choose the perfect package to create an <span className="magic-text">unforgettable memory</span></p>
                 </div>
 
                 <div className="packages-grid">

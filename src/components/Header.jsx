@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { isAuthenticated, logout } from '../services/api';
-import logo from '../assets/logo.svg';
+import Logo from './Logo';
 import './Header.css';
 
 const Header = ({ cartCount, onCartClick }) => {
@@ -42,19 +42,31 @@ const Header = ({ cartCount, onCartClick }) => {
         navigate('/');
     };
 
+    const handleLogoClick = (e) => {
+        if (location.pathname === '/') {
+            e.preventDefault();
+            const heroSection = document.getElementById('hero');
+            if (heroSection) {
+                heroSection.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+    };
+
     return (
         <header className={`header ${isScrolled ? 'scrolled' : ''}`}>
             <div className="container" style={{ maxWidth: '95%' }}>
                 <div className="header-content">
-                    <a href="/" className="logo text-decoration-none">
+                    <Link to="/" className="logo text-decoration-none" onClick={handleLogoClick}>
                         <div className="logo-container">
-                            <img src={logo} alt="Star Naming Logo" className="logo-img" width="50" height="50" />
+                            <Logo className="logo-svg" size={45} />
                             <span className="logo-text">Star Naming</span>
                         </div>
-                    </a>
+                    </Link>
 
                     <nav className={`nav ${isMobileMenuOpen ? 'open' : ''}`}>
-                        <Link to="/" className="nav-link">Home</Link>
+                        <Link to="/" className="nav-link" onClick={handleLogoClick}>Home</Link>
                         <Link to="/shop" className="nav-link">Shop</Link>
                         <Link to="/order" className="nav-link">Order Now</Link>
                         <a href="/#packages" className="nav-link">Packages</a>
@@ -93,37 +105,22 @@ const Header = ({ cartCount, onCartClick }) => {
 
                                     <div className="profile-menu-items">
                                         <Link to="/account" className="profile-menu-item">
-                                            Orders
+                                            My Orders
                                         </Link>
                                         <Link to="/wishlist" className="profile-menu-item">
-                                            Wishlist
+                                            My Wishlist
                                         </Link>
                                         <div className="profile-menu-item">
-                                            Gift Cards
+                                            Certificate Search
                                         </div>
                                         <div className="profile-menu-item">
-                                            Contact Us
-                                        </div>
-                                        <div className="profile-menu-item">
-                                            Star Naming Insider <span style={{ fontSize: '10px', background: '#ff3f6c', color: 'white', padding: '0 4px', borderRadius: '2px', marginLeft: '6px', textTransform: 'uppercase' }}>New</span>
+                                            Official Registry Help
                                         </div>
 
                                         <div style={{ height: '1px', background: 'rgba(255,255,255,0.1)', margin: '8px 0' }}></div>
 
                                         <div className="profile-menu-item">
-                                            Star Naming Credit
-                                        </div>
-                                        <div className="profile-menu-item">
-                                            Coupons
-                                        </div>
-                                        <div className="profile-menu-item">
-                                            Saved Cards
-                                        </div>
-                                        <div className="profile-menu-item">
-                                            Saved Vouchers
-                                        </div>
-                                        <div className="profile-menu-item">
-                                            Saved Addresses
+                                            Saved Coordinates
                                         </div>
 
                                         {isLoggedIn && (

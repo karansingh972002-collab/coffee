@@ -15,14 +15,18 @@ const HeartsTouched = () => {
                                 <span className="float-heart h3">❤️</span>
                             </div>
                         </div>
-                        <h2 className="hearts-title mb-3">
-                            A Community of Celestial Givers
-                        </h2>
-                        <p className="hearts-subtitle lead mx-auto">
-                            Join thousands of people around the world who have created
-                            eternal memories with our official star naming certificates.
-                            A gift that truly lasts a lifetime.
-                        </p>
+                        <div className="section-header text-center">
+                            <span className="section-badge fade-in">Community</span>
+                            <div className="header-title-wrapper">
+                                <div className="header-decoration left"></div>
+                                <h2 className="premium-title">Hearts Touched by Stars</h2>
+                                <div className="header-decoration right"></div>
+                            </div>
+                            <p className="section-subtitle lead mx-auto fade-in">
+                                Join thousands of people around the world who have created
+                                <span className="magic-text"> eternal memories</span> with our official star naming certificates.
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>

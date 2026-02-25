@@ -132,6 +132,86 @@ const packages = [
         gradient: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
         image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80',
         type: 'Binary'
+    },
+    {
+        name: 'Diamondnova - Digital',
+        subtitle: 'The Ultimate Star',
+        description: 'The brightest, most prestigious star naming experience available.',
+        price: 9999,
+        features: [
+            'Extra Bright Visible Star (Mag < 4.5)',
+            'Priority Registration',
+            'Premium Digital Cert',
+            'VIP Support'
+        ],
+        delivery: {
+            digital: 'Ready in 10 minutes',
+            physical: 'N/A'
+        },
+        badge: 'Ultimate',
+        gradient: 'linear-gradient(135deg, #a8c0ff 0%, #3f2b96 100%)',
+        image: 'https://images.unsplash.com/photo-1444703686981-a3abbc4d4fe3?auto=format&fit=crop&w=800&q=80',
+        type: 'Luxury'
+    },
+    {
+        name: 'Diamondnova - Gift Pack',
+        subtitle: 'Prestige Collection',
+        description: 'An elite gift box representing the pinnacle of celestial naming.',
+        price: 14999,
+        features: [
+            'Extra Bright Visible Star (Mag < 4.5)',
+            'Gold-Foiled Certificate',
+            'Premium Wood Frame',
+            'Crystal Star Ornament'
+        ],
+        delivery: {
+            digital: 'Ready in 10 minutes',
+            physical: 'Arrives in 2-3 days'
+        },
+        badge: 'Exclusive',
+        gradient: 'linear-gradient(135deg, #a8c0ff 0%, #3f2b96 100%)',
+        image: 'https://images.unsplash.com/photo-1506318171071-a8bcbf675b27?auto=format&fit=crop&w=800&q=80',
+        type: 'Luxury'
+    },
+    {
+        name: 'Zodiac Star - Digital',
+        subtitle: 'Aligned with Destiny',
+        description: 'Name a star within your specific Zodiac sign constellation.',
+        price: 2999,
+        features: [
+            'Star in Specific Zodiac Constellation',
+            'Astrology Report Included',
+            'Digital Zodiac Certificate',
+            'AR Sky Guide'
+        ],
+        delivery: {
+            digital: 'Ready in 15 minutes',
+            physical: 'N/A'
+        },
+        badge: 'Astrology',
+        gradient: 'linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%)',
+        image: 'https://images.unsplash.com/photo-1534067783941-51c9c23ecefd?auto=format&fit=crop&w=800&q=80',
+        type: 'Zodiac'
+    },
+    {
+        name: 'Little Star - Digital',
+        subtitle: 'For the Little Ones',
+        description: 'A magical star naming experience designed specifically for children.',
+        price: 1499,
+        features: [
+            'Kid-Friendly Certificate Design',
+            'Space Facts Booklet (PDF)',
+            'Easy-to-find Star',
+            'Space Coloring Pages'
+        ],
+        delivery: {
+            digital: 'Ready in 15 minutes',
+            physical: 'N/A'
+        },
+        badge: 'For Kids',
+        gradient: 'linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%)',
+        image: 'https://images.unsplash.com/photo-1444703686981-a3abbc4d4fe3?auto=format&fit=crop&w=800&q=80',
+        type: 'Kids'
     }
 ];
 

@@ -85,158 +85,184 @@ const Account = () => {
     }
 
     const memberSince = formatDate(user.createdAt || new Date());
-    const starsNamed = orders.length;
-
     return (
         <div className="account-page">
             <div className="account-container">
                 <header className="account-header">
-                    <h1>User Dashboard</h1>
-                    <p className="text-secondary">Manage your star naming portfolio and registry activity</p>
+                    <div className="header-content">
+                        <h1>User Dashboard</h1>
+                        <p>Welcome back, {user?.name}. Your universe is waiting.</p>
+                    </div>
                 </header>
 
                 <div className="account-layout">
-                    <aside className="profile-sidebar">
+                    <aside className="profile-sidebar glass">
                         <div className="profile-avatar-container">
-                            <div className="avatar-main">{user.name ? user.name[0].toUpperCase() : 'U'}</div>
+                            <div className="avatar-main">{user?.name?.charAt(0)}</div>
                             <div className="avatar-ring"></div>
                         </div>
-                        <h3 className="profile-name">{user.name}</h3>
-                        <p className="profile-email">{user.email}</p>
+                        <h3 className="profile-name">{user?.name}</h3>
+                        <p className="profile-email">{user?.email}</p>
 
-                        <div className="profile-stats">
-                            <div className="stat-item">
-                                <span>Stars Named</span>
-                                <span>{starsNamed}</span>
-                            </div>
-                            <div className="stat-item">
-                                <span>Member Since</span>
-                                <span>{memberSince}</span>
-                            </div>
+                        <div className="sidebar-nav">
+                            <button className="nav-item active">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                                Overview
+                            </button>
+                            <button className="nav-item">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                                Wishlist
+                            </button>
+                            <button className="nav-item">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                                Security
+                            </button>
                         </div>
 
-                        <button className="logout-btn-premium" onClick={handleLogout}>
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <button className="logout-btn-premium" onClick={onLogout}>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                 <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
                                 <polyline points="16 17 21 12 16 7"></polyline>
                                 <line x1="21" y1="12" x2="9" y2="12"></line>
                             </svg>
-                            Logout Account
+                            Logout
                         </button>
                     </aside>
 
-                    <main className="dashboard-content">
-                        <div className="order-history-card">
+                    <div className="dashboard-content">
+                        <section className="dashboard-stats-grid">
+                            <div className="dashboard-stat-card glass">
+                                <div className="stat-icon-wrapper orders">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                                </div>
+                                <div className="stat-info">
+                                    <span className="stat-value">{orders.length}</span>
+                                    <span className="stat-label">Total Orders</span>
+                                </div>
+                            </div>
+                            <div className="dashboard-stat-card glass">
+                                <div className="stat-icon-wrapper stars">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                                </div>
+                                <div className="stat-info">
+                                    <span className="stat-value">{orders.filter(o => o.paymentStatus === 'completed').length}</span>
+                                    <span className="stat-label">Named Stars</span>
+                                </div>
+                            </div>
+                            <div className="dashboard-stat-card glass">
+                                <div className="stat-icon-wrapper security">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                                </div>
+                                <div className="stat-info">
+                                    <span className="stat-value">Verified</span>
+                                    <span className="stat-label">Account Status</span>
+                                </div>
+                            </div>
+                        </section>
+
+                        <div className="order-history-card glass">
                             <div className="card-title-group">
                                 <h2>
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                                        <line x1="16" y1="2" x2="16" y2="6"></line>
-                                        <line x1="8" y1="2" x2="8" y2="6"></line>
-                                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                                        <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+                                        <polyline points="13 2 13 9 20 9"></polyline>
                                     </svg>
-                                    Celestial Order History
+                                    Recent Registries
                                 </h2>
                             </div>
 
-                            <div className="premium-table-wrapper">
-                                {orders.length === 0 ? (
-                                    <div className="text-center py-5">
-                                        <p className="text-secondary">No orders yet. Start naming your stars!</p>
-                                        <button className="btn btn-primary mt-3" onClick={() => navigate('/shop')}>
-                                            Browse Packages
-                                        </button>
-                                    </div>
-                                ) : (
+                            {orders.length === 0 ? (
+                                <div className="no-orders text-center py-5">
+                                    <p className="text-muted">You haven't immortalized any stars yet.</p>
+                                    <Link to="/shop" className="btn btn-primary mt-3">Start Naming</Link>
+                                </div>
+                            ) : (
+                                <div className="premium-table-wrapper">
                                     <table className="premium-table">
                                         <thead>
                                             <tr>
                                                 <th>Registry ID</th>
+                                                <th>Package</th>
                                                 <th>Star Name</th>
-                                                <th>Date</th>
-                                                <th>Payment</th>
-                                                <th>Total</th>
                                                 <th>Status</th>
+                                                <th>Amount</th>
                                                 <th></th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {orders.map(order => (
-                                                <OrderRow key={order._id} order={order} formatDate={formatDate} />
+                                            {orders.map((order) => (
+                                                <React.Fragment key={order._id}>
+                                                    <tr
+                                                        className={`order-row ${expandedOrder === order._id ? 'expanded' : ''}`}
+                                                        onClick={() => toggleOrderDetails(order._id)}
+                                                    >
+                                                        <td className="order-id">#{order._id.slice(-6).toUpperCase()}</td>
+                                                        <td>{order.package?.name || 'Star Package'}</td>
+                                                        <td><strong>{order.customization?.starName || 'Unnamed Star'}</strong></td>
+                                                        <td>
+                                                            <span className={`badge-celestial ${order.paymentStatus}`}>
+                                                                {order.paymentStatus}
+                                                            </span>
+                                                        </td>
+                                                        <td className="order-price">₹{order.totalPrice.toLocaleString()}</td>
+                                                        <td className="text-right">
+                                                            <button className="btn-icon">
+                                                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                                    <path d="M6 9l6 6 6-6"></path>
+                                                                </svg>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                    {expandedOrder === order._id && (
+                                                        <tr className="order-details-row">
+                                                            <td colSpan="6">
+                                                                <div className="order-details-content">
+                                                                    <div className="detail-grid">
+                                                                        <div className="detail-section">
+                                                                            <h5>Star Information</h5>
+                                                                            <p><strong>Name:</strong> {order.customization?.starName}</p>
+                                                                            <p><strong>Dedication:</strong> {order.customization?.dedicationMessage || 'No message'}</p>
+                                                                            <p><strong>Date:</strong> {order.customization?.dedicationDate || 'Universal Time'}</p>
+                                                                        </div>
+                                                                        <div className="detail-section">
+                                                                            <h5>Order Details</h5>
+                                                                            <p><strong>ID:</strong> {order._id}</p>
+                                                                            <p><strong>Package:</strong> {order.package?.name}</p>
+                                                                            <p><strong>Payment:</strong> <span className={`status-text ${order.paymentStatus}`}>{order.paymentStatus}</span></p>
+                                                                        </div>
+
+                                                                        {order.paymentStatus === 'completed' && (
+                                                                            <div className="detail-section certificate-preview-section">
+                                                                                <h5>Your Certificate</h5>
+                                                                                <div className="certificate-thumbnail glass">
+                                                                                    <div className="cert-inner">
+                                                                                        <h4>Certificate of Registry</h4>
+                                                                                        <p className="cert-star-name">{order.customization?.starName}</p>
+                                                                                        <div className="cert-footer">Official Seal</div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <button className="btn btn-outline-primary btn-sm w-100 mt-2">
+                                                                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="me-1"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                                                                                    Download PDF
+                                                                                </button>
+                                                                            </div>
+                                                                        )}
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    )}
+                                                </React.Fragment>
                                             ))}
                                         </tbody>
                                     </table>
-                                )}
-                            </div>
+                                </div>
+                            )}
                         </div>
-                    </main>
+                    </div>
                 </div>
             </div>
         </div>
-    );
-};
-
-const OrderRow = ({ order, formatDate }) => {
-    const [expanded, setExpanded] = useState(false);
-
-    return (
-        <>
-            <tr className={`order-row ${expanded ? 'expanded' : ''}`} onClick={() => setExpanded(!expanded)}>
-                <td className="order-id">ORD-{order._id.slice(-6).toUpperCase()}</td>
-                <td className="text-white fw-medium">{order.starName || 'Unnamed Star'}</td>
-                <td>{formatDate(order.createdAt)}</td>
-                <td className="text-capitalize">{order.paymentMethod || 'COD'}</td>
-                <td className="fw-bold text-white">₹{order.totalAmount.toLocaleString()}</td>
-                <td>
-                    <span className={`badge-celestial ${order.orderStatus || 'processing'}`}>
-                        {order.orderStatus || 'Processing'}
-                    </span>
-                </td>
-                <td>
-                    <button className="btn-icon">
-                        <svg
-                            width="20"
-                            height="20"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            style={{ transform: expanded ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.3s' }}
-                        >
-                            <polyline points="6 9 12 15 18 9"></polyline>
-                        </svg>
-                    </button>
-                </td>
-            </tr>
-            {expanded && (
-                <tr className="order-details-row">
-                    <td colSpan="7">
-                        <div className="order-details-content">
-                            <div className="detail-grid">
-                                <div className="detail-section">
-                                    <h5>Dedication</h5>
-                                    <p><strong>To:</strong> {order.recipientInfo?.name || 'N/A'}</p>
-                                    <p><strong>Message:</strong> {order.dedicationMessage || 'No message'}</p>
-                                </div>
-                                <div className="detail-section">
-                                    <h5>Shipping Details</h5>
-                                    <p>{order.shippingAddress?.address}</p>
-                                    <p>{order.shippingAddress?.city}, {order.shippingAddress?.postalCode}</p>
-                                    <p>Phone: {order.recipientInfo?.phone}</p>
-                                </div>
-                                <div className="detail-section">
-                                    <h5>Package Info</h5>
-                                    <p><strong>Package ID:</strong> {order.package}</p>
-                                    <p><strong>Payment Status:</strong> <span className={`status-text ${order.paymentStatus}`}>{order.paymentStatus}</span></p>
-                                </div>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-            )}
-        </>
     );
 };
 

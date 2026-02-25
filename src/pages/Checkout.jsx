@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { api, isAuthenticated } from '../services/api';
 import CheckoutSteps from '../components/CheckoutSteps';
-import './CheckoutMyntra.css';
+import './CheckoutCelestial.css';
 
 const Checkout = ({ items, clearCart }) => {
     const navigate = useNavigate();
@@ -12,7 +12,7 @@ const Checkout = ({ items, clearCart }) => {
     const [paymentMethod, setPaymentMethod] = useState('cod');
 
     // Address State
-    const [selectedAddress, setSelectedAddress] = useState(0); // 0 for default mock address
+    const [selectedAddress, setSelectedAddress] = useState(0);
     const [showAddressForm, setShowAddressForm] = useState(false);
     const [formData, setFormData] = useState({
         name: 'Karan Singh',
@@ -74,12 +74,7 @@ const Checkout = ({ items, clearCart }) => {
                 return Promise.all(orderPromises);
             });
 
-            const results = await Promise.all(promises);
-
-            if (results.length > 0 && results[0].length > 0 && results[0][0].data) {
-                sessionStorage.setItem('lastOrderId', results[0][0].data._id);
-            }
-
+            await Promise.all(promises);
             clearCart();
             navigate('/success');
         } catch (err) {
@@ -93,8 +88,10 @@ const Checkout = ({ items, clearCart }) => {
     if (items.length === 0) {
         return (
             <div className="checkout-page container py-5 text-center">
-                <h2>Your cart is empty</h2>
-                <Link to="/shop" className="btn-place-order" style={{ width: 'auto', display: 'inline-block' }}>Go to Shop</Link>
+                <div style={{ padding: '60px 20px', background: 'rgba(30, 41, 59, 0.3)', borderRadius: '32px', border: '1px solid rgba(255,255,255,0.05)', maxWidth: '600px', margin: '0 auto' }}>
+                    <h2 style={{ color: '#fff', fontWeight: 800, marginBottom: '20px' }}>Your celestial bag is empty</h2>
+                    <Link to="/shop" className="btn-place-order" style={{ width: 'auto', display: 'inline-block', padding: '16px 40px' }}>EXPLORE CELESTIAL SHOP</Link>
+                </div>
             </div>
         );
     }
@@ -102,16 +99,17 @@ const Checkout = ({ items, clearCart }) => {
     return (
         <div className="checkout-page">
             {error && (
-                <div className="alert alert-danger text-center m-3" role="alert">
+                <div className="alert alert-danger text-center m-3" role="alert" style={{ background: 'rgba(239, 68, 68, 0.2)', color: '#fca5a5', border: '1px solid rgba(239, 68, 68, 0.3)', borderRadius: '12px' }}>
                     {error}
                 </div>
             )}
+
             {loading && (
-                <div className="processing-overlay">
-                    <div className="processing-content">
-                        <div className="spinner-border text-primary" role="status"></div>
-                        <h3>Processing Secure Payment</h3>
-                        <p>Please do not close this window...</p>
+                <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(5, 8, 22, 0.9)', backdropFilter: 'blur(10px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
+                    <div style={{ textAlign: 'center' }}>
+                        <div className="spinner-border text-primary mb-4" role="status" style={{ width: '3rem', height: '3rem' }}></div>
+                        <h3 style={{ color: '#fff', fontWeight: 800, letterSpacing: '2px' }}>PROCESSING YOUR ORDER</h3>
+                        <p style={{ color: '#94a3b8' }}>Please do not close this window...</p>
                     </div>
                 </div>
             )}
@@ -119,61 +117,54 @@ const Checkout = ({ items, clearCart }) => {
             <CheckoutSteps activeStep={step} />
 
             <div className="checkout-container">
-                {/* Left Section */}
                 <div className="checkout-left">
-                    {/* Step 1: Address */}
                     {step === 'address' && (
                         <div>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
-                                <h4 style={{ fontSize: '18px', fontWeight: 700 }}>Select Delivery Address</h4>
-                                <button className="btn btn-sm btn-outline-secondary" onClick={() => setShowAddressForm(!showAddressForm)}>ADD NEW ADDRESS</button>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '24px', alignItems: 'center' }}>
+                                <h4 style={{ fontSize: '1.25rem', fontWeight: 800, margin: 0, letterSpacing: '0.05em' }}>SHIPPING ADDRESS</h4>
+                                <button className="btn btn-sm" style={{ color: '#818cf8', fontWeight: 800, border: '1px solid rgba(129, 140, 248, 0.3)', padding: '8px 16px', borderRadius: '8px' }} onClick={() => setShowAddressForm(!showAddressForm)}>+ ADD NEW ADDRESS</button>
                             </div>
 
-                            {/* Default Address Mock */}
-                            <div
-                                className={`address-box ${selectedAddress === 0 ? 'selected' : ''}`}
-                                onClick={() => setSelectedAddress(0)}
-                            >
-                                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
-                                    <input type="radio" checked={selectedAddress === 0} readOnly onChange={() => setSelectedAddress(0)} style={{ marginTop: '4px', accentColor: '#ff3f6c' }} />
-                                    <div>
-                                        <div className="address-name">{formData.name} <span style={{ fontSize: '10px', padding: '2px 6px', border: '1px solid #03a685', color: '#03a685', borderRadius: '10px', marginLeft: '8px' }}>HOME</span></div>
-                                        <p style={{ fontSize: '13px', color: '#535766', margin: '4px 0' }}>{formData.address}, {formData.city} - {formData.postalCode}</p>
-                                        <p style={{ fontSize: '13px', color: '#535766', margin: 0 }}>Mobile: <span style={{ fontWeight: 600 }}>{formData.phone}</span></p>
+                            <div className="checkout-card" style={{ padding: '24px', cursor: 'pointer', border: selectedAddress === 0 ? '1px solid #6366f1' : '1px solid rgba(255,255,255,0.1)', background: selectedAddress === 0 ? 'rgba(99, 102, 241, 0.05)' : 'rgba(30, 41, 59, 0.4)' }} onClick={() => setSelectedAddress(0)}>
+                                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
+                                    <div style={{ width: '20px', height: '20px', borderRadius: '50%', border: '2px solid #818cf8', display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '4px' }}>
+                                        {selectedAddress === 0 && <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#818cf8' }}></div>}
+                                    </div>
+                                    <div style={{ flex: 1 }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
+                                            <span style={{ fontSize: '1.1rem', fontWeight: 800, color: '#fff' }}>{formData.name}</span>
+                                            <span style={{ fontSize: '10px', padding: '2px 8px', background: 'rgba(16, 185, 129, 0.2)', color: '#10b981', borderRadius: '20px', fontWeight: 700 }}>DEFAULT</span>
+                                        </div>
+                                        <p style={{ color: '#94a3b8', margin: '0 0 12px', lineHeight: 1.6 }}>{formData.address}, {formData.city} - {formData.postalCode}</p>
+                                        <div style={{ color: '#6366f1', fontWeight: 700 }}>Mobile: {formData.phone}</div>
 
                                         {selectedAddress === 0 && (
-                                            <button
-                                                className="btn-place-order"
-                                                onClick={() => setStep('payment')}
-                                                style={{ marginTop: '16px' }}
-                                            >
-                                                DELIVER HERE
-                                            </button>
+                                            <button className="btn-place-order" onClick={() => setStep('payment')} style={{ marginTop: '24px', maxWidth: '250px' }}>DELIVER TO THIS ADDRESS</button>
                                         )}
                                     </div>
                                 </div>
                             </div>
 
                             {showAddressForm && (
-                                <div className="checkout-card">
-                                    <form className="row g-3" onSubmit={handleAddressSubmit}>
+                                <div className="checkout-card" style={{ marginTop: '24px' }}>
+                                    <form className="row g-4" onSubmit={handleAddressSubmit}>
                                         <div className="col-md-6">
-                                            <input type="text" className="form-control" name="name" value={formData.name} onChange={handleChange} placeholder="Name" required />
+                                            <input type="text" className="payment-input" name="name" value={formData.name} onChange={handleChange} placeholder="Full Name" required />
                                         </div>
                                         <div className="col-md-6">
-                                            <input type="text" className="form-control" name="phone" value={formData.phone} onChange={handleChange} placeholder="Mobile No." required />
+                                            <input type="text" className="payment-input" name="phone" value={formData.phone} onChange={handleChange} placeholder="Mobile Number" required />
                                         </div>
                                         <div className="col-12">
-                                            <input type="text" className="form-control" name="address" value={formData.address} onChange={handleChange} placeholder="Address (Area and Street)" required />
+                                            <input type="text" className="payment-input" name="address" value={formData.address} onChange={handleChange} placeholder="Galaxy Address" required />
                                         </div>
                                         <div className="col-md-6">
-                                            <input type="text" className="form-control" name="city" value={formData.city} onChange={handleChange} placeholder="City" required />
+                                            <input type="text" className="payment-input" name="city" value={formData.city} onChange={handleChange} placeholder="Celestial City" required />
                                         </div>
                                         <div className="col-md-6">
-                                            <input type="text" className="form-control" name="postalCode" value={formData.postalCode} onChange={handleChange} placeholder="Pincode" required />
+                                            <input type="text" className="payment-input" name="postalCode" value={formData.postalCode} onChange={handleChange} placeholder="Pincode / Star Code" required />
                                         </div>
                                         <div className="col-12">
-                                            <button type="submit" className="btn-place-order">SAVE THIS ADDRESS</button>
+                                            <button type="submit" className="btn-place-order">SAVE ADDRESS</button>
                                         </div>
                                     </form>
                                 </div>
@@ -181,49 +172,32 @@ const Checkout = ({ items, clearCart }) => {
                         </div>
                     )}
 
-                    {/* Step 2: Payment */}
                     {step === 'payment' && (
                         <div>
-                            <h4 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '16px', textTransform: 'uppercase', color: '#535766' }}>Choose Payment Mode</h4>
+                            <h4 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '24px', letterSpacing: '0.05em' }}>CHOOSE PAYMENT METHOD</h4>
                             <div className="payment-wrapper">
-                                {/* Sidebar */}
                                 <div className="payment-sidebar">
                                     <div className={`payment-tab ${paymentMethod === 'cod' ? 'active' : ''}`} onClick={() => setPaymentMethod('cod')}>
-                                        <span className="payment-icon">💵</span>
-                                        <span>Cash On Delivery</span>
+                                        <span>💵</span> Cash On Delivery
                                     </div>
                                     <div className={`payment-tab ${paymentMethod === 'upi' ? 'active' : ''}`} onClick={() => setPaymentMethod('upi')}>
-                                        <span className="payment-icon">📍</span>
-                                        <span>UPI</span>
-                                        <span className="recommended-pill">New</span>
+                                        <span>📍</span> UPI Interface
                                     </div>
                                     <div className={`payment-tab ${paymentMethod === 'card' ? 'active' : ''}`} onClick={() => setPaymentMethod('card')}>
-                                        <span className="payment-icon">💳</span>
-                                        <span>Credit / Debit Card</span>
+                                        <span>💳</span> Stellar Cards
                                     </div>
                                     <div className={`payment-tab ${paymentMethod === 'netbanking' ? 'active' : ''}`} onClick={() => setPaymentMethod('netbanking')}>
-                                        <span className="payment-icon">🏦</span>
-                                        <span>Net Banking</span>
-                                    </div>
-                                    <div className={`payment-tab ${paymentMethod === 'wallet' ? 'active' : ''}`} onClick={() => setPaymentMethod('wallet')}>
-                                        <span className="payment-icon">👛</span>
-                                        <span>Wallets</span>
-                                        <span className="recommended-pill">Offer</span>
-                                    </div>
-                                    <div className={`payment-tab ${paymentMethod === 'emi' ? 'active' : ''}`} onClick={() => setPaymentMethod('emi')}>
-                                        <span className="payment-icon">📉</span>
-                                        <span>EMI</span>
+                                        <span>🏦</span> Galatic Banking
                                     </div>
                                 </div>
 
-                                {/* Content Area */}
-                                <div className="payment-content-area">
+                                <div className="payment-content-area" style={{ background: 'transparent' }}>
                                     {paymentMethod === 'cod' && (
                                         <div>
-                                            <div className="payment-header">Cash On Delivery (Cash / UPI)</div>
-                                            <div style={{ background: '#fff9f9', border: '1px dashed #ff3f6c', padding: '16px', borderRadius: '4px', marginBottom: '24px' }}>
-                                                <p style={{ fontSize: '14px', marginBottom: '8px', fontWeight: 600 }}>Pay on Delivery</p>
-                                                <p style={{ fontSize: '12px', color: '#535766' }}>You can pay via Cash or UPI (Google Pay, PhonePe, etc.) when the product is delivered.</p>
+                                            <h5 style={{ fontWeight: 800, color: '#fff', marginBottom: '16px' }}>CASH ON ARRIVAL</h5>
+                                            <div style={{ background: 'rgba(99, 102, 241, 0.1)', border: '1px dashed #6366f1', padding: '20px', borderRadius: '16px', marginBottom: '32px' }}>
+                                                <p style={{ fontSize: '14px', color: '#fff', marginBottom: '8px', fontWeight: 700 }}>Verified Arrival</p>
+                                                <p style={{ fontSize: '12px', color: '#94a3b8', margin: 0 }}>You can fulfill the credits via Cash or Digital UPI when your celestial package arrives at the coordinates.</p>
                                             </div>
                                             <button className="btn-place-order" onClick={handlePaymentSubmit}>PLACE ORDER</button>
                                         </div>
@@ -231,79 +205,47 @@ const Checkout = ({ items, clearCart }) => {
 
                                     {paymentMethod === 'upi' && (
                                         <div>
-                                            <div className="payment-header">Pay via UPI</div>
-                                            <div style={{ marginBottom: '20px' }}>
-                                                <div className="payment-form-label">Enter UPI ID</div>
-                                                <input type="text" className="payment-input" placeholder="e.g. mobile@upl" />
-                                                <p style={{ fontSize: '11px', color: '#535766', marginTop: '6px' }}>UPI ID is in the format of mobilenumber@bank or username@bank</p>
+                                            <h5 style={{ fontWeight: 800, color: '#fff', marginBottom: '16px' }}>PAY VIA STELLAR UPI</h5>
+                                            <div className="mb-4">
+                                                <label style={{ fontSize: '12px', color: '#94a3b8', marginBottom: '8px', display: 'block', fontWeight: 700 }}>ENTER UPI ID</label>
+                                                <input type="text" className="payment-input" placeholder="e.g. pilot@stellar" />
                                             </div>
-                                            <button className="btn-place-order" onClick={handlePaymentSubmit}>VERIFY & PAY</button>
+                                            <button className="btn-place-order" onClick={handlePaymentSubmit}>VERIFY & SYNC</button>
                                         </div>
                                     )}
 
                                     {paymentMethod === 'card' && (
                                         <div>
-                                            <div className="payment-header">Credit / Debit Card</div>
-                                            <div className="payment-form-group">
-                                                <div className="payment-form-label">Card Number</div>
-                                                <input type="text" className="payment-input" placeholder="XXXX XXXX XXXX XXXX" />
-                                            </div>
-                                            <div className="payment-form-group">
-                                                <div className="payment-form-label">Name on Card</div>
-                                                <input type="text" className="payment-input" placeholder="John Doe" />
-                                            </div>
-                                            <div style={{ display: 'flex', gap: '16px' }}>
-                                                <div className="payment-form-group" style={{ flex: 1 }}>
-                                                    <div className="payment-form-label">Valid Thru</div>
+                                            <h5 style={{ fontWeight: 800, color: '#fff', marginBottom: '16px' }}>ENCRYPTED CARD CHANNEL</h5>
+                                            <div className="row g-3">
+                                                <div className="col-12">
+                                                    <input type="text" className="payment-input" placeholder="XXXX XXXX XXXX XXXX" />
+                                                </div>
+                                                <div className="col-12">
+                                                    <input type="text" className="payment-input" placeholder="Holder Name" />
+                                                </div>
+                                                <div className="col-6">
                                                     <input type="text" className="payment-input" placeholder="MM/YY" />
                                                 </div>
-                                                <div className="payment-form-group" style={{ flex: 1 }}>
-                                                    <div className="payment-form-label">CVV</div>
-                                                    <input type="password" className="payment-input" placeholder="123" />
+                                                <div className="col-6">
+                                                    <input type="password" className="payment-input" placeholder="CVV" />
                                                 </div>
                                             </div>
-                                            <button className="btn-place-order" onClick={handlePaymentSubmit}>PAY NOW</button>
+                                            <button className="btn-place-order" style={{ marginTop: '24px' }} onClick={handlePaymentSubmit}>FUSE PAYMENT</button>
                                         </div>
                                     )}
 
                                     {paymentMethod === 'netbanking' && (
                                         <div>
-                                            <div className="payment-header">Net Banking</div>
-                                            <div className="payment-form-label" style={{ marginBottom: '12px' }}>Popular Banks</div>
-                                            <div className="bank-grid">
-                                                <div className="bank-item" onClick={handlePaymentSubmit}>
-                                                    <span>HDFC</span>
-                                                </div>
-                                                <div className="bank-item" onClick={handlePaymentSubmit}>
-                                                    <span>ICICI</span>
-                                                </div>
-                                                <div className="bank-item" onClick={handlePaymentSubmit}>
-                                                    <span>SBI</span>
-                                                </div>
-                                                <div className="bank-item" onClick={handlePaymentSubmit}>
-                                                    <span>Axis</span>
-                                                </div>
-                                                <div className="bank-item" onClick={handlePaymentSubmit}>
-                                                    <span>Kotak</span>
-                                                </div>
+                                            <h5 style={{ fontWeight: 800, color: '#fff', marginBottom: '16px' }}>SELECT NODE</h5>
+                                            <div className="bank-grid mb-4">
+                                                {['HDFC', 'ICICI', 'SBI', 'AXIS'].map(bank => (
+                                                    <div key={bank} className="bank-item" onClick={handlePaymentSubmit} style={{ background: 'rgba(255,255,255,0.03)', height: '70px' }}>
+                                                        <span style={{ fontWeight: 800, fontSize: '0.9rem' }}>{bank}</span>
+                                                    </div>
+                                                ))}
                                             </div>
-                                            <div style={{ marginTop: '20px' }}>
-                                                <div className="payment-form-label">Other Banks</div>
-                                                <select className="payment-input" style={{ width: '100%', cursor: 'pointer' }}>
-                                                    <option>Select Bank</option>
-                                                    <option>Bank of Baroda</option>
-                                                    <option>Punjab National Bank</option>
-                                                    <option>Yes Bank</option>
-                                                </select>
-                                            </div>
-                                            <button className="btn-place-order" onClick={handlePaymentSubmit} style={{ marginTop: '24px' }}>PAY NOW</button>
-                                        </div>
-                                    )}
-
-                                    {(paymentMethod === 'wallet' || paymentMethod === 'emi') && (
-                                        <div style={{ padding: '40px 0', textAlign: 'center', color: '#535766' }}>
-                                            <span style={{ fontSize: '32px', display: 'block', marginBottom: '12px' }}>🚧</span>
-                                            <p>{paymentMethod === 'wallet' ? 'Wallets' : 'EMI'} are currently unavailable.</p>
+                                            <button className="btn-place-order" onClick={handlePaymentSubmit}>PROCEED TO GATEWAY</button>
                                         </div>
                                     )}
                                 </div>
@@ -312,26 +254,25 @@ const Checkout = ({ items, clearCart }) => {
                     )}
                 </div>
 
-                {/* Right Section: Price Details */}
                 <div className="checkout-right">
                     <div className="checkout-card">
-                        <div className="price-details-header">PRICE DETAILS ({items.length} Items)</div>
+                        <div className="price-details-header">ORDER SUMMARY ({items.length} Items)</div>
 
                         <div className="price-row">
-                            <span>Total MRP</span>
+                            <span>Package Total</span>
                             <span>₹{Math.floor(totalMRP).toLocaleString()}</span>
                         </div>
                         <div className="price-row">
-                            <span>Discount on MRP</span>
+                            <span>Celestial Discount</span>
                             <span className="price-discount">-₹{Math.floor(discount).toLocaleString()}</span>
                         </div>
                         <div className="price-row">
-                            <span>Convenience Fee</span>
-                            <span><span style={{ textDecoration: 'line-through' }}>₹99</span> <span className="price-discount">FREE</span></span>
+                            <span>Shipping & Handling</span>
+                            <span><span style={{ textDecoration: 'line-through', color: '#94a3b8', marginRight: '8px' }}>₹99</span> <span className="price-discount">FREE</span></span>
                         </div>
 
                         <div className="price-row total">
-                            <span>Total Amount</span>
+                            <span>TOTAL PAYABLE</span>
                             <span>₹{total.toLocaleString()}</span>
                         </div>
                     </div>

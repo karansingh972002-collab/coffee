@@ -45,13 +45,6 @@ const OrderPage = ({ onAddToCart }) => {
                         official registration, and a premium folder delivered across India.
                     </p>
 
-                    {/* Trustpilot Placeholder */}
-                    <div className="trust-indicator mb-4">
-                        <div className="trustpilot-box">
-                            <span className="trust-stars text-success">★★★★★</span>
-                            <span className="trust-text ml-2">Rated 4.8/5 by 10,000+ Customers</span>
-                        </div>
-                    </div>
                 </div>
             </div>
 
@@ -84,7 +77,6 @@ const OrderPage = ({ onAddToCart }) => {
             </div>
 
             {/* --- HEARTS TOUCHED --- */}
-            <KnownFrom />
             <HeartsTouched />
 
             {/* --- PAYMENT TRUST --- */}

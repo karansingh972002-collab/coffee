@@ -32,28 +32,7 @@
     width: 100%;
 }
 
-.section-badge {
-    background: rgba(99, 102, 241, 0.1);
-    border: 1px solid rgba(99, 102, 241, 0.3);
-    color: var(--color-primary-light);
-    padding: var(--spacing-xs) var(--spacing-lg);
-    border-radius: var(--radius-full);
-    font-size: 0.8rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-bottom: var(--spacing-md);
-    backdrop-filter: blur(10px);
-}
-
-.section-header h2 {
-    font-size: 2.5rem;
-    margin-bottom: var(--spacing-md);
-    background: var(--gradient-cosmic);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
+/* Global magic styles used from index.css */
 
 .section-header p {
     font-size: 1.2rem;
@@ -72,41 +51,46 @@
 
 .package-card {
     position: relative;
-    background: rgba(255, 255, 255, 0.03);
+    background: rgba(255, 255, 255, 0.01);
     backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-radius: var(--radius-2xl);
-    padding: var(--spacing-2xl);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 32px;
+    padding: 40px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
     display: flex;
     flex-direction: column;
-    overflow: visible;
-    /* Changed to visible for glowing border effects */
-}
-
-/* Glowing border effect on hover */
-.package-card::after {
-    content: '';
-    position: absolute;
-    inset: -1px;
-    border-radius: var(--radius-2xl);
-    padding: 1px;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent, rgba(255, 255, 255, 0.1));
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    pointer-events: none;
-    transition: opacity 0.5s ease;
+    overflow: hidden;
+    /* Changed for shimmer */
+    animation: fadeInScale 0.6s ease-out both;
 }
 
 .package-card:hover {
     transform: translateY(-15px) scale(1.02);
-    background: rgba(255, 255, 255, 0.06);
-    border-color: transparent;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4),
-        0 0 20px rgba(99, 102, 241, 0.2);
+    background: rgba(255, 255, 255, 0.03);
+    border-color: rgba(99, 102, 241, 0.2);
+    box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.5);
+}
+
+.package-card::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg,
+            transparent,
+            rgba(255, 255, 255, 0.05),
+            transparent);
+    transform: rotate(45deg);
+    transition: all 0.7s ease;
+    pointer-events: none;
+    opacity: 0;
+}
+
+.package-card:hover::after {
+    left: 100%;
+    opacity: 1;
 }
 
 .package-card:hover::after {

@@ -1,7 +1,9 @@
 .known-from {
-    background-color: var(--bg-dark);
+    background-color: #050816;
     border-top: 1px solid rgba(255, 255, 255, 0.05);
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 2rem 0;
+    overflow: hidden;
 }
 
 .known-from-content {
@@ -9,44 +11,66 @@
 }
 
 .known-title {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     font-weight: 700;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.3em;
     color: #64748b;
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
+    text-transform: uppercase;
 }
 
-.brand-strip {
+.marquee-container {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 3rem;
-    opacity: 0.6;
-    transition: opacity 0.3s;
+    overflow: hidden;
+    user-select: none;
+    gap: 4rem;
+    mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
 }
 
-.brand-strip:hover {
-    opacity: 0.9;
+.marquee-content {
+    display: flex;
+    flex-shrink: 0;
+    justify-content: space-around;
+    gap: 4rem;
+    min-width: 100%;
+    animation: scroll 30s linear infinite;
 }
 
 .brand-item {
-    font-family: 'Georgia', serif;
-    /* News-like font */
-    font-size: 1.25rem;
+    font-family: 'Times New Roman', serif;
+    font-size: 1.5rem;
     font-weight: 700;
-    color: #cbd5e1;
-    text-transform: capitalize;
-    user-select: none;
-    cursor: default;
+    color: rgba(203, 213, 225, 0.6);
+    white-space: nowrap;
+    transition: color 0.3s, transform 0.3s;
+}
+
+.brand-item:hover {
+    color: #fff;
+    transform: scale(1.05);
+}
+
+@keyframes scroll {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(calc(-100% - 4rem));
+    }
 }
 
 @media (max-width: 768px) {
-    .brand-strip {
-        gap: 1.5rem;
+    .marquee-content {
+        animation-duration: 20s;
+        gap: 2rem;
     }
 
     .brand-item {
-        font-size: 1rem;
+        font-size: 1.1rem;
+    }
+
+    .marquee-container {
+        gap: 2rem;
     }
 }

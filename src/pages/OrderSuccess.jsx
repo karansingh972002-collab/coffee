@@ -25,35 +25,45 @@ const OrderSuccess = () => {
                 {[...Array(20)].map((_, i) => <div key={i} className="confetti"></div>)}
             </div>
 
-            <div className="success-card">
-                <div className="success-icon">✨</div>
-                <h2>Order Placed Successfully!</h2>
-                <p>
-                    Thank you for naming a star! Your celestial certificate will be prepared shortly.
+            <div className="success-card glass">
+                <div className="success-icon-container">
+                    <div className="success-icon">✨</div>
+                    <div className="icon-glow"></div>
+                </div>
+                <h2>A New Star Is Born!</h2>
+                <p className="success-lead">
+                    Your request to name a star has been registered in the eternal cosmic database.
                 </p>
 
                 <div className="order-id-box" onClick={copyOrderId} title="Click to copy">
-                    <span>Order ID:</span>
-                    <strong>{orderId}</strong>
-                    <span className="copy-icon">
-                        {copied ? '✅' : '📋'}
-                    </span>
-                    {copied && <span className="copy-tooltip">Copied!</span>}
+                    <span className="id-label">Registration ID:</span>
+                    <strong className="id-value">{orderId}</strong>
+                    <div className="copy-action">
+                        {copied ? <span className="text-success">✅</span> : <span className="text-primary-light">📋</span>}
+                    </div>
                 </div>
 
                 <div className="success-features">
-                    <h4>What Happens Next?</h4>
-                    <ul>
-                        <li>We'll prepare your personalized star certificate</li>
-                        <li>Digital documents will be ready within 24 hours</li>
-                        <li>Physical package ships within 2-4 business days</li>
-                        <li>Track your order from your account dashboard</li>
+                    <h4>Next Celestial Steps</h4>
+                    <ul className="steps-list">
+                        <li>
+                            <div className="step-num">01</div>
+                            <div className="step-text">Check your email for an instant digital copy of your certificate.</div>
+                        </li>
+                        <li>
+                            <div className="step-num">02</div>
+                            <div className="step-text">Our cartographers are prepping your physical gift pack (2-4 days).</div>
+                        </li>
+                        <li>
+                            <div className="step-num">03</div>
+                            <div className="step-text">View your star coordinates and track delivery in your dashboard.</div>
+                        </li>
                     </ul>
                 </div>
 
-                <div className="d-flex gap-3 justify-content-center flex-wrap">
-                    <Link to="/shop" className="btn btn-primary">Continue Shopping</Link>
-                    <Link to="/account" className="btn btn-outline-secondary">View Order History</Link>
+                <div className="action-buttons">
+                    <Link to="/account" className="btn-primary-glow">View My Star Registry</Link>
+                    <Link to="/shop" className="btn-outline-celestial">Continue Exploring</Link>
                 </div>
             </div>
         </div>

@@ -7,9 +7,65 @@
     padding-top: 180px;
     margin-top: -100px;
     overflow: hidden;
-    background: linear-gradient(to bottom, #0a0e27 0%, #1a1f3a 50%, #0f1229 100%);
+    background: #050816;
     width: 100%;
-    min-width: 100%;
+}
+
+.stars-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.stars-background::before,
+.stars-background::after {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background-image:
+        radial-gradient(1px 1px at 25% 10%, #fff, transparent),
+        radial-gradient(2px 2px at 50% 25%, #fff, transparent),
+        radial-gradient(1px 1px at 75% 40%, #fff, transparent),
+        radial-gradient(1.5px 1.5px at 10% 60%, #fff, transparent),
+        radial-gradient(1px 1px at 40% 80%, #fff, transparent);
+    background-size: 400px 400px;
+    opacity: 0.2;
+}
+
+.stars-background::after {
+    background-size: 600px 600px;
+    animation: slowTwinkle 15s linear infinite alternate;
+}
+
+@keyframes fastTwinkle {
+    from {
+        opacity: 0.1;
+        transform: scale(1);
+    }
+
+    to {
+        opacity: 0.3;
+        transform: scale(1.1);
+    }
+}
+
+@keyframes slowTwinkle {
+    from {
+        opacity: 0.05;
+        transform: scale(1.1);
+    }
+
+    to {
+        opacity: 0.2;
+        transform: scale(1);
+    }
 }
 
 .hero::before {
@@ -19,9 +75,10 @@
     left: 0;
     width: 100%;
     height: 100%;
-    /* background-image removed */
-    background-color: transparent;
-    opacity: 0.8;
+    /* Deep space base */
+    background: radial-gradient(circle at 20% 30%, rgba(102, 126, 234, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 80% 70%, rgba(118, 75, 162, 0.05) 0%, transparent 40%),
+        linear-gradient(to bottom, #0a0e27 0%, #0f1229 100%);
     z-index: 0;
 }
 
@@ -32,38 +89,76 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: radial-gradient(ellipse at center, transparent 0%, rgba(10, 14, 39, 0.7) 70%, rgba(10, 14, 39, 0.95) 100%);
-    z-index: 1;
+    background: radial-gradient(circle at center, transparent 0%, rgba(10, 14, 39, 0.4) 70%, rgba(10, 14, 39, 0.9) 100%);
+    z-index: 3;
 }
 
-.stars-background {
+.nebula-overlay {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-image:
-        radial-gradient(2px 2px at 20px 30px, white, transparent),
-        radial-gradient(2px 2px at 60px 70px, white, transparent),
-        radial-gradient(1px 1px at 50px 50px, white, transparent),
-        radial-gradient(1px 1px at 130px 80px, white, transparent),
-        radial-gradient(2px 2px at 90px 10px, white, transparent),
-        radial-gradient(1px 1px at 170px 120px, white, transparent),
-        radial-gradient(2px 2px at 110px 160px, white, transparent),
-        radial-gradient(1px 1px at 200px 40px, white, transparent),
-        radial-gradient(2px 2px at 140px 190px, white, transparent);
-    background-size: 200px 200px;
-    /* animation: twinkle 5s ease-in-out infinite; removed */
-    opacity: 0.7;
     z-index: 1;
+    background:
+        radial-gradient(circle at var(--mouse-x) var(--mouse-y), rgba(99, 102, 241, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at calc(100% - var(--mouse-x)) calc(100% - var(--mouse-y)), rgba(139, 92, 246, 0.1) 0%, transparent 40%),
+        radial-gradient(circle at 50% 50%, rgba(168, 85, 247, 0.05) 0%, transparent 60%);
+    filter: blur(50px);
+    animation: nebulaPulse 12s ease-in-out infinite alternate;
+    transition: background 0.5s ease-out;
+    /* Smooth transitions for mouse movement */
+}
+
+@keyframes nebulaPulse {
+    from {
+        opacity: 0.5;
+        transform: scale(1);
+    }
+
+    to {
+        opacity: 0.8;
+        transform: scale(1.1);
+    }
+}
+
+.parallax-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.parallax-star {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: #fff;
+    border-radius: 50%;
+    filter: blur(1px);
+    box-shadow: 0 0 5px #fff;
+    animation: drift 20s linear infinite;
+}
+
+@keyframes drift {
+    from {
+        transform: translate(0, 0);
+    }
+
+    to {
+        transform: translate(-20px, -20px);
+    }
 }
 
 .hero-content {
     text-align: center;
-    max-width: 100%;
+    max-width: 1000px;
     margin: 0 auto;
     position: relative;
-    z-index: 2;
+    z-index: 10;
     padding: var(--spacing-2xl) var(--spacing-md);
 }
 
@@ -71,29 +166,42 @@
     display: inline-flex;
     align-items: center;
     gap: var(--spacing-xs);
-    background: rgba(99, 102, 241, 0.15);
-    border: 1px solid rgba(99, 102, 241, 0.4);
-    padding: var(--spacing-xs) var(--spacing-lg);
-    border-radius: var(--radius-full);
-    color: var(--color-primary-light);
+    background: rgba(99, 102, 241, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(153, 155, 255, 0.2);
+    padding: 8px 20px;
+    border-radius: 50px;
+    color: #e0e7ff;
     font-size: 0.85rem;
-    font-weight: 500;
+    font-weight: 600;
     margin-bottom: var(--spacing-xl);
-    animation: fadeIn 0.8s ease-out, glow 3s ease-in-out infinite;
-    box-shadow: 0 0 20px rgba(99, 102, 241, 0.2);
+    animation: fadeIn 0.8s ease-out, badgeGlow 4s ease-in-out infinite;
+    letter-spacing: 0.02em;
 }
 
-.badge-icon {
-    font-size: 1.2rem;
-    animation: float 3s ease-in-out infinite;
+@keyframes badgeGlow {
+
+    0%,
+    100% {
+        box-shadow: 0 0 15px rgba(99, 102, 241, 0.1);
+        border-color: rgba(153, 155, 255, 0.2);
+    }
+
+    50% {
+        box-shadow: 0 0 25px rgba(99, 102, 241, 0.3);
+        border-color: rgba(153, 155, 255, 0.5);
+    }
 }
 
 .hero-title {
     margin-bottom: var(--spacing-lg);
     animation: fadeIn 1s ease-out 0.2s both;
-    font-size: 4.5rem;
-    line-height: 1.1;
-    text-shadow: 0 0 30px rgba(99, 102, 241, 0.3);
+    font-size: 4.8rem;
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    text-shadow: 0 10px 40px rgba(99, 102, 241, 0.5), 0 0 20px rgba(139, 92, 246, 0.3);
+    color: #fff;
 }
 
 .text-gradient {
@@ -144,88 +252,31 @@
     animation: fadeIn 1s ease-out 0.6s both;
 }
 
-.hero-stats {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: var(--spacing-lg);
-    max-width: 700px;
-    margin: 0 auto;
-    animation: fadeIn 1s ease-out 0.8s both;
+.btn-primary {
+    position: relative;
+    overflow: hidden;
 }
 
-.stat {
-    padding: var(--spacing-lg);
-    background: rgba(255, 255, 255, 0.04);
-    border-radius: var(--radius-lg);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    transition: all var(--transition-base);
-    backdrop-filter: blur(10px);
+.btn-primary::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -150%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg,
+            transparent 0%,
+            rgba(255, 255, 255, 0) 45%,
+            rgba(255, 255, 255, 0.2) 50%,
+            rgba(255, 255, 255, 0) 55%,
+            transparent 100%);
+    transform: rotate(45deg);
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
 }
 
-.stat:hover {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(99, 102, 241, 0.4);
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: 0 15px 40px rgba(99, 102, 241, 0.25);
-}
-
-.stat-icon {
-    font-size: 2.2rem;
-    margin-bottom: var(--spacing-sm);
-    animation: float 3s ease-in-out infinite;
-    color: var(--color-primary-light);
-}
-
-.stat-number {
-    font-size: 2.2rem;
-    font-weight: 700;
-    background: var(--gradient-cosmic);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-bottom: var(--spacing-xs);
-}
-
-.stat-label {
-    font-size: 0.9rem;
-    color: var(--color-text-muted);
-    font-weight: 500;
-}
-
-@keyframes twinkle {
-
-    0%,
-    100% {
-        opacity: 0.7;
-    }
-
-    50% {
-        opacity: 0.9;
-    }
-}
-
-@keyframes glow {
-
-    0%,
-    100% {
-        box-shadow: 0 0 20px rgba(99, 102, 241, 0.2);
-    }
-
-    50% {
-        box-shadow: 0 0 30px rgba(99, 102, 241, 0.4);
-    }
-}
-
-@keyframes float {
-
-    0%,
-    100% {
-        transform: translateY(0);
-    }
-
-    50% {
-        transform: translateY(-5px);
-    }
+.btn-primary:hover::after {
+    left: 100%;
 }
 
 @media (max-width: 768px) {
@@ -256,58 +307,49 @@
     }
 
     .hero-badge::after {
-        content: 'Trusted by 100,000+ customers';
+        content: 'Official Star Naming Registry';
     }
 
     .hero-actions {
         flex-direction: column;
         padding: 0 var(--spacing-md);
     }
-
-    .hero-stats {
-        grid-template-columns: 1fr;
-        gap: var(--spacing-md);
-    }
-
-    .stat {
-        padding: var(--spacing-md);
-    }
-
-    .stat-icon {
-        font-size: 1.5rem;
-    }
-
-    .stat-number {
-        font-size: 1.8rem;
-    }
 }
 
 /* Lotus Mandala Styles */
 .hero-visual {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: 50%;
+    left: 50%;
+    width: 120%;
+    height: 120%;
+    transform: translate(-50%, -50%);
     z-index: 0;
     pointer-events: none;
-    opacity: 1;
-    mix-blend-mode: normal;
+    opacity: 0.4;
+    filter: blur(2px);
+    mix-blend-mode: screen;
 }
 
 .lotus-mandala-img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    object-position: center;
+    object-fit: contain;
+    animation: rotateMandala 120s linear infinite;
 }
 
+@keyframes rotateMandala {
+    from {
+        transform: rotate(0deg);
+    }
 
-
-
+    to {
+        transform: rotate(360deg);
+    }
+}
 
 @media (max-width: 768px) {
     .hero-visual {
-        opacity: 0.8;
+        opacity: 0.3;
     }
 }

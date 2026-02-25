@@ -93,21 +93,26 @@ const WhatsInside = () => {
         <section id="whats-inside" className="whats-inside section">
             <div className="whats-inside-container">
                 <div className="section-header text-center">
-                    <h2>What's Inside Your Gift Set</h2>
-                    <p>With every set, you receive everything needed for an unforgettable gift</p>
+                    <span className="section-badge fade-in">Premium Collection</span>
+                    <div className="header-title-wrapper">
+                        <div className="header-decoration left"></div>
+                        <h2 className="premium-title">A World of Magic in One Box</h2>
+                        <div className="header-decoration right"></div>
+                    </div>
+                    <p className="section-subtitle fade-in">With every set, you receive everything needed for an <span className="magic-text">unforgettable gift experience</span></p>
                 </div>
 
                 <div className="visual-showcase">
                     <div className="showcase-main">
-                        <img src={giftPackage} alt="Premium Star Naming Gift Package" className="showcase-image main-image" />
+                        <img src={giftPackage} alt="Premium Star Naming Gift Package" className="showcase-image main-image" loading="lazy" />
                     </div>
                     <div className="showcase-secondary">
                         <div className="showcase-item">
-                            <img src={certificatePreview} alt="Star Naming Certificate" className="showcase-image" />
+                            <img src={certificatePreview} alt="Star Naming Certificate" className="showcase-image" loading="lazy" />
                             <p className="showcase-label">Personalized Certificate</p>
                         </div>
                         <div className="showcase-item">
-                            <img src={starMapPreview} alt="XXL Star Map" className="showcase-image" />
+                            <img src={starMapPreview} alt="XXL Star Map" className="showcase-image" loading="lazy" />
                             <p className="showcase-label">XXL Star Map</p>
                         </div>
                     </div>

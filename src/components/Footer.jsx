@@ -1,3 +1,4 @@
+import Logo from './Logo';
 import './Footer.css';
 
 const Footer = () => {
@@ -7,21 +8,13 @@ const Footer = () => {
                 <div className="footer-content">
                     <div className="footer-section">
                         <div className="footer-logo">
-                            <svg className="logo-svg" width="32" height="32" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="50" cy="50" r="48" stroke="url(#footer_logo_grad)" strokeWidth="4" />
-                                <path d="M50 15L56 42H83L61 58L69 85L50 68L31 85L39 58L17 42H44L50 15Z" fill="url(#footer_logo_grad)" />
-                                <defs>
-                                    <linearGradient id="footer_logo_grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                        <stop offset="0%" stopColor="#fcd34d" />
-                                        <stop offset="100%" stopColor="#f59e0b" />
-                                    </linearGradient>
-                                </defs>
-                            </svg>
+                            <Logo className="logo-svg" size={32} />
                             <span className="logo-text">Star Naming</span>
                         </div>
                         <p className="footer-description">
-                            Gift a real star in India. Trusted by 100,000+ customers.
-                            Official registry – we named the star for Dr. Ambedkar.
+                            The world's most elegant celestial registry. We help you create
+                            eternal connections by naming stars in the night sky with
+                            premium gift sets and official registration.
                         </p>
                         <div className="social-links">
                             <a href="#" className="social-link">
@@ -78,7 +71,7 @@ const Footer = () => {
                 <div className="footer-bottom">
                     <p>&copy; 2024 Star Naming. All rights reserved.</p>
                     <p className="footer-trust">
-                        Trusted by 100,000+ customers | Official International Space Registry
+                        Official International Space Registry – India's #1 Star Registry
                     </p>
                 </div>
             </div>

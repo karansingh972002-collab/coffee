@@ -3,22 +3,7 @@ import './Wishlist.css';
 
 const Wishlist = ({ items = [], onAddToCart, onRemoveFromWishlist }) => {
     // Dummy wishlist items for demonstration if real ones aren't available
-    const displayItems = items.length === 0 ? [
-        {
-            id: 'supernova-gift',
-            name: 'Supernova - Gift Pack',
-            type: 'Premium Gift Set',
-            price: 3499,
-            image: 'https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?auto=format&fit=crop&w=800&q=80'
-        },
-        {
-            id: 'silvernova-digital',
-            name: 'Silvernova - Digital',
-            type: 'Standard Package',
-            price: 1999,
-            image: 'https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?auto=format&fit=crop&w=800&q=80'
-        }
-    ] : items;
+    const displayItems = items;
 
     return (
         <div className="wishlist-page">
@@ -29,9 +14,12 @@ const Wishlist = ({ items = [], onAddToCart, onRemoveFromWishlist }) => {
                 </header>
 
                 {displayItems.length === 0 ? (
-                    <div className="wishlist-empty">
-                        <div className="empty-icon-wrapper">
-                            <span style={{ fontSize: '48px' }}>✨</span>
+                    <div className="wishlist-empty glass">
+                        <div className="empty-visual">
+                            <svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                            </svg>
+                            <div className="star-twinkle">✦</div>
                         </div>
                         <h2>Your wishlist is awaiting stars</h2>
                         <p>Explore the cosmos and save your favorite constellations to name them later.</p>

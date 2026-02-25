@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 import Header from './components/Header';
@@ -18,27 +18,55 @@ import Wishlist from './pages/Wishlist';
 import Account from './pages/Account';
 
 function App() {
-  const [cartItems, setCartItems] = useState([]);
+  const [cartItems, setCartItems] = useState(() => {
+    try {
+      const savedCart = localStorage.getItem('cartItems');
+      return savedCart ? JSON.parse(savedCart) : [];
+    } catch (e) {
+      return [];
+    }
+  });
+
+  const [wishlistItems, setWishlistItems] = useState(() => {
+    try {
+      const savedWishlist = localStorage.getItem('wishlistItems');
+      return savedWishlist ? JSON.parse(savedWishlist) : [];
+    } catch (e) {
+      return [];
+    }
+  });
+
+  // Persist to localStorage
+  useEffect(() => {
+    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+  }, [cartItems]);
+
+  useEffect(() => {
+    localStorage.setItem('wishlistItems', JSON.stringify(wishlistItems));
+  }, [wishlistItems]);
 
   const addToCart = (item) => {
+    const itemId = item.id || item._id;
     setCartItems(prev => {
-      const existing = prev.find(i =>
-        i.id === item.id &&
-        JSON.stringify(i.customization) === JSON.stringify(item.customization)
-      );
+      const existing = prev.find(i => {
+        const iId = i.id || i._id;
+        return iId === itemId &&
+          JSON.stringify(i.customization) === JSON.stringify(item.customization);
+      });
       if (existing) {
-        return prev.map(i =>
-          (i.id === item.id && JSON.stringify(i.customization) === JSON.stringify(item.customization))
+        return prev.map(i => {
+          const iId = i.id || i._id;
+          return (iId === itemId && JSON.stringify(i.customization) === JSON.stringify(item.customization))
             ? { ...i, quantity: i.quantity + (item.quantity || 1) }
-            : i
-        );
+            : i;
+        });
       }
       return [...prev, { ...item, quantity: item.quantity || 1 }];
     });
   };
 
   const removeFromCart = (itemId) => {
-    setCartItems(prev => prev.filter(item => item.id !== itemId));
+    setCartItems(prev => prev.filter(item => (item.id || item._id) !== itemId));
   };
 
   const updateQuantity = (itemId, quantity) => {
@@ -48,7 +76,7 @@ function App() {
     }
     setCartItems(prev =>
       prev.map(item =>
-        item.id === itemId ? { ...item, quantity } : item
+        (item.id || item._id) === itemId ? { ...item, quantity } : item
       )
     );
   };
@@ -57,18 +85,17 @@ function App() {
     setCartItems([]);
   };
 
-  const [wishlistItems, setWishlistItems] = useState([]);
 
   const addToWishlist = (item) => {
+    const itemId = item.id || item._id;
     setWishlistItems(prev => {
-      if (prev.find(i => i.id === item.id)) return prev;
+      if (prev.find(i => (i.id || i._id) === itemId)) return prev;
       return [...prev, item];
     });
-    // Optional: Show a toast or feedback
   };
 
   const removeFromWishlist = (itemId) => {
-    setWishlistItems(prev => prev.filter(item => item.id !== itemId));
+    setWishlistItems(prev => prev.filter(item => (item.id || item._id) !== itemId));
   };
 
   return (

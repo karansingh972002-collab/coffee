@@ -35,14 +35,21 @@ const StarCustomizer = ({ pkg, isOpen, onClose, onConfirm }) => {
                 <form onSubmit={handleSubmit} className="customizer-form">
                     <div className="form-group">
                         <label>Star Name</label>
-                        <input
-                            type="text"
-                            placeholder="e.g. Orion's Light"
-                            value={starName}
-                            onChange={e => setStarName(e.target.value)}
-                            required
-                        />
-                        <small>Choose a name that will be registered forever.</small>
+                        <div className="input-with-icon">
+                            <input
+                                type="text"
+                                placeholder="e.g. Orion's Light"
+                                value={starName}
+                                onChange={e => setStarName(e.target.value)}
+                                required
+                                minLength="2"
+                                maxLength="50"
+                            />
+                            {starName.length >= 2 && (
+                                <span className="valid-icon">✓</span>
+                            )}
+                        </div>
+                        <small>Choose a name that will be registered forever (2-50 characters).</small>
                     </div>
 
                     <div className="form-group">
@@ -62,7 +69,9 @@ const StarCustomizer = ({ pkg, isOpen, onClose, onConfirm }) => {
                             placeholder="A message for your loved one..."
                             value={message}
                             onChange={e => setMessage(e.target.value)}
+                            maxLength="200"
                         ></textarea>
+                        <small className="char-count">{message.length}/200</small>
                     </div>
 
                     <div className="modal-footer">

@@ -1,0 +1,177 @@
+/* Celestial Checkout Theme - Premium Glassmorphism Edition */
+:root {
+    --accent-celestial: #6366f1;
+    --accent-glow: #8b5cf6;
+    --celestial-border: rgba(255, 255, 255, 0.1);
+    --celestial-text-primary: #f8fafc;
+    --celestial-text-secondary: #94a3b8;
+    --celestial-green: #10b981;
+    --celestial-card-bg: rgba(30, 41, 59, 0.4);
+}
+
+.checkout-page {
+    background-color: #050816 !important;
+    min-height: 100vh;
+    color: var(--celestial-text-primary);
+    padding-top: 100px;
+    background-image:
+        radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(139, 92, 246, 0.05) 0%, transparent 40%);
+}
+
+.checkout-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    display: flex;
+    gap: 30px;
+}
+
+.checkout-left {
+    flex: 1;
+}
+
+.checkout-right {
+    width: 380px;
+    position: sticky;
+    top: 100px;
+    height: fit-content;
+}
+
+.checkout-card {
+    background: rgba(30, 41, 59, 0.4);
+    border: 1px solid var(--celestial-border);
+    border-radius: 20px;
+    padding: 24px;
+    margin-bottom: 20px;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.price-details-header {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--celestial-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 20px;
+}
+
+.price-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    font-size: 1rem;
+    color: var(--celestial-text-primary);
+}
+
+.price-row.total {
+    font-weight: 800;
+    font-size: 1.25rem;
+    border-top: 1px solid var(--celestial-border);
+    padding-top: 20px;
+    margin-top: 20px;
+    color: #fff;
+}
+
+.price-discount {
+    color: var(--celestial-green);
+}
+
+.btn-place-order {
+    background: linear-gradient(135deg, #6366f1 0%, #7c3aed 100%);
+    color: white;
+    width: 100%;
+    padding: 16px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    margin-top: 20px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
+}
+
+.btn-place-order:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 35px rgba(99, 102, 241, 0.5);
+    filter: brightness(1.1);
+}
+
+.item-actions-footer {
+    display: flex;
+    border-top: 1px solid var(--celestial-border);
+    margin-top: 16px;
+}
+
+.action-btn {
+    flex: 1;
+    background: none;
+    border: none;
+    border-right: 1px solid var(--celestial-border);
+    color: var(--celestial-text-secondary);
+    font-weight: 600;
+    font-size: 0.75rem;
+    padding: 12px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.2s;
+}
+
+.action-btn:last-child {
+    border-right: none;
+}
+
+.action-btn:hover {
+    color: var(--accent-celestial);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.payment-wrapper {
+    display: flex;
+    background: rgba(30, 41, 59, 0.3);
+    min-height: 450px;
+    border: 1px solid var(--celestial-border);
+    border-radius: 16px;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+}
+
+.payment-sidebar {
+    width: 35%;
+    background-color: rgba(0, 0, 0, 0.15);
+    border-right: 1px solid var(--celestial-border);
+}
+
+.payment-tab {
+    padding: 18px 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 1rem;
+    color: var(--celestial-text-secondary);
+    border-left: 4px solid transparent;
+    transition: all 0.3s;
+}
+
+.payment-tab.active {
+    background-color: rgba(99, 102, 241, 0.1);
+    border-left-color: var(--accent-celestial);
+    color: #fff;
+}
+
+@media (max-width: 1024px) {
+    .checkout-container {
+        flex-direction: column;
+    }
+
+    .checkout-right {
+        width: 100%;
+        position: static;
+    }
+}

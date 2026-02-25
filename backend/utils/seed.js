@@ -70,7 +70,7 @@ const packages = [
 // Import into DB
 const importData = async () => {
     try {
-        await mongoose.connect(process.env.MONGODB_URI);
+        await mongoose.connect(process.env.MONGO_URI);
 
         await Package.deleteMany();
         await Package.create(packages);

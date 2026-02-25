@@ -2,41 +2,48 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px 0;
+    padding: 30px 0;
     max-width: 600px;
-    margin: 0 auto 30px;
-    font-family: 'Inter', sans-serif;
+    margin: 0 auto 40px;
 }
 
 .step-item {
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 1px;
-    color: var(--color-text-muted);
-    /* Gray-600 */
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: rgba(255, 255, 255, 0.3);
     text-transform: uppercase;
     position: relative;
-    padding: 0 10px;
+    padding: 0 15px;
+    transition: all 0.3s ease;
 }
 
 .step-item.active {
-    color: var(--myntra-pink);
-    /* Pink Accent */
-    border-bottom: 2px solid var(--myntra-pink);
-    padding-bottom: 4px;
+    color: #818cf8;
+    text-shadow: 0 0 12px rgba(129, 140, 248, 0.5);
+}
+
+.step-item.active::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 15px;
+    right: 15px;
+    height: 2px;
+    background: linear-gradient(to right, #6366f1, #8b5cf6);
+    box-shadow: 0 0 10px rgba(99, 102, 241, 0.8);
 }
 
 .step-item.completed {
-    color: var(--myntra-green);
+    color: #10b981;
 }
 
 .step-divider {
     height: 1px;
-    width: 40px;
-    background-color: rgba(255, 255, 255, 0.1);
-    /* Gray-200 */
+    width: 60px;
+    background-color: rgba(255, 255, 255, 0.05);
     margin: 0 10px;
-    border-top: 1px dashed rgba(255, 255, 255, 0.3);
+    border-top: 1px dashed rgba(255, 255, 255, 0.2);
 }
 
 /* Dark mode compatibility is now default */

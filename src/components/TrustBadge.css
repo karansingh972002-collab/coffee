@@ -63,6 +63,74 @@
     padding: 8px;
 }
 
+.badge-card {
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 20px;
+    padding: 30px;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(12px);
+    position: relative;
+    overflow: hidden;
+    animation: float 6s ease-in-out infinite;
+}
+
+.badge-card:nth-child(2) {
+    animation-delay: 1s;
+}
+
+.badge-card:nth-child(3) {
+    animation-delay: 2s;
+}
+
+.badge-card:nth-child(4) {
+    animation-delay: 3s;
+}
+
+.badge-card:hover {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(99, 102, 241, 0.4);
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 15px 40px rgba(99, 102, 241, 0.2);
+    animation-play-state: paused;
+}
+
+.badge-icon {
+    width: 70px;
+    height: 70px;
+    background: rgba(99, 102, 241, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    color: var(--color-primary-light);
+    transition: all 0.4s ease;
+    border: 1px solid rgba(99, 102, 241, 0.2);
+}
+
+.badge-card:hover .badge-icon {
+    background: var(--color-primary);
+    color: #fff;
+    transform: rotate(10deg);
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+}
+
+.badge-card h3 {
+    font-size: 1.25rem;
+    margin-bottom: 12px;
+    color: #fff;
+    font-weight: 700;
+}
+
+.badge-card p {
+    color: rgba(255, 255, 255, 0.6);
+    line-height: 1.6;
+    font-size: 0.95rem;
+    margin: 0;
+}
+
 /* Specific Icon Colors - Using SVG stroke */
 .trust-item:nth-child(1) .trust-icon svg {
     stroke: #4facfe;

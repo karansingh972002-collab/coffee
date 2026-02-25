@@ -15,7 +15,7 @@ const FAQ = () => {
         },
         {
             question: 'How quickly will I receive my star certificate?',
-            answer: 'You\'ll receive your digital certificate within 15 minutes, ready to gift instantly. The physical gift set is shipped within 3–5 working days with free delivery across India.'
+            answer: 'You\'ll receive your digital certificate instantly via email, ready to gift. The physical gift set is shipped within 3–5 working days with free delivery across India.'
         },
         {
             question: 'What exactly do I receive with my star naming package?',
@@ -47,8 +47,13 @@ const FAQ = () => {
         <section id="faq" className="faq section">
             <div className="faq-container">
                 <div className="section-header text-center">
-                    <h2>Everything You Need to Know</h2>
-                    <p>Before naming your star</p>
+                    <span className="section-badge fade-in">Assistance</span>
+                    <div className="header-title-wrapper">
+                        <div className="header-decoration left"></div>
+                        <h2 className="premium-title">Everything You Need to Know</h2>
+                        <div className="header-decoration right"></div>
+                    </div>
+                    <p className="section-subtitle fade-in">Before <span className="magic-text">naming your star</span></p>
                 </div>
 
                 <div className="faq-list">

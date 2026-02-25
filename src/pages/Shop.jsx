@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
-import { api } from '../services/api';
+import api from '../services/api';
 import StarCustomizer from '../components/StarCustomizer';
-import KnownFrom from '../components/KnownFrom';
 import HeartsTouched from '../components/HeartsTouched';
 import './Shop.css';
 
@@ -17,16 +16,18 @@ const Shop = ({ onAddToCart, onAddToWishlist }) => {
 
     useEffect(() => {
         const fetchProducts = async () => {
+            console.log('Shop: Fetching products...');
             try {
                 const response = await api.getPackages();
-                if (response.success) {
+                console.log('Shop: API Response:', response);
+                if (response.success && Array.isArray(response.data)) {
                     setProducts(response.data);
                 } else {
-                    setError('Failed to load products');
+                    setError('Failed to load products: Invalid data format');
                 }
             } catch (err) {
-                console.error('Error fetching products:', err);
-                setError('Unable to connect to server. Please ensure the backend is running.');
+                console.error('Shop: Error fetching products:', err);
+                setError(`Unable to connect to server: ${err.message}`);
             } finally {
                 setLoading(false);
             }
@@ -68,11 +69,20 @@ const Shop = ({ onAddToCart, onAddToWishlist }) => {
     return (
         <div className="shop-page">
             <div className="shop-container">
-                <div className="section-header text-center">
-                    <div className="section-badge">Celestial Gifts</div>
-                    <h2>Name a Star</h2>
-                    <p>Choose from our range of official star naming packages. The perfect gift for any occasion.</p>
-                </div>
+                <section className="shop-hero">
+                    <div className="container">
+                        <div className="section-header text-center">
+                            <span className="section-badge fade-in">Stellar Registry</span>
+                            <div className="header-title-wrapper">
+                                <div className="header-decoration left"></div>
+                                <h2 className="premium-title">Celestial Gift Shop</h2>
+                                <div className="header-decoration right"></div>
+                            </div>
+                            <p className="section-subtitle fade-in">Select the perfect package to <span className="magic-text">immortalize your star</span> in the night sky</p>
+                        </div>
+                    </div>
+                </section>
+
 
                 <div className="shop-grid">
                     <aside className="filters-sidebar">
@@ -121,19 +131,13 @@ const Shop = ({ onAddToCart, onAddToWishlist }) => {
                         {filteredProducts.map(product => (
                             <div key={product._id} className="product-card">
                                 <div className="product-image-container">
-                                    <img src={product.image} alt={product.name} className="product-image" />
+                                    <img src={product.image} alt={product.name} className="product-image" loading="lazy" />
                                     {product.badge && <div className="product-badge">{product.badge}</div>}
                                     <button
                                         className="wishlist-btn-overlay"
                                         onClick={(e) => {
                                             e.stopPropagation();
-                                            onAddToWishlist && onAddToWishlist({
-                                                id: product._id,
-                                                name: product.name,
-                                                type: product.type,
-                                                price: product.price,
-                                                image: product.image
-                                            });
+                                            onAddToWishlist && onAddToWishlist(product);
                                         }}
                                     >
                                         ♥
@@ -149,27 +153,20 @@ const Shop = ({ onAddToCart, onAddToWishlist }) => {
                                                 </div>
                                             ))}
                                         </div>
+                                        <button className="view-details-btn" onClick={() => {
+                                            setSelectedPkg(product);
+                                            setIsModalOpen(true);
+                                        }}>
+                                            Name Your Star
+                                        </button>
                                     </div>
                                 </div>
                                 <div className="product-info">
                                     <h4>{product.name}</h4>
                                     <p className="product-subtitle">{product.subtitle}</p>
-                                    <div className="product-specs">
-                                        <span>{product.type}</span> • <span>{product.features.length} features</span>
-                                    </div>
                                     <div className="product-footer">
                                         <div className="product-price">₹{product.price.toLocaleString()}</div>
-                                        <button className="add-cart-btn" onClick={() => {
-                                            setSelectedPkg(product);
-                                            setIsModalOpen(true);
-                                        }}>
-                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                                <circle cx="9" cy="21" r="1"></circle>
-                                                <circle cx="20" cy="21" r="1"></circle>
-                                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                                            </svg>
-                                            Name It
-                                        </button>
+                                        <span className="pkg-type-tag">{product.type}</span>
                                     </div>
                                 </div>
                             </div>
@@ -178,7 +175,6 @@ const Shop = ({ onAddToCart, onAddToWishlist }) => {
                 </div>
             </div>
 
-            <KnownFrom />
             <HeartsTouched />
 
             <StarCustomizer

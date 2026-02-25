@@ -17,29 +17,6 @@ const TrustBadge = () => {
                         </div>
                     </div>
 
-                    <div className="trust-item">
-                        <div className="trust-icon">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                            </svg>
-                        </div>
-                        <div className="trust-text">
-                            <div className="trust-title">4.9/5 Rating</div>
-                            <div className="trust-subtitle">100,000+ Reviews</div>
-                        </div>
-                    </div>
-
-                    <div className="trust-item">
-                        <div className="trust-icon">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
-                            </svg>
-                        </div>
-                        <div className="trust-text">
-                            <div className="trust-title">Instant Delivery</div>
-                            <div className="trust-subtitle">Digital in 15 Minutes</div>
-                        </div>
-                    </div>
 
                     <div className="trust-item">
                         <div className="trust-icon">

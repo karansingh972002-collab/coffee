@@ -1,5 +1,6 @@
 // In-Memory Data Store (replaces MongoDB)
 const crypto = require('crypto');
+const jwt = require('jsonwebtoken');
 
 // Data stores
 const db = {
@@ -305,7 +306,16 @@ const userStore = {
     getById: (id) => db.users.find(u => u._id === id),
     getByEmail: (email) => db.users.find(u => u.email === email),
     create: (data) => {
-        const user = { _id: generateId(), ...data, createdAt: new Date() };
+        const user = {
+            _id: generateId(),
+            ...data,
+            createdAt: new Date(),
+            getSignedJwtToken: function () {
+                return jwt.sign({ id: this._id }, process.env.JWT_SECRET || 'secret', {
+                    expiresIn: process.env.JWT_EXPIRE || '30d'
+                });
+            }
+        };
         db.users.push(user);
         return user;
     },
@@ -329,9 +339,12 @@ const userStore = {
 
 // Order operations
 const orderStore = {
-    getAll: () => db.orders,
-    getById: (id) => db.orders.find(o => o._id === id),
-    getByUserId: (userId) => db.orders.filter(o => o.user === userId),
+    getAll: () => db.orders.map(o => ({ ...o, package: packageStore.getById(o.package) })),
+    getById: (id) => {
+        const o = db.orders.find(ord => ord._id === id);
+        return o ? { ...o, package: packageStore.getById(o.package) } : null;
+    },
+    getByUserId: (userId) => db.orders.filter(o => o.user === userId).map(o => ({ ...o, package: packageStore.getById(o.package) })),
     create: (data) => {
         const order = { _id: generateId(), ...data, createdAt: new Date() };
         db.orders.push(order);

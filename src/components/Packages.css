@@ -1,7 +1,6 @@
 /* ===== Packages Section - Enhanced Premium Design ===== */
-
 .packages {
-    background: linear-gradient(to bottom, #0f1229 0%, #0a0e27 100%);
+    background: transparent;
     position: relative;
     padding: var(--spacing-3xl) 0;
     overflow: hidden;
@@ -70,16 +69,17 @@
 /* ===== Package Card - Glass Morphism with Gradient Border ===== */
 .package-card {
     position: relative;
-    background: rgba(255, 255, 255, 0.02);
+    background: rgba(15, 23, 42, 0.6);
     backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
     border-radius: 28px;
     padding: 44px 36px;
-    border: 1px solid rgba(255, 255, 255, 0.06);
     transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
     display: flex;
     flex-direction: column;
     overflow: hidden;
     animation: pkg-fadeIn 0.7s ease-out both;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
 }
 
 .package-card:nth-child(1) {
@@ -106,17 +106,25 @@
     }
 }
 
-/* Gradient top accent line */
+/* Glowing embedded border mask */
 .package-card::before {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
-    height: 3px;
-    background: var(--pkg-gradient, var(--gradient-primary));
-    opacity: 0.6;
-    transition: opacity 0.4s ease;
+    bottom: 0;
+    border-radius: 28px;
+    padding: 2px;
+    background: var(--pkg-gradient, linear-gradient(135deg, rgba(129, 140, 248, 0.5), transparent, rgba(236, 72, 153, 0.3)));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0.4;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+    z-index: 2;
 }
 
 .package-card:hover::before {
@@ -146,12 +154,10 @@
 
 .package-card:hover {
     transform: translateY(-12px) scale(1.02);
-    background: rgba(255, 255, 255, 0.04);
-    border-color: rgba(99, 102, 241, 0.15);
+    background: rgba(30, 41, 59, 0.7);
     box-shadow:
-        0 40px 80px -20px rgba(0, 0, 0, 0.5),
-        0 0 0 1px rgba(255, 255, 255, 0.03),
-        inset 0 1px 0 0 rgba(255, 255, 255, 0.04);
+        0 40px 80px -20px rgba(0, 0, 0, 0.7),
+        0 0 40px rgba(129, 140, 248, 0.15);
 }
 
 /* ===== Badge ===== */

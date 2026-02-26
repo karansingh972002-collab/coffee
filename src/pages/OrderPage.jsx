@@ -31,6 +31,7 @@ const OrderPage = ({ onAddToCart }) => {
             image: customizedPkg.image,
             customization: customizedPkg.customization
         });
+        setIsModalOpen(false);
     };
 
     return (

@@ -1,6 +1,7 @@
 const User = require('../models/User');
 const { userStore } = require('../db/memory-store');
 const mongoose = require('mongoose');
+const sendEmail = require('../utils/sendEmail');
 
 // @desc    Register user
 // @route   POST /api/auth/register
@@ -25,6 +26,33 @@ exports.register = async (req, res, next) => {
         });
 
         if (!user) user = memoryUser;
+
+        // --- EMAIL NOTIFICATION: Welcome Message ---
+        try {
+            const messageText = `Welcome to Star Naming, ${user.name}!\n\nYour celestial journey begins here. You can now log in, view your dashboard, and immortalize a star.\n\nThank you for choosing us!`;
+
+            const messageHtml = `
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #050816; color: #fff; border-radius: 12px;">
+                    <h2 style="color: #818cf8; text-align: center;">Welcome to Star Naming! 🌌</h2>
+                    <p style="font-size: 16px;">Hello <strong>${user.name}</strong>,</p>
+                    <p style="font-size: 16px; line-height: 1.5; color: #e2e8f0;">Your celestial journey begins here. Your account has been successfully created. You can now log in, view your dashboard, and immortalize a star in the galaxy.</p>
+                    <div style="text-align: center; margin: 30px 0;">
+                        <a href="${process.env.FRONTEND_URL || 'http://localhost:5173'}/auth" style="background: linear-gradient(135deg, #6366f1 0%, #7c3aed 100%); color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold;">Login Now</a>
+                    </div>
+                    <p style="font-size: 14px; color: #94a3b8; text-align: center;">Thank you for choosing Star Naming.</p>
+                </div>
+            `;
+
+            await sendEmail({
+                email: user.email,
+                subject: 'Welcome to Star Naming!',
+                message: messageText,
+                html: messageHtml
+            });
+        } catch (err) {
+            console.error('Failed to send welcome email:', err);
+            // Non-blocking: we still want to log the user in
+        }
 
         sendTokenResponse(user, 201, res);
     } catch (err) {

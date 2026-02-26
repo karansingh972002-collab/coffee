@@ -1,52 +1,49 @@
 /* ===== Hearts Touched Section - Enhanced Premium ===== */
-
 .hearts-touched {
     position: relative;
-    padding: 7rem 0;
+    padding: 8rem 0 4rem;
     overflow: hidden;
+    background: transparent;
 }
 
-/* Animated radial glow */
 .hearts-bg-glow {
     position: absolute;
-    top: 50%;
+    top: 40%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 700px;
-    height: 700px;
-    background: radial-gradient(circle,
-            rgba(255, 63, 108, 0.08) 0%,
-            rgba(236, 72, 153, 0.04) 30%,
-            transparent 70%);
+    width: 800px;
+    height: 800px;
+    background: radial-gradient(circle, rgba(236, 72, 153, 0.15) 0%, rgba(139, 92, 246, 0.1) 40%, transparent 70%);
     z-index: 0;
     pointer-events: none;
-    animation: ht-glow-breathe 6s ease-in-out infinite;
+    animation: ht-glow-breathe 8s ease-in-out infinite alternate;
 }
 
 @keyframes ht-glow-breathe {
-
-    0%,
-    100% {
-        transform: translate(-50%, -50%) scale(1);
+    0% {
+        transform: translate(-50%, -50%) scale(0.9);
         opacity: 0.6;
     }
 
-    50% {
-        transform: translate(-50%, -50%) scale(1.15);
+    100% {
+        transform: translate(-50%, -50%) scale(1.1);
         opacity: 1;
     }
 }
 
 .heart-icon-wrapper {
     position: relative;
-    display: inline-block;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
     z-index: 1;
+    margin-bottom: 2rem;
 }
 
 .main-heart {
-    font-size: 5rem;
-    filter: drop-shadow(0 0 25px rgba(255, 63, 108, 0.5));
-    animation: ht-pulse-heart 2s infinite ease-in-out;
+    font-size: 5.5rem;
+    filter: drop-shadow(0 0 35px rgba(255, 63, 108, 0.6));
+    animation: ht-pulse-heart 2.5s infinite ease-in-out;
 }
 
 @keyframes ht-pulse-heart {
@@ -54,116 +51,103 @@
     0%,
     100% {
         transform: scale(1);
+        filter: drop-shadow(0 0 30px rgba(255, 63, 108, 0.5));
     }
 
     50% {
-        transform: scale(1.12);
+        transform: scale(1.15);
+        filter: drop-shadow(0 0 50px rgba(255, 63, 108, 0.9));
     }
 }
 
 .floating-hearts .float-heart {
     position: absolute;
     opacity: 0;
-    font-size: 1.5rem;
+    font-size: 2rem;
+    filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.3));
 }
 
 .float-heart.h1 {
     top: -20px;
-    left: -30px;
-    animation: ht-float-up 2.5s infinite 0.5s;
+    left: -40px;
+    animation: ht-float-up 3s infinite 0.2s;
 }
 
 .float-heart.h2 {
-    top: -40px;
-    left: 25px;
-    animation: ht-float-up 3s infinite 1s;
+    top: -50px;
+    left: 60px;
+    animation: ht-float-up 3.5s infinite 1.2s;
+    font-size: 1.5rem;
 }
 
 .float-heart.h3 {
-    top: 0;
-    left: 50px;
-    animation: ht-float-up 2.8s infinite 1.5s;
+    top: 20px;
+    left: 80px;
+    animation: ht-float-up 3.2s infinite 2s;
+    font-size: 1.8rem;
 }
 
 @keyframes ht-float-up {
     0% {
-        transform: translateY(0) scale(0.5) rotate(0deg);
+        transform: translateY(0) scale(0.5) rotate(-10deg);
         opacity: 0;
     }
 
-    30% {
-        opacity: 0.9;
+    20% {
+        opacity: 1;
     }
 
     100% {
-        transform: translateY(-90px) scale(1.1) rotate(15deg);
+        transform: translateY(-120px) scale(1.2) rotate(20deg);
         opacity: 0;
     }
 }
 
-.hearts-touched .section-header {
-    margin-bottom: 40px;
-    position: relative;
-    z-index: 1;
+/* Typography */
+.hearts-touched .section-badge {
+    display: inline-block;
+    padding: 8px 16px;
+    background: rgba(236, 72, 153, 0.1);
+    border: 1px solid rgba(236, 72, 153, 0.3);
+    color: #f9a8d4;
+    border-radius: 30px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 24px;
+    box-shadow: 0 0 20px rgba(236, 72, 153, 0.2);
 }
 
-.highlight-count {
-    color: #ff3f6c;
-    -webkit-text-fill-color: #ff3f6c;
+.hearts-touched .premium-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, #fff 0%, #f472b6 50%, #818cf8 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
 }
 
 .hearts-touched .section-subtitle {
-    max-width: 800px;
+    font-size: 1.25rem;
+    color: #cbd5e1;
+    line-height: 1.8;
 }
 
-/* Stats strip */
-.stat-item {
-    padding: 1.25rem 2rem;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.04);
-    border-radius: 16px;
-    min-width: 180px;
-    backdrop-filter: blur(10px);
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.stat-item:hover {
-    transform: translateY(-4px);
-    background: rgba(255, 255, 255, 0.04);
-    border-color: rgba(255, 63, 108, 0.2);
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.3);
-}
-
-.stat-value {
-    font-size: 1.75rem;
-    font-weight: 800;
-    color: #fff;
-    margin-bottom: 0.25rem;
-    background: linear-gradient(135deg, #fff, #f9a8d4);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-.stat-label {
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    color: #64748b;
-    font-weight: 600;
+.hearts-touched .magic-text {
+    color: #f472b6;
+    font-weight: 700;
+    text-shadow: 0 0 15px rgba(244, 114, 182, 0.4);
 }
 
 @media (max-width: 768px) {
+    .hearts-touched .premium-title {
+        font-size: 2.5rem;
+    }
+
     .hearts-touched {
-        padding: 4rem 0;
-    }
-
-    .main-heart {
-        font-size: 3.5rem;
-    }
-
-    .hearts-bg-glow {
-        width: 400px;
-        height: 400px;
+        padding: 5rem 0 2rem;
     }
 }

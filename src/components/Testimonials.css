@@ -1,287 +1,263 @@
 /* ===== Testimonials Section - Enhanced Premium ===== */
-
 .testimonials {
-    background: var(--gradient-dark);
+    background: transparent;
+    /* Flows seamlessly from HeartsTouched */
     position: relative;
-    overflow: hidden;
-}
-
-/* Subtle ambient glow */
-.testimonials::before {
-    content: '';
-    position: absolute;
-    width: 500px;
-    height: 500px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(99, 102, 241, 0.06), transparent 70%);
-    top: -200px;
-    right: -100px;
-    pointer-events: none;
+    padding: 0 0 6rem 0;
+    /* Only bottom padding since HeartsTouched is right above it */
+    overflow: visible;
 }
 
 .testimonials-container {
-    max-width: 1600px;
+    max-width: 1400px;
     margin: 0 auto;
-    padding: 0 var(--spacing-md);
-    width: 100%;
+    padding: 0 24px;
     position: relative;
-    z-index: 1;
+    z-index: 2;
 }
 
 .testimonials-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: var(--spacing-lg);
-    margin-bottom: var(--spacing-2xl);
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 2rem;
+    padding: 2rem 1rem 4rem 1rem;
+    margin: 0 -1rem 1rem -1rem;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    /* Firefox */
+    -webkit-overflow-scrolling: touch;
 }
 
-/* Individual card slide-in animation */
+.testimonials-grid::-webkit-scrollbar {
+    display: none;
+    /* Chrome, Safari */
+}
+
 .testimonial-card {
-    animation: tm-slide-in 0.6s ease-out both;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 20px;
+    padding: 2.5rem;
+    position: relative;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    flex: 0 0 400px;
+    scroll-snap-align: center;
 }
 
-.testimonial-card:nth-child(1) {
-    animation-delay: 0.05s;
-}
-
-.testimonial-card:nth-child(2) {
-    animation-delay: 0.15s;
-}
-
-.testimonial-card:nth-child(3) {
-    animation-delay: 0.25s;
-}
-
-.testimonial-card:nth-child(4) {
-    animation-delay: 0.35s;
-}
-
-.testimonial-card:nth-child(5) {
-    animation-delay: 0.45s;
-}
-
-@keyframes tm-slide-in {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Shimmer sweep on hover */
-.testimonial-card::after {
+.testimonial-card::before {
     content: '';
     position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: linear-gradient(45deg,
-            transparent 40%,
-            rgba(255, 255, 255, 0.03) 50%,
-            transparent 60%);
-    transform: rotate(45deg) translateX(-100%);
-    transition: transform 0.7s ease;
-    pointer-events: none;
-}
-
-.testimonial-card:hover::after {
-    transform: rotate(45deg) translateX(100%);
-}
-
-/* Large quotation mark */
-.testimonial-card::before {
-    content: '"';
-    position: absolute;
-    top: 8px;
-    left: 24px;
-    font-size: 80px;
-    font-family: 'Playfair Display', serif;
-    color: rgba(99, 102, 241, 0.07);
-    line-height: 1;
-    font-weight: 800;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 20px;
+    padding: 2px;
+    background: linear-gradient(135deg, rgba(244, 114, 182, 0.5), transparent, rgba(99, 102, 241, 0.3));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0.3;
+    transition: opacity 0.5s ease;
     pointer-events: none;
 }
 
 .testimonial-card:hover {
-    transform: translateY(-8px);
-    background: rgba(255, 255, 255, 0.04);
-    border-color: rgba(99, 102, 241, 0.2);
-    box-shadow:
-        0 20px 40px rgba(0, 0, 0, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.03);
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(244, 114, 182, 0.1);
 }
 
-.testimonial-card:hover::before {
-    color: rgba(99, 102, 241, 0.12);
+/* Giant quote mark behind text */
+.testimonial-card::after {
+    content: '"';
+    position: absolute;
+    top: -20px;
+    right: 20px;
+    font-size: 15rem;
+    font-family: serif;
+    color: rgba(255, 255, 255, 0.03);
+    line-height: 1;
+    z-index: 0;
+    pointer-events: none;
+    transition: color 0.4s ease;
 }
 
-/* Star ratings */
+.testimonial-card:hover::after {
+    color: rgba(244, 114, 182, 0.06);
+}
+
 .testimonial-rating {
-    margin-bottom: 18px;
+    margin-bottom: 1.5rem;
     display: flex;
-    gap: 3px;
+    gap: 6px;
+    position: relative;
+    z-index: 1;
 }
 
 .star {
-    display: inline-block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     color: #fbbf24;
-    filter: drop-shadow(0 0 4px rgba(251, 191, 36, 0.25));
-    transition: transform 0.2s ease;
+    filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.4));
+    animation: tm-star-pulse 3s infinite alternate;
 }
 
-.testimonial-card:hover .star {
-    animation: tm-star-pop 0.4s ease both;
-}
-
-.testimonial-card:hover .star:nth-child(1) {
-    animation-delay: 0s;
-}
-
-.testimonial-card:hover .star:nth-child(2) {
-    animation-delay: 0.05s;
-}
-
-.testimonial-card:hover .star:nth-child(3) {
-    animation-delay: 0.1s;
-}
-
-.testimonial-card:hover .star:nth-child(4) {
-    animation-delay: 0.15s;
-}
-
-.testimonial-card:hover .star:nth-child(5) {
+.star:nth-child(2) {
     animation-delay: 0.2s;
 }
 
-@keyframes tm-star-pop {
+.star:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+.star:nth-child(4) {
+    animation-delay: 0.6s;
+}
+
+.star:nth-child(5) {
+    animation-delay: 0.8s;
+}
+
+@keyframes tm-star-pulse {
     0% {
         transform: scale(1);
-    }
-
-    50% {
-        transform: scale(1.3);
+        filter: drop-shadow(0 0 5px rgba(251, 191, 36, 0.3));
     }
 
     100% {
-        transform: scale(1);
+        transform: scale(1.15);
+        filter: drop-shadow(0 0 12px rgba(251, 191, 36, 0.7));
     }
 }
 
 .testimonial-title {
-    font-size: 1.15rem;
+    font-size: 1.3rem;
     font-weight: 700;
-    margin-bottom: 12px;
-    color: #fff;
+    margin-bottom: 1rem;
+    color: #f8fafc;
     position: relative;
-    z-index: 2;
+    z-index: 1;
     line-height: 1.4;
 }
 
 .testimonial-text {
-    font-size: 0.95rem;
-    color: rgba(255, 255, 255, 0.6);
-    line-height: 1.8;
-    margin-bottom: 24px;
+    font-size: 1.05rem;
+    color: #94a3b8;
+    line-height: 1.7;
+    margin-bottom: 2rem;
     font-style: italic;
     position: relative;
-    z-index: 2;
+    z-index: 1;
 }
 
 .testimonial-author {
-    font-size: 0.9rem;
-    color: var(--color-primary-light);
+    font-size: 1rem;
+    color: #f472b6;
     font-weight: 700;
     position: relative;
-    z-index: 2;
-    letter-spacing: 0.5px;
+    z-index: 1;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 12px;
 }
 
 .testimonial-author::before {
     content: '';
-    width: 16px;
+    width: 24px;
     height: 2px;
-    background: var(--color-primary-light);
-    border-radius: 1px;
-    opacity: 0.5;
+    background: #f472b6;
+    border-radius: 2px;
 }
 
 /* ===== Trustpilot Badge ===== */
 .trustpilot-section {
     display: flex;
     justify-content: center;
-    padding: 50px 0 10px;
+    padding-top: 2rem;
 }
 
 .trustpilot-badge {
-    background: rgba(255, 255, 255, 0.02);
-    backdrop-filter: blur(16px);
-    border-radius: 24px;
-    padding: 36px 48px;
-    text-align: center;
-    border: 1px solid rgba(0, 182, 122, 0.12);
-    min-width: 320px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    background: rgba(15, 23, 42, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 100px;
+    padding: 20px 40px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    border: 1px solid rgba(0, 182, 122, 0.2);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
     transition: all 0.4s ease;
 }
 
 .trustpilot-badge:hover {
-    transform: translateY(-4px);
-    border-color: rgba(0, 182, 122, 0.25);
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(0, 182, 122, 0.05);
+    transform: translateY(-5px);
+    border-color: rgba(0, 182, 122, 0.5);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(0, 182, 122, 0.15);
 }
 
 .trustpilot-stars {
-    margin-bottom: 14px;
     display: flex;
-    justify-content: center;
     gap: 4px;
+    margin-right: 15px;
 }
 
 .trustpilot-stars svg {
-    filter: drop-shadow(0 0 4px rgba(0, 182, 126, 0.3));
-    transition: transform 0.2s ease;
-}
-
-.trustpilot-badge:hover .trustpilot-stars svg {
-    transform: scale(1.1);
+    filter: drop-shadow(0 0 5px rgba(0, 182, 126, 0.4));
 }
 
 .trustpilot-text {
-    font-size: 1.25rem;
-    margin-bottom: 8px;
+    font-size: 1.2rem;
     color: #fff;
-    font-weight: 600;
+    font-weight: 500;
 }
 
 .trustpilot-text strong {
     color: #00b67a;
     font-weight: 800;
-    text-shadow: 0 0 10px rgba(0, 182, 122, 0.15);
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .trustpilot-reviews {
     font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.4);
-    font-weight: 500;
-    letter-spacing: 0.3px;
+    color: #64748b;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    padding-left: 20px;
+    margin-left: 5px;
+}
+
+@media (max-width: 992px) {
+    .trustpilot-badge {
+        flex-direction: column;
+        border-radius: 30px;
+        text-align: center;
+        padding: 30px;
+        gap: 10px;
+    }
+
+    .trustpilot-stars {
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+
+    .trustpilot-reviews {
+        border-left: none;
+        padding-left: 0;
+        margin-left: 0;
+        margin-top: 5px;
+    }
 }
 
 @media (max-width: 768px) {
-    .testimonials-grid {
-        grid-template-columns: 1fr;
-        gap: var(--spacing-md);
-    }
-
-    .trustpilot-badge {
-        padding: 28px 24px;
-        min-width: auto;
+    .testimonial-card {
+        flex: 0 0 85vw;
+        padding: 2rem;
     }
 }

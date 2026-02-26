@@ -57,33 +57,61 @@ const FAQ = () => {
                 </div>
 
                 <div className="faq-list">
-                    {faqs.map((faq, index) => (
-                        <div
-                            key={index}
-                            className={`faq-item ${openIndex === index ? 'open' : ''}`}
-                        >
-                            <button
-                                className="faq-question"
-                                onClick={() => toggleFAQ(index)}
+                    <div className="faq-column">
+                        {faqs.slice(0, Math.ceil(faqs.length / 2)).map((faq, index) => (
+                            <div
+                                key={index}
+                                className={`faq-item ${openIndex === index ? 'open' : ''}`}
                             >
-                                <span>{faq.question}</span>
-                                <svg
-                                    width="24"
-                                    height="24"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeWidth="2"
-                                    className="faq-icon"
+                                <button
+                                    className="faq-question"
+                                    onClick={() => toggleFAQ(index)}
+                                    aria-expanded={openIndex === index}
                                 >
-                                    <polyline points="6 9 12 15 18 9" />
-                                </svg>
-                            </button>
-                            <div className="faq-answer">
-                                <p>{faq.answer}</p>
+                                    <span>{faq.question}</span>
+                                    <div className="faq-icon-wrapper">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="faq-icon">
+                                            <polyline points="6 9 12 15 18 9" />
+                                        </svg>
+                                    </div>
+                                </button>
+                                <div className="faq-answer-container">
+                                    <div className="faq-answer">
+                                        <p className="faq-answer-content">{faq.answer}</p>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    ))}
+                        ))}
+                    </div>
+                    <div className="faq-column">
+                        {faqs.slice(Math.ceil(faqs.length / 2)).map((faq, relativeIndex) => {
+                            const index = relativeIndex + Math.ceil(faqs.length / 2);
+                            return (
+                                <div
+                                    key={index}
+                                    className={`faq-item ${openIndex === index ? 'open' : ''}`}
+                                >
+                                    <button
+                                        className="faq-question"
+                                        onClick={() => toggleFAQ(index)}
+                                        aria-expanded={openIndex === index}
+                                    >
+                                        <span>{faq.question}</span>
+                                        <div className="faq-icon-wrapper">
+                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="faq-icon">
+                                                <polyline points="6 9 12 15 18 9" />
+                                            </svg>
+                                        </div>
+                                    </button>
+                                    <div className="faq-answer-container">
+                                        <div className="faq-answer">
+                                            <p className="faq-answer-content">{faq.answer}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
                 </div>
             </div>
         </section>

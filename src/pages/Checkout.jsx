@@ -47,42 +47,109 @@ const Checkout = ({ items, clearCart }) => {
         setError('');
 
         try {
+            if (paymentMethod === 'razorpay') {
+                // 1. Create Razorpay Order
+                const rzpResponse = await api.createRazorpayOrder({ amount: total });
+                if (!rzpResponse.success) throw new Error('Could not initialize payment gateway.');
+
+                const { id: order_id, amount: amountPaise, currency } = rzpResponse.data;
+
+                // 2. Open Razorpay Checkout options
+                const options = {
+                    key: import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_YourTestKeyId',
+                    amount: amountPaise,
+                    currency: currency,
+                    name: 'Star Naming',
+                    description: 'Celestial Package Order',
+                    order_id: order_id,
+                    handler: async function (response) {
+                        try {
+                            setLoading(true); // Re-set loading for verification
+                            // 3. Verify Payment
+                            const verifyData = {
+                                razorpay_order_id: response.razorpay_order_id,
+                                razorpay_payment_id: response.razorpay_payment_id,
+                                razorpay_signature: response.razorpay_signature
+                            };
+
+                            const verifyRes = await api.verifyRazorpayPayment(verifyData);
+
+                            if (verifyRes.success) {
+                                // 4. Create App Orders
+                                await createApplicationOrders('completed', 'razorpay');
+                                clearCart();
+                                navigate('/success');
+                            }
+                        } catch (err) {
+                            console.error('Payment verification failed:', err);
+                            setError('Payment verification failed. Please contact stellar support.');
+                            setLoading(false);
+                        }
+                    },
+                    prefill: {
+                        name: formData.name,
+                        email: '',
+                        contact: formData.phone
+                    },
+                    theme: {
+                        color: '#6366f1'
+                    },
+                    modal: {
+                        ondismiss: function () {
+                            setLoading(false);
+                        }
+                    }
+                };
+
+                const rzp1 = new window.Razorpay(options);
+                rzp1.on('payment.failed', function (response) {
+                    setError(`Payment Failed: ${response.error.description || 'Unknown error'}`);
+                    setLoading(false);
+                });
+                rzp1.open();
+                return; // Let the Razorpay handler deal with completion
+            }
+
+            // Normal flow for cod, upi, netbanking mock
             await new Promise(resolve => setTimeout(resolve, 2000));
+            await createApplicationOrders(paymentMethod === 'cod' ? 'pending' : 'completed', paymentMethod);
 
-            const promises = items.map(item => {
-                const orderPromises = [];
-                for (let i = 0; i < item.quantity; i++) {
-                    orderPromises.push(api.createOrder({
-                        packageId: item.id,
-                        starName: item.customization?.starName || `Star #${Date.now()}-${i}`,
-                        dedicationMessage: item.customization?.message || '',
-                        dedicationDate: item.customization?.dedicationDate || new Date().toISOString(),
-                        recipientInfo: {
-                            name: formData.name,
-                            email: '',
-                            phone: formData.phone
-                        },
-                        shippingAddress: {
-                            address: formData.address,
-                            city: formData.city,
-                            postalCode: formData.postalCode
-                        },
-                        paymentMethod: paymentMethod,
-                        paymentStatus: paymentMethod === 'cod' ? 'pending' : 'completed'
-                    }));
-                }
-                return Promise.all(orderPromises);
-            });
-
-            await Promise.all(promises);
             clearCart();
             navigate('/success');
         } catch (err) {
             console.error('Checkout error:', err);
             setError(err.message || 'Failed to place order. Please try again.');
-        } finally {
             setLoading(false);
         }
+    };
+
+    const createApplicationOrders = async (paymentStatus, method) => {
+        const promises = items.map(item => {
+            const orderPromises = [];
+            for (let i = 0; i < item.quantity; i++) {
+                orderPromises.push(api.createOrder({
+                    packageId: item.id,
+                    starName: item.customization?.starName || `Star #${Date.now()}-${i}`,
+                    dedicationMessage: item.customization?.message || '',
+                    dedicationDate: item.customization?.dedicationDate || new Date().toISOString(),
+                    recipientInfo: {
+                        name: formData.name,
+                        email: '',
+                        phone: formData.phone
+                    },
+                    shippingAddress: {
+                        address: formData.address,
+                        city: formData.city,
+                        postalCode: formData.postalCode
+                    },
+                    paymentMethod: method,
+                    paymentStatus: paymentStatus
+                }));
+            }
+            return Promise.all(orderPromises);
+        });
+
+        await Promise.all(promises);
     };
 
     if (items.length === 0) {
@@ -180,6 +247,9 @@ const Checkout = ({ items, clearCart }) => {
                                     <div className={`payment-tab ${paymentMethod === 'cod' ? 'active' : ''}`} onClick={() => setPaymentMethod('cod')}>
                                         <span>💵</span> Cash On Delivery
                                     </div>
+                                    <div className={`payment-tab ${paymentMethod === 'razorpay' ? 'active' : ''}`} onClick={() => setPaymentMethod('razorpay')}>
+                                        <span>⚡</span> Pay Online (Razorpay)
+                                    </div>
                                     <div className={`payment-tab ${paymentMethod === 'upi' ? 'active' : ''}`} onClick={() => setPaymentMethod('upi')}>
                                         <span>📍</span> UPI Interface
                                     </div>
@@ -200,6 +270,17 @@ const Checkout = ({ items, clearCart }) => {
                                                 <p style={{ fontSize: '12px', color: '#94a3b8', margin: 0 }}>You can fulfill the credits via Cash or Digital UPI when your celestial package arrives at the coordinates.</p>
                                             </div>
                                             <button className="btn-place-order" onClick={handlePaymentSubmit}>PLACE ORDER</button>
+                                        </div>
+                                    )}
+
+                                    {paymentMethod === 'razorpay' && (
+                                        <div>
+                                            <h5 style={{ fontWeight: 800, color: '#fff', marginBottom: '16px' }}>SECURE ONLINE PAYMENT</h5>
+                                            <div style={{ background: 'rgba(99, 102, 241, 0.1)', border: '1px dashed #6366f1', padding: '20px', borderRadius: '16px', marginBottom: '32px' }}>
+                                                <p style={{ fontSize: '14px', color: '#fff', marginBottom: '8px', fontWeight: 700 }}>Stellar Gateway</p>
+                                                <p style={{ fontSize: '12px', color: '#94a3b8', margin: 0 }}>You will be redirected to our secure payment gateway to complete your transaction using Cards, UPI, Netbanking, or Wallets.</p>
+                                            </div>
+                                            <button className="btn-place-order" onClick={handlePaymentSubmit}>PROCEED TO PAY</button>
                                         </div>
                                     )}
 

@@ -222,6 +222,38 @@ export const api = {
         return handleResponse(response);
     },
 
+    // Create Razorpay order
+    createRazorpayOrder: async (paymentData) => {
+        const token = getToken();
+
+        const response = await fetch(`${API_URL}/payment/razorpay`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
+            body: JSON.stringify(paymentData),
+        });
+
+        return handleResponse(response);
+    },
+
+    // Verify Razorpay payment
+    verifyRazorpayPayment: async (verificationData) => {
+        const token = getToken();
+
+        const response = await fetch(`${API_URL}/payment/verify`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
+            body: JSON.stringify(verificationData),
+        });
+
+        return handleResponse(response);
+    },
+
     // Update order status (Admin only)
     updateOrderStatus: async (id, statusData) => {
         const token = getToken();

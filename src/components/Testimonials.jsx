@@ -37,16 +37,6 @@ const Testimonials = () => {
     return (
         <section id="testimonials" className="testimonials section">
             <div className="testimonials-container">
-                <div className="section-header text-center">
-                    <span className="section-badge fade-in">Customer Trust</span>
-                    <div className="header-title-wrapper">
-                        <div className="header-decoration left"></div>
-                        <h2 className="premium-title">Hearts Touched by Stars</h2>
-                        <div className="header-decoration right"></div>
-                    </div>
-                    <p className="section-subtitle fade-in">Experience the <span className="magic-text">magic of star naming</span> through our community</p>
-                </div>
-
                 <div className="testimonials-grid">
                     {testimonials.map((testimonial, index) => (
                         <div key={index} className="testimonial-card glass">

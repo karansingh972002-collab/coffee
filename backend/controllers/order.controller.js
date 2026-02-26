@@ -1,7 +1,9 @@
 const Order = require('../models/Order');
 const Package = require('../models/Package');
 const mongoose = require('mongoose');
-const { orderStore, packageStore } = require('../db/memory-store');
+const { orderStore, packageStore, userStore } = require('../db/memory-store');
+const sendEmail = require('../utils/sendEmail');
+const User = require('../models/User');
 
 // @desc    Create new order
 // @route   POST /api/orders
@@ -56,6 +58,70 @@ exports.createOrder = async (req, res, next) => {
         });
 
         if (!order) order = memoryOrder;
+
+        // --- EMAIL NOTIFICATION: Order Confirmation ---
+        try {
+            // Get user email
+            let userEmail = '';
+            let userName = '';
+
+            if (mongoose.connection.readyState === 1 && req.user) {
+                const user = await User.findById(userId);
+                if (user) {
+                    userEmail = user.email;
+                    userName = user.name;
+                }
+            }
+
+            if (!userEmail) {
+                const memUser = userStore.getById(userId);
+                if (memUser) {
+                    userEmail = memUser.email;
+                    userName = memUser.name;
+                }
+            }
+
+            if (userEmail) {
+                const messageText = `Order Confirmation\n\nDear ${userName},\n\nThank you for your order! Your celestial package for claiming the star "${orderData.starName}" has been received and is currently processing.\n\nTotal Amount: ₹${orderData.totalAmount}\nOrder ID: ${order ? order._id : 'Pending'}\n\nYou can track your order status in your dashboard.\n\nThank you for choosing Star Naming!`;
+
+                const messageHtml = `
+                    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #050816; color: #fff; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
+                        <div style="text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 20px; margin-bottom: 20px;">
+                            <h2 style="color: #818cf8; margin: 0;">Order Confirmed 🌠</h2>
+                        </div>
+                        <p style="font-size: 16px;">Dear <strong>${userName}</strong>,</p>
+                        <p style="font-size: 16px; color: #e2e8f0; line-height: 1.5;">Thank you for your purchase. We are thrilled to confirm your order. Your star catalog details are currently being processed.</p>
+                        
+                        <div style="background-color: rgba(99, 102, 241, 0.1); border-radius: 8px; padding: 16px; margin: 20px 0;">
+                            <h3 style="color: #a5b4fc; margin-top: 0; font-size: 16px;">Star Details</h3>
+                            <p style="margin: 5px 0;"><strong>Star Name:</strong> ${orderData.starName}</p>
+                            <p style="margin: 5px 0;"><strong>Package:</strong> ${pkg.name}</p>
+                            ${orderData.dedicationMessage ? `<p style="margin: 5px 0;"><strong>Message:</strong> "${orderData.dedicationMessage}"</p>` : ''}
+                        </div>
+
+                        <div style="margin: 20px 0;">
+                            <h3 style="color: #a5b4fc; margin-top: 0; font-size: 16px;">Payment Summary</h3>
+                            <p style="margin: 5px 0;"><strong>Total Amount:</strong> ₹${orderData.totalAmount}</p>
+                            <p style="margin: 5px 0;"><strong>Payment Status:</strong> <span style="color: ${orderData.paymentStatus === 'completed' ? '#10b981' : '#fbbf24'}; text-transform: capitalize;">${orderData.paymentStatus}</span></p>
+                        </div>
+
+                        <div style="text-align: center; margin-top: 30px;">
+                            <a href="${process.env.FRONTEND_URL || 'http://localhost:5173'}/account" style="display: inline-block; background: linear-gradient(135deg, #6366f1 0%, #7c3aed 100%); color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold;">View Order Status</a>
+                        </div>
+                    </div>
+                `;
+
+                await sendEmail({
+                    email: userEmail,
+                    subject: 'Order Confirmation - Star Naming',
+                    message: messageText,
+                    html: messageHtml
+                });
+            }
+        } catch (err) {
+            console.error('Failed to send order confirmation email:', err);
+            // Non-blocking
+        }
 
         res.status(201).json({
             success: true,

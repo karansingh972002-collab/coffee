@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import { api, logout } from '../services/api';
 import './Account.css';
 
@@ -9,6 +9,7 @@ const Account = () => {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+    const [expandedOrder, setExpandedOrder] = useState(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -38,6 +39,14 @@ const Account = () => {
     const handleLogout = () => {
         logout();
         navigate('/auth');
+    };
+
+    const toggleOrderDetails = (id) => {
+        if (expandedOrder === id) {
+            setExpandedOrder(null);
+        } else {
+            setExpandedOrder(id);
+        }
     };
 
     const formatDate = (dateString) => {
@@ -119,7 +128,7 @@ const Account = () => {
                             </button>
                         </div>
 
-                        <button className="logout-btn-premium" onClick={onLogout}>
+                        <button className="logout-btn-premium" onClick={handleLogout}>
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                 <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
                                 <polyline points="16 17 21 12 16 7"></polyline>

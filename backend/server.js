@@ -38,6 +38,7 @@ app.use(cors());
 app.use('/api/auth', auth);
 app.use('/api/packages', packages);
 app.use('/api/orders', orders);
+app.use('/api/payment', require('./routes/payment.routes'));
 
 // Health check route
 app.get('/api/health', (req, res) => {

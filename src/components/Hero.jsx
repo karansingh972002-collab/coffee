@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import heroBg from '../assets/hero-bg.webp';
 import './Hero.css';
 
 const Hero = () => {
@@ -47,7 +48,11 @@ const Hero = () => {
     return (
         <section id="hero" className="hero" style={{
             '--mouse-x': `${mousePos.x}%`,
-            '--mouse-y': `${mousePos.y}%`
+            '--mouse-y': `${mousePos.y}%`,
+            backgroundImage: `url(${heroBg})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat'
         }}>
             <div className="stars-background"></div>
             <div className="nebula-overlay"></div>

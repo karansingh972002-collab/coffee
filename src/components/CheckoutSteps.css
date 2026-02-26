@@ -1,49 +1,70 @@
+/* ===== Checkout Steps - Enhanced Premium ===== */
+
 .checkout-steps {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 30px 0;
+    padding: 28px 0;
     max-width: 600px;
-    margin: 0 auto 40px;
+    margin: 0 auto 36px;
+    gap: 4px;
 }
 
 .step-item {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 2px;
-    color: rgba(255, 255, 255, 0.3);
+    color: rgba(255, 255, 255, 0.2);
     text-transform: uppercase;
     position: relative;
-    padding: 0 15px;
-    transition: all 0.3s ease;
+    padding: 8px 16px;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    border-radius: 10px;
 }
 
 .step-item.active {
-    color: #818cf8;
-    text-shadow: 0 0 12px rgba(129, 140, 248, 0.5);
+    color: #a5b4fc;
+    background: rgba(99, 102, 241, 0.08);
+    text-shadow: 0 0 12px rgba(129, 140, 248, 0.4);
 }
 
 .step-item.active::after {
     content: '';
     position: absolute;
-    bottom: -8px;
-    left: 15px;
-    right: 15px;
+    bottom: -2px;
+    left: 16px;
+    right: 16px;
     height: 2px;
     background: linear-gradient(to right, #6366f1, #8b5cf6);
-    box-shadow: 0 0 10px rgba(99, 102, 241, 0.8);
+    box-shadow: 0 0 8px rgba(99, 102, 241, 0.6);
+    border-radius: 1px;
 }
 
 .step-item.completed {
-    color: #10b981;
+    color: #34d399;
 }
 
 .step-divider {
     height: 1px;
-    width: 60px;
-    background-color: rgba(255, 255, 255, 0.05);
-    margin: 0 10px;
-    border-top: 1px dashed rgba(255, 255, 255, 0.2);
+    width: 48px;
+    background: rgba(255, 255, 255, 0.06);
+    margin: 0 6px;
+    border-top: none;
+    border-radius: 1px;
 }
 
-/* Dark mode compatibility is now default */
+@media (max-width: 480px) {
+    .checkout-steps {
+        gap: 2px;
+    }
+
+    .step-item {
+        font-size: 0.65rem;
+        padding: 6px 10px;
+        letter-spacing: 1.5px;
+    }
+
+    .step-divider {
+        width: 24px;
+    }
+}

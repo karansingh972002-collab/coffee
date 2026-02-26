@@ -30,7 +30,7 @@ const packages = [
         },
         badge: 'Entry Level',
         gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-        image: 'https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?auto=format&fit=crop&w=800&q=80',
+        image: '/packages/standard.webp',
         type: 'Standard'
     },
     {
@@ -50,7 +50,7 @@ const packages = [
         },
         badge: 'Best Value',
         gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-        image: 'https://images.unsplash.com/photo-1516339901601-2e1b62dc0c45?auto=format&fit=crop&w=800&q=80',
+        image: '/packages/standard.webp',
         type: 'Standard'
     },
     {
@@ -70,7 +70,7 @@ const packages = [
         },
         badge: 'Most Popular',
         gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-        image: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=800&q=80',
+        image: '/packages/premium.webp',
         type: 'Premium'
     },
     {
@@ -90,7 +90,7 @@ const packages = [
         },
         badge: 'Top Choice',
         gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-        image: 'https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?auto=format&fit=crop&w=800&q=80',
+        image: '/packages/premium.webp',
         type: 'Premium'
     },
     {
@@ -110,7 +110,7 @@ const packages = [
         },
         badge: 'Romantic Gift',
         gradient: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
-        image: 'https://images.unsplash.com/photo-1506318137071-a8bcbf675b27?auto=format&fit=crop&w=800&q=80',
+        image: '/packages/binary.webp',
         type: 'Binary'
     },
     {
@@ -130,7 +130,7 @@ const packages = [
         },
         badge: 'Luxury',
         gradient: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
-        image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80',
+        image: '/packages/binary.webp',
         type: 'Binary'
     },
     {
@@ -150,7 +150,7 @@ const packages = [
         },
         badge: 'Ultimate',
         gradient: 'linear-gradient(135deg, #a8c0ff 0%, #3f2b96 100%)',
-        image: 'https://images.unsplash.com/photo-1444703686981-a3abbc4d4fe3?auto=format&fit=crop&w=800&q=80',
+        image: '/packages/luxury.webp',
         type: 'Luxury'
     },
     {
@@ -170,7 +170,7 @@ const packages = [
         },
         badge: 'Exclusive',
         gradient: 'linear-gradient(135deg, #a8c0ff 0%, #3f2b96 100%)',
-        image: 'https://images.unsplash.com/photo-1506318171071-a8bcbf675b27?auto=format&fit=crop&w=800&q=80',
+        image: '/packages/luxury.webp',
         type: 'Luxury'
     },
     {
@@ -190,7 +190,7 @@ const packages = [
         },
         badge: 'Astrology',
         gradient: 'linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%)',
-        image: 'https://images.unsplash.com/photo-1534067783941-51c9c23ecefd?auto=format&fit=crop&w=800&q=80',
+        image: '/packages/zodiac.webp',
         type: 'Zodiac'
     },
     {
@@ -210,7 +210,7 @@ const packages = [
         },
         badge: 'For Kids',
         gradient: 'linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%)',
-        image: 'https://images.unsplash.com/photo-1444703686981-a3abbc4d4fe3?auto=format&fit=crop&w=800&q=80',
+        image: '/packages/kids.webp',
         type: 'Kids'
     }
 ];

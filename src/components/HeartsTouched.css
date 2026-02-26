@@ -1,30 +1,64 @@
+/* ===== Hearts Touched Section - Enhanced Premium ===== */
+
 .hearts-touched {
-    background-color: var(--bg-dark);
     position: relative;
-    padding: 8rem 0;
+    padding: 7rem 0;
+    overflow: hidden;
 }
 
+/* Animated radial glow */
 .hearts-bg-glow {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 600px;
-    height: 600px;
-    background: radial-gradient(circle, rgba(255, 63, 108, 0.08) 0%, transparent 70%);
+    width: 700px;
+    height: 700px;
+    background: radial-gradient(circle,
+            rgba(255, 63, 108, 0.08) 0%,
+            rgba(236, 72, 153, 0.04) 30%,
+            transparent 70%);
     z-index: 0;
     pointer-events: none;
+    animation: ht-glow-breathe 6s ease-in-out infinite;
+}
+
+@keyframes ht-glow-breathe {
+
+    0%,
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0.6;
+    }
+
+    50% {
+        transform: translate(-50%, -50%) scale(1.15);
+        opacity: 1;
+    }
 }
 
 .heart-icon-wrapper {
     position: relative;
     display: inline-block;
+    z-index: 1;
 }
 
 .main-heart {
     font-size: 5rem;
-    filter: drop-shadow(0 0 20px rgba(255, 63, 108, 0.4));
-    animation: pulse-heart 2s infinite ease-in-out;
+    filter: drop-shadow(0 0 25px rgba(255, 63, 108, 0.5));
+    animation: ht-pulse-heart 2s infinite ease-in-out;
+}
+
+@keyframes ht-pulse-heart {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.12);
+    }
 }
 
 .floating-hearts .float-heart {
@@ -35,54 +69,42 @@
 
 .float-heart.h1 {
     top: -20px;
-    left: -20px;
-    animation: float-up-fade 2.5s infinite 0.5s;
+    left: -30px;
+    animation: ht-float-up 2.5s infinite 0.5s;
 }
 
 .float-heart.h2 {
     top: -40px;
-    left: 20px;
-    animation: float-up-fade 3s infinite 1s;
+    left: 25px;
+    animation: ht-float-up 3s infinite 1s;
 }
 
 .float-heart.h3 {
-    top: 0px;
-    left: 40px;
-    animation: float-up-fade 2.8s infinite 1.5s;
+    top: 0;
+    left: 50px;
+    animation: ht-float-up 2.8s infinite 1.5s;
 }
 
-@keyframes pulse-heart {
-
-    0%,
-    100% {
-        transform: scale(1);
-    }
-
-    50% {
-        transform: scale(1.1);
-    }
-}
-
-@keyframes float-up-fade {
+@keyframes ht-float-up {
     0% {
-        transform: translateY(0) scale(0.5);
+        transform: translateY(0) scale(0.5) rotate(0deg);
         opacity: 0;
     }
 
-    50% {
-        opacity: 0.8;
+    30% {
+        opacity: 0.9;
     }
 
     100% {
-        transform: translateY(-80px) scale(1.2);
+        transform: translateY(-90px) scale(1.1) rotate(15deg);
         opacity: 0;
     }
 }
-
-/* Global magic styles used from index.css */
 
 .hearts-touched .section-header {
     margin-bottom: 40px;
+    position: relative;
+    z-index: 1;
 }
 
 .highlight-count {
@@ -94,34 +116,54 @@
     max-width: 800px;
 }
 
+/* Stats strip */
 .stat-item {
-    padding: 1rem 2rem;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 15px;
+    padding: 1.25rem 2rem;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    border-radius: 16px;
     min-width: 180px;
+    backdrop-filter: blur(10px);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.stat-item:hover {
+    transform: translateY(-4px);
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 63, 108, 0.2);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.3);
 }
 
 .stat-value {
     font-size: 1.75rem;
-    font-weight: 700;
+    font-weight: 800;
     color: #fff;
     margin-bottom: 0.25rem;
+    background: linear-gradient(135deg, #fff, #f9a8d4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .stat-label {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
+    letter-spacing: 1.5px;
     color: #64748b;
+    font-weight: 600;
 }
 
 @media (max-width: 768px) {
-    .hearts-title {
-        font-size: 2.25rem;
+    .hearts-touched {
+        padding: 4rem 0;
     }
 
     .main-heart {
         font-size: 3.5rem;
+    }
+
+    .hearts-bg-glow {
+        width: 400px;
+        height: 400px;
     }
 }

@@ -1,9 +1,12 @@
+/* ===== Known From / Press Strip - Enhanced Premium ===== */
+
 .known-from {
-    background-color: #050816;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    padding: 2rem 0;
+    background-color: #030712;
+    border-top: 1px solid rgba(255, 255, 255, 0.03);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    padding: 2.5rem 0;
     overflow: hidden;
+    position: relative;
 }
 
 .known-from-content {
@@ -11,11 +14,11 @@
 }
 
 .known-title {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     font-weight: 700;
-    letter-spacing: 0.3em;
-    color: #64748b;
-    margin-bottom: 2rem;
+    letter-spacing: 0.35em;
+    color: #475569;
+    margin-bottom: 1.75rem;
     text-transform: uppercase;
 }
 
@@ -24,7 +27,7 @@
     overflow: hidden;
     user-select: none;
     gap: 4rem;
-    mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+    mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
 }
 
 .marquee-content {
@@ -33,24 +36,26 @@
     justify-content: space-around;
     gap: 4rem;
     min-width: 100%;
-    animation: scroll 30s linear infinite;
+    animation: kf-scroll 30s linear infinite;
 }
 
 .brand-item {
     font-family: 'Times New Roman', serif;
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     font-weight: 700;
-    color: rgba(203, 213, 225, 0.6);
+    color: rgba(148, 163, 184, 0.35);
     white-space: nowrap;
-    transition: color 0.3s, transform 0.3s;
+    transition: all 0.4s ease;
+    letter-spacing: 0.5px;
 }
 
 .brand-item:hover {
-    color: #fff;
-    transform: scale(1.05);
+    color: rgba(255, 255, 255, 0.8);
+    transform: scale(1.08);
+    text-shadow: 0 0 20px rgba(99, 102, 241, 0.15);
 }
 
-@keyframes scroll {
+@keyframes kf-scroll {
     from {
         transform: translateX(0);
     }
@@ -63,7 +68,7 @@
 @media (max-width: 768px) {
     .marquee-content {
         animation-duration: 20s;
-        gap: 2rem;
+        gap: 2.5rem;
     }
 
     .brand-item {
@@ -71,6 +76,6 @@
     }
 
     .marquee-container {
-        gap: 2rem;
+        gap: 2.5rem;
     }
 }

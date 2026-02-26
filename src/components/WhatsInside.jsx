@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import './WhatsInside.css';
 import giftPackage from '../assets/gift-package.webp';
 import certificatePreview from '../assets/certificate-preview.webp';
@@ -6,6 +6,13 @@ import starMapPreview from '../assets/star-map-preview.webp';
 
 const WhatsInside = () => {
     const [activeItem, setActiveItem] = useState(null);
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+    useEffect(() => {
+        const handleResize = () => setIsMobile(window.innerWidth < 768);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     const items = [
         {
@@ -100,18 +107,31 @@ const WhatsInside = () => {
         }
     ];
 
+    const particles = useMemo(() => {
+        const count = isMobile ? 8 : 20;
+        return [...Array(count)].map((_, i) => ({
+            key: i,
+            left: `${Math.random() * 100}%`,
+            top: `${Math.random() * 100}%`,
+            animationDelay: `${Math.random() * 8}s`,
+            animationDuration: `${6 + Math.random() * 8}s`,
+            width: `${2 + Math.random() * 4}px`,
+            height: `${2 + Math.random() * 4}px`,
+        }));
+    }, [isMobile]);
+
     return (
         <section id="whats-inside" className="whats-inside section">
             {/* Floating particles background */}
             <div className="wi-particles">
-                {[...Array(20)].map((_, i) => (
-                    <div key={i} className="wi-particle" style={{
-                        left: `${Math.random() * 100}%`,
-                        top: `${Math.random() * 100}%`,
-                        animationDelay: `${Math.random() * 8}s`,
-                        animationDuration: `${6 + Math.random() * 8}s`,
-                        width: `${2 + Math.random() * 4}px`,
-                        height: `${2 + Math.random() * 4}px`,
+                {particles.map(particle => (
+                    <div key={particle.key} className="wi-particle" style={{
+                        left: particle.left,
+                        top: particle.top,
+                        animationDelay: particle.animationDelay,
+                        animationDuration: particle.animationDuration,
+                        width: particle.width,
+                        height: particle.height,
                     }} />
                 ))}
             </div>

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import heroBg from '../assets/hero-bg.webp';
+import heroBgMobile from '../assets/hero-bg-mobile.webp';
 import './Hero.css';
 
 const Hero = () => {
@@ -14,8 +15,12 @@ const Hero = () => {
 
     const [currentHeadline, setCurrentHeadline] = useState(0);
     const [mousePos, setMousePos] = useState({ x: 50, y: 50 });
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
     useEffect(() => {
+        const handleResize = () => setIsMobile(window.innerWidth < 768);
+        window.addEventListener('resize', handleResize);
+
         const timer = setInterval(() => {
             setCurrentHeadline((prev) => (prev + 1) % headlines.length);
         }, 4000);
@@ -29,12 +34,17 @@ const Hero = () => {
             });
         };
 
-        window.addEventListener('mousemove', handleMouseMove);
+        // Only track mouse on desktop to save battery/CPU on mobile
+        if (!isMobile) {
+            window.addEventListener('mousemove', handleMouseMove);
+        }
+
         return () => {
             clearInterval(timer);
+            window.removeEventListener('resize', handleResize);
             window.removeEventListener('mousemove', handleMouseMove);
         };
-    }, [headlines.length]);
+    }, [headlines.length, isMobile]);
 
     // Optimize star generation by memoizing it
     const starField = useState(() => [...Array(20)].map((_, i) => ({
@@ -49,7 +59,7 @@ const Hero = () => {
         <section id="hero" className="hero" style={{
             '--mouse-x': `${mousePos.x}%`,
             '--mouse-y': `${mousePos.y}%`,
-            backgroundImage: `url(${heroBg})`,
+            backgroundImage: `url(${isMobile ? heroBgMobile : heroBg})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat'
@@ -112,7 +122,7 @@ const Hero = () => {
             </div>
 
             <div className="hero-visual">
-                <img src="/src/assets/hero-mandala.svg" alt="Glowing Lotus Mandala" className="lotus-mandala-img" />
+                <img src="/src/assets/hero-mandala.svg" alt="Glowing Lotus Mandala" className="lotus-mandala-img" fetchpriority="high" loading="eager" />
             </div>
         </section >
     );

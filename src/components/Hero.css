@@ -314,6 +314,19 @@
         flex-direction: column;
         padding: 0 var(--spacing-md);
     }
+
+    .stars-background::before,
+    .stars-background::after {
+        animation: none !important;
+    }
+
+    .parallax-layer {
+        display: none;
+    }
+
+    .hero-visual {
+        animation: none !important;
+    }
 }
 
 /* Lotus Mandala Styles */

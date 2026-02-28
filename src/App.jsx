@@ -12,7 +12,6 @@ import ProductDetails from './pages/ProductDetails';
 import CartPage from './pages/CartPage';
 import Checkout from './pages/Checkout';
 import OrderSuccess from './pages/OrderSuccess';
-import OrderPage from './pages/OrderPage';
 import Auth from './pages/Auth';
 import Wishlist from './pages/Wishlist';
 import Account from './pages/Account';
@@ -113,7 +112,6 @@ function App() {
             <Route path="/cart" element={<CartPage items={cartItems} onUpdateQuantity={updateQuantity} onRemove={removeFromCart} onAddToWishlist={addToWishlist} />} />
             <Route path="/checkout" element={<Checkout items={cartItems} clearCart={clearCart} />} />
             <Route path="/success" element={<OrderSuccess />} />
-            <Route path="/order" element={<OrderPage onAddToCart={addToCart} />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/wishlist" element={<Wishlist items={wishlistItems} onAddToCart={addToCart} onRemoveFromWishlist={removeFromWishlist} />} />
             <Route path="/account" element={<Account />} />

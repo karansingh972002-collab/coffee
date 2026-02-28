@@ -68,7 +68,6 @@ const Header = ({ cartCount, onCartClick }) => {
                     <nav className={`nav ${isMobileMenuOpen ? 'open' : ''}`}>
                         <Link to="/" className="nav-link" onClick={handleLogoClick}>Home</Link>
                         <Link to="/shop" className="nav-link">Shop</Link>
-                        <Link to="/order" className="nav-link">Order Now</Link>
                         <a href="/#packages" className="nav-link">Packages</a>
                         <a href="/#testimonials" className="nav-link">Reviews</a>
                         <Link to="/wishlist" className="nav-link">Wishlist</Link>

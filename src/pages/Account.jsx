@@ -99,8 +99,13 @@ const Account = () => {
             <div className="account-container">
                 <header className="account-header">
                     <div className="header-content">
-                        <h1>User Dashboard</h1>
-                        <p>Welcome back, {user?.name}. Your universe is waiting.</p>
+                        <h1 className="dashboard-title">
+                            <span className="title-glow">User Dashboard</span>
+                        </h1>
+                        <p className="dashboard-subtitle">
+                            Welcome back, <span className="user-name-highlight">{user?.name}</span>. Your universe is waiting.
+                            <svg className="sparkle-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" /></svg>
+                        </p>
                     </div>
                 </header>
 
@@ -182,8 +187,8 @@ const Account = () => {
 
                             {orders.length === 0 ? (
                                 <div className="no-orders text-center py-5">
-                                    <p className="text-muted">You haven't immortalized any stars yet.</p>
-                                    <Link to="/shop" className="btn btn-primary mt-3">Start Naming</Link>
+                                    <p>You haven't immortalized any stars yet.</p>
+                                    <Link to="/shop" className="btn-premium-action">Start Naming</Link>
                                 </div>
                             ) : (
                                 <div className="premium-table-wrapper">

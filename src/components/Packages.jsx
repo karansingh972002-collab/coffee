@@ -1,10 +1,12 @@
 import './Packages.css';
 
+import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { api } from '../services/api';
 import './Packages.css';
 
 const Packages = ({ onAddToCart, onCustomize }) => {
+    const navigate = useNavigate();
     const [packages, setPackages] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -122,13 +124,7 @@ const Packages = ({ onAddToCart, onCustomize }) => {
                                     if (onCustomize) {
                                         onCustomize(pkg);
                                     } else {
-                                        onAddToCart({
-                                            id: pkg._id,
-                                            name: pkg.name,
-                                            price: pkg.price,
-                                            type: pkg.type,
-                                            image: pkg.image || 'https://via.placeholder.com/150'
-                                        });
+                                        navigate(`/product/${pkg._id}`);
                                     }
                                 }}
                                 style={{ background: pkg.gradient }}

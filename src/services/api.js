@@ -34,9 +34,12 @@ export const api = {
         const data = await handleResponse(response);
 
         // Save token to localStorage
-        if (data.data.token) {
+        if (data.token) {
+            localStorage.setItem('token', data.token);
+            if (data.user) localStorage.setItem('user', JSON.stringify(data.user));
+        } else if (data.data && data.data.token) {
             localStorage.setItem('token', data.data.token);
-            localStorage.setItem('user', JSON.stringify(data.data.user));
+            if (data.data.user) localStorage.setItem('user', JSON.stringify(data.data.user));
         }
 
         return data;
@@ -55,9 +58,12 @@ export const api = {
         const data = await handleResponse(response);
 
         // Save token to localStorage
-        if (data.data.token) {
+        if (data.token) {
+            localStorage.setItem('token', data.token);
+            if (data.user) localStorage.setItem('user', JSON.stringify(data.user));
+        } else if (data.data && data.data.token) {
             localStorage.setItem('token', data.data.token);
-            localStorage.setItem('user', JSON.stringify(data.data.user));
+            if (data.data.user) localStorage.setItem('user', JSON.stringify(data.data.user));
         }
 
         return data;

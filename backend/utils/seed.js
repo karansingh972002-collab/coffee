@@ -213,6 +213,106 @@ const packages = [
         gradient: 'linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%)',
         image: '/packages/luxury.webp',
         type: 'Luxury'
+    },
+    {
+        name: 'ORION\'S BELT',
+        subtitle: 'The Legendary Trio',
+        description: 'Name a trio of prominent stars aligning dynamically in the night sky.',
+        price: 5999,
+        features: [
+            'Name three distinct but visually-aligned stars',
+            'Large-scale premium star map depicting the trio',
+            'Three corresponding digital certificates',
+            'Special AR app grouping feature'
+        ],
+        delivery: {
+            digital: 'Ready in 15 minutes',
+            physical: 'Arrives in 2-4 days'
+        },
+        badge: 'Rare',
+        gradient: 'linear-gradient(135deg, #434343 0%, #000000 100%)',
+        image: '/packages/standard.webp',
+        type: 'Premium'
+    },
+    {
+        name: 'GALACTIC CORE',
+        subtitle: 'The Center of it All',
+        description: 'A spectacular star located near the supermassive black hole at our galaxy\'s center.',
+        price: 14999,
+        features: [
+            'Name a rare star in the Sagittarius A* region',
+            'Deep-space telescope imaging certificate',
+            'Laser-etched glass plaque display',
+            'Lifetime VIP registration'
+        ],
+        delivery: {
+            digital: 'Ready in 15 minutes',
+            physical: 'Express shipping (1-2 days)'
+        },
+        badge: 'Exclusive',
+        gradient: 'linear-gradient(135deg, #f77062 0%, #fe5196 100%)',
+        image: '/packages/luxury.webp',
+        type: 'Luxury'
+    },
+    {
+        name: 'NEBULA STAR',
+        subtitle: 'A Star in the Clouds',
+        description: 'A vibrant young star situated within a breathtakingly colorful interstellar nebula.',
+        price: 4999,
+        features: [
+            'Name a star born within a famous nebula (e.g., Orion, Carina)',
+            'Full-color astrophotography background on certificate',
+            'Detailed scientific facts sheet about the nebula',
+            'Lifetime Registry Access'
+        ],
+        delivery: {
+            digital: 'Ready in 15 minutes',
+            physical: 'Arrives in 2-4 days'
+        },
+        badge: 'Beautiful',
+        gradient: 'linear-gradient(135deg, #b8cbb8 0%, #b8cbb8 0%, #b465da 0%, #cf6cc9 33%, #ee609c 66%, #ee609c 100%)',
+        image: '/packages/premium.webp',
+        type: 'Premium'
+    },
+    {
+        name: 'PULSAR NOVA',
+        subtitle: 'The Beating Heart',
+        description: 'For the sci-fi lovers: Name an actual, rapidly-spinning neutron star (Pulsar).',
+        price: 3999,
+        features: [
+            'Name a scientifically verified Pulsar',
+            'Audio-file of the pulsar\'s "heartbeat" radio emission',
+            'Sleek modern sci-fi themed certificate',
+            'Premium AR simulation'
+        ],
+        delivery: {
+            digital: 'Ready in 15 minutes',
+            physical: 'Arrives in 2-4 days'
+        },
+        badge: 'Sci-Fi',
+        gradient: 'linear-gradient(135deg, #16a085 0%, #f4d03f 100%)',
+        image: '/packages/binary.webp',
+        type: 'Standard'
+    },
+    {
+        name: 'ECLIPSE BUNDLE',
+        subtitle: 'The Phenomenon',
+        description: 'A dark and intriguing package featuring a star that regularly undergoes eclipses.',
+        price: 6499,
+        features: [
+            'Name an eclipsing binary star system',
+            'Time-lapse simulation of the eclipse in AR',
+            'Dual-layered physical certificate',
+            'Premium presentation box'
+        ],
+        delivery: {
+            digital: 'Ready in 15 minutes',
+            physical: 'Arrives in 2-4 days'
+        },
+        badge: 'Bundle',
+        gradient: 'linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%)',
+        image: '/packages/duonova.webp',
+        type: 'Binary'
     }
 ];
 

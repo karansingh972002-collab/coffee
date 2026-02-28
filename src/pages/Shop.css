@@ -229,6 +229,27 @@
 
 .overlay-features {
     width: 100%;
+    margin-bottom: var(--spacing-sm);
+}
+
+.view-details-btn {
+    width: 100%;
+    padding: var(--spacing-md);
+    background: var(--gradient-primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+    pointer-events: auto;
+}
+
+.view-details-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.6);
 }
 
 .feature-item-overlay {

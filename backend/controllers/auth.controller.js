@@ -11,6 +11,22 @@ exports.register = async (req, res, next) => {
         const { name, email, password, phone } = req.body;
         let user;
 
+        // Check if user already exists
+        let existingUser = null;
+        if (mongoose.connection.readyState === 1) {
+            existingUser = await User.findOne({ email });
+        }
+        if (!existingUser) {
+            existingUser = userStore.getByEmail(email);
+        }
+
+        if (existingUser) {
+            return res.status(400).json({
+                success: false,
+                message: 'An account with this email already exists. Please log in instead.'
+            });
+        }
+
         // Try creating in DB first
         if (mongoose.connection.readyState === 1) {
             user = await User.create({ name, email, password, phone });
@@ -56,9 +72,18 @@ exports.register = async (req, res, next) => {
 
         sendTokenResponse(user, 201, res);
     } catch (err) {
+        const errorString = err ? String(err.message || err) : '';
+
+        if (err.code === 11000 || errorString.includes('11000') || errorString.includes('duplicate key error') || errorString.includes('dup key')) {
+            return res.status(400).json({
+                success: false,
+                message: 'An account with this email already exists. Please log in instead.'
+            });
+        }
+
         res.status(400).json({
             success: false,
-            message: err.message,
+            message: err.message || 'An error occurred during registration',
         });
     }
 };
@@ -156,5 +181,8 @@ const sendTokenResponse = (user, statusCode, res) => {
     res.status(statusCode).cookie('token', token, options).json({
         success: true,
         token,
+        data: {
+            user: user
+        }
     });
 };

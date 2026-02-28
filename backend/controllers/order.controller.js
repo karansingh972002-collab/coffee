@@ -106,7 +106,7 @@ exports.createOrder = async (req, res, next) => {
                         </div>
 
                         <div style="text-align: center; margin-top: 30px;">
-                            <a href="${process.env.FRONTEND_URL || 'http://localhost:5173'}/account" style="display: inline-block; background: linear-gradient(135deg, #6366f1 0%, #7c3aed 100%); color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold;">View Order Status</a>
+                            <a href="${process.env.FRONTEND_URL || 'https://coffee-kappa-ashen.vercel.app'}/account" style="display: inline-block; background: linear-gradient(135deg, #6366f1 0%, #7c3aed 100%); color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold;">View Order Status</a>
                         </div>
                     </div>
                 `;

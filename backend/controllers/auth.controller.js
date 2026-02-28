@@ -53,7 +53,7 @@ exports.register = async (req, res, next) => {
                     <p style="font-size: 16px;">Hello <strong>${user.name}</strong>,</p>
                     <p style="font-size: 16px; line-height: 1.5; color: #e2e8f0;">Your celestial journey begins here. Your account has been successfully created. You can now log in, view your dashboard, and immortalize a star in the galaxy.</p>
                     <div style="text-align: center; margin: 30px 0;">
-                        <a href="${process.env.FRONTEND_URL || 'http://localhost:5173'}/auth" style="background: linear-gradient(135deg, #6366f1 0%, #7c3aed 100%); color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold;">Login Now</a>
+                        <a href="${process.env.FRONTEND_URL || 'https://coffee-kappa-ashen.vercel.app'}/auth" style="background: linear-gradient(135deg, #6366f1 0%, #7c3aed 100%); color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold;">Login Now</a>
                     </div>
                     <p style="font-size: 14px; color: #94a3b8; text-align: center;">Thank you for choosing Star Naming.</p>
                 </div>

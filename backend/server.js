@@ -47,7 +47,7 @@ app.get('/api/health', (req, res) => {
 
 // Root route
 app.get('/', (req, res) => {
-    res.send('API is running. Access the frontend at <a href="http://localhost:5173">http://localhost:5173</a>');
+    res.send('API is running. Access the frontend at <a href="https://coffee-kappa-ashen.vercel.app">https://coffee-kappa-ashen.vercel.app</a>');
 });
 
 const PORT = process.env.PORT || 5000;

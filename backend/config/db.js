@@ -1,4 +1,8 @@
 const mongoose = require('mongoose');
+const dns = require('dns');
+
+// Override DNS to use Google's Public DNS (helps bypass ECONNREFUSED on SRV)
+dns.setServers(['8.8.8.8']);
 
 const connectDB = async () => {
     try {

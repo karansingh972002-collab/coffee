@@ -4,10 +4,15 @@ import './App.css';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import LivePurchase from './components/LivePurchase';
+import Cart from './components/Cart';
+import FloatingBag from './components/FloatingBag';
+import Toast from './components/Toast';
+import './components/FloatingBag.css';
+import './components/Toast.css';
 
 // Pages
-import Home from './pages/Home';
-import Shop from './pages/Shop';
+import Home from './pages/Shop/Home';
+import Shop from './pages/Shop/Shop';
 import ProductDetails from './pages/ProductDetails';
 import CartPage from './pages/CartPage';
 import Checkout from './pages/Checkout';
@@ -35,6 +40,9 @@ function App() {
     }
   });
 
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [toast, setToast] = useState({ isVisible: false, message: '', type: 'success' });
+
   // Persist to localStorage
   useEffect(() => {
     localStorage.setItem('cartItems', JSON.stringify(cartItems));
@@ -53,6 +61,7 @@ function App() {
           JSON.stringify(i.customization) === JSON.stringify(item.customization);
       });
       if (existing) {
+        setToast({ isVisible: true, message: `Updated quantity for ${item.name}!`, type: 'success' });
         return prev.map(i => {
           const iId = i.id || i._id;
           return (iId === itemId && JSON.stringify(i.customization) === JSON.stringify(item.customization))
@@ -60,6 +69,7 @@ function App() {
             : i;
         });
       }
+      setToast({ isVisible: true, message: `${item.name} added to your celestial bag!`, type: 'success' });
       return [...prev, { ...item, quantity: item.quantity || 1 }];
     });
   };
@@ -121,6 +131,26 @@ function App() {
 
         <LivePurchase />
         <Footer />
+
+        <Cart
+          isOpen={isCartOpen}
+          onClose={() => setIsCartOpen(false)}
+          items={cartItems}
+          onUpdateQuantity={updateQuantity}
+          onRemove={removeFromCart}
+        />
+
+        <FloatingBag
+          count={cartItems.reduce((sum, item) => sum + item.quantity, 0)}
+          onOpenCart={() => setIsCartOpen(true)}
+        />
+
+        <Toast
+          isVisible={toast.isVisible}
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(prev => ({ ...prev, isVisible: false }))}
+        />
       </div>
     </Router>
   );

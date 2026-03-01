@@ -1,0 +1,89 @@
+.floating-bag {
+    position: fixed;
+    bottom: var(--spacing-2xl);
+    right: var(--spacing-2xl);
+    width: 65px;
+    height: 65px;
+    background: var(--color-bg-card);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 0 10px rgba(255, 255, 255, 0.05);
+    z-index: 9991;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    color: var(--color-primary);
+    animation: floating-bag-pop 0.6s ease-out;
+}
+
+.floating-bag:hover {
+    transform: translateY(-10px) scale(1.1);
+    color: var(--color-primary-light);
+    border: 1px solid var(--color-primary);
+    box-shadow: 0 15px 40px rgba(var(--color-primary-rgb), 0.3);
+}
+
+.bag-icon-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.bag-count {
+    position: absolute;
+    top: -12px;
+    right: -12px;
+    background: var(--color-primary);
+    color: white;
+    font-size: 13px;
+    font-weight: 700;
+    min-width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--color-bg-card);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    animation: bag-count-pulse 1.5s infinite;
+}
+
+@keyframes bag-count-pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.12);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes floating-bag-pop {
+    0% {
+        transform: scale(0) rotate(-20deg);
+        opacity: 0;
+    }
+
+    100% {
+        transform: scale(1) rotate(0);
+        opacity: 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .floating-bag {
+        bottom: 110px;
+        /* Above potential mobile nav or sticky buttons */
+        right: 20px;
+        width: 60px;
+        height: 60px;
+    }
+}

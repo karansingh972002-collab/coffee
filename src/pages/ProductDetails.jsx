@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import api from '../services/api';
-import StarCustomizer from '../components/StarCustomizer';
+import StarCustomizer from './Shop/StarCustomizer';
 import HeartsTouched from '../components/HeartsTouched';
 import './ProductDetails.css';
 

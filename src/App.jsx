@@ -112,11 +112,12 @@ function App() {
       <div className="App">
         <Header
           cartCount={cartItems.reduce((sum, item) => sum + item.quantity, 0)}
+          onCartClick={() => setIsCartOpen(true)}
         />
 
         <main className="main-content">
           <Routes>
-            <Route path="/" element={<Home onAddToCart={addToCart} />} />
+            <Route path="/" element={<Home />} />
             <Route path="/shop" element={<Shop onAddToCart={addToCart} onAddToWishlist={addToWishlist} />} />
             <Route path="/product/:id" element={<ProductDetails onAddToCart={addToCart} onAddToWishlist={addToWishlist} />} />
             <Route path="/cart" element={<CartPage items={cartItems} onUpdateQuantity={updateQuantity} onRemove={removeFromCart} onAddToWishlist={addToWishlist} />} />

@@ -149,7 +149,7 @@ const Shop = ({ onAddToCart, onAddToWishlist, minimal = false, limit = 0 }) => {
     );
 
     return (
-        <div className={minimal ? 'packages-section py-5' : 'shop-page'}>
+        <div id={minimal ? 'packages' : 'shop'} className={minimal ? 'packages-section py-5' : 'shop-page'}>
             <div className={minimal ? 'packages-container' : 'shop-container'}>
                 {renderHeader()}
 

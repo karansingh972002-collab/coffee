@@ -143,7 +143,13 @@ const Header = ({ cartCount, onCartClick }) => {
                             <span className="profile-text">Wishlist</span>
                         </Link>
 
-                        <div className="action-icon-btn cart-toggle" onClick={onCartClick}>
+                        <div className="action-icon-btn cart-toggle" onClick={() => {
+                            if (window.innerWidth > 768) {
+                                onCartClick();
+                            } else {
+                                navigate('/cart');
+                            }
+                        }}>
                             <div className="icon-badge-container">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                     <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" />

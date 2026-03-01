@@ -49,6 +49,60 @@ const Account = () => {
         }
     };
 
+    const handlePrintCertificate = (order) => {
+        const printWindow = window.open('', '_blank');
+        const starName = order.customization?.starName || 'Unnamed Star';
+        const date = order.customization?.dedicationDate || new Date().toLocaleDateString();
+
+        printWindow.document.write(`
+            <html>
+                <head>
+                    <title>Certificate of Registry - ${starName}</title>
+                    <style>
+                        body { 
+                            margin: 0; 
+                            display: flex; 
+                            align-items: center; 
+                            justify-content: center; 
+                            min-height: 100vh;
+                            background: #f8fafc;
+                            font-family: 'Georgia', serif;
+                        }
+                        .certificate {
+                            width: 800px;
+                            height: 600px;
+                            padding: 40px;
+                            border: 20px double #fbbf24;
+                            background: #fff;
+                            text-align: center;
+                            box-shadow: 0 0 50px rgba(0,0,0,0.1);
+                            position: relative;
+                        }
+                        h1 { color: #1e293b; font-size: 3rem; margin-bottom: 10px; }
+                        h2 { color: #fbbf24; font-size: 1.5rem; text-transform: uppercase; letter-spacing: 4px; border-bottom: 2px solid #fbbf24; display: inline-block; padding-bottom: 10px; }
+                        .star-name { font-size: 4rem; margin: 40px 0; color: #1e1b4b; font-weight: bold; font-style: italic; }
+                        .date { font-size: 1.2rem; color: #64748b; margin-top: 20px; }
+                        .seal { position: absolute; bottom: 40px; right: 40px; width: 100px; height: 100px; background: #fbbf24; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: bold; transform: rotate(-15deg); box-shadow: 0 5px 15px rgba(251, 191, 36, 0.4); border: 2px dashed #fff; }
+                    </style>
+                </head>
+                <body>
+                    <div class="certificate">
+                        <h2>Certificate of Registry</h2>
+                        <h1>This certifies that the star</h1>
+                        <div class="star-name">${starName}</div>
+                        <h1>is officially recorded in the Celestial Registry</h1>
+                        <div class="date">Dated: ${date}</div>
+                        <div class="seal">OFFICIAL SEAL</div>
+                    </div>
+                    <script>
+                        window.onload = function() { window.print(); window.close(); }
+                    </script>
+                </body>
+            </html>
+        `);
+        printWindow.document.close();
+    };
+
     const formatDate = (dateString) => {
         const date = new Date(dateString);
         return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
@@ -255,10 +309,16 @@ const Account = () => {
                                                                                         <div className="cert-footer">Official Seal</div>
                                                                                     </div>
                                                                                 </div>
-                                                                                <button className="btn btn-outline-primary btn-sm w-100 mt-2">
-                                                                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="me-1"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                                                                                    Download PDF
-                                                                                </button>
+                                                                                <div className="d-flex gap-2 mt-2">
+                                                                                    <button className="btn btn-outline-primary btn-sm flex-grow-1">
+                                                                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="me-1"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                                                                                        PDF
+                                                                                    </button>
+                                                                                    <button className="btn btn-primary btn-sm flex-grow-1" onClick={() => handlePrintCertificate(order)}>
+                                                                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="me-1"><path d="M6 9V2h12v7"></path><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+                                                                                        Print
+                                                                                    </button>
+                                                                                </div>
                                                                             </div>
                                                                         )}
                                                                     </div>

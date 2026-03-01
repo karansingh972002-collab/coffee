@@ -52,6 +52,16 @@ const Checkout = ({ items, clearCart }) => {
                 const rzpResponse = await api.createRazorpayOrder({ amount: total });
                 if (!rzpResponse.success) throw new Error('Could not initialize payment gateway.');
 
+                // Handle Mock Order for local testing
+                if (rzpResponse.isMock) {
+                    console.log('Detected Mock Razorpay Order - Simulating success');
+                    await new Promise(resolve => setTimeout(resolve, 1500));
+                    await createApplicationOrders('completed', 'razorpay-mock');
+                    clearCart();
+                    navigate('/success');
+                    return;
+                }
+
                 const { id: order_id, amount: amountPaise, currency } = rzpResponse.data;
 
                 // 2. Open Razorpay Checkout options

@@ -305,6 +305,12 @@
 
 .cart-toggle {
     cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cart-toggle:hover {
+    background: rgba(255, 255, 255, 0.05) !important;
+    transform: translateY(-2px) scale(1.05);
 }
 
 /* Mobile Adjustments */

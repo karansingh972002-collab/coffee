@@ -53,49 +53,163 @@ const Account = () => {
         const printWindow = window.open('', '_blank');
         const starName = order.customization?.starName || 'Unnamed Star';
         const date = order.customization?.dedicationDate || new Date().toLocaleDateString();
+        const registryId = order._id.toUpperCase();
 
         printWindow.document.write(`
             <html>
                 <head>
-                    <title>Certificate of Registry - ${starName}</title>
+                    <title>Certificate Of Registry - ${starName}</title>
                     <style>
+                        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;700&display=swap');
+                        
                         body { 
                             margin: 0; 
-                            display: flex; 
-                            align-items: center; 
-                            justify-content: center; 
+                            background: #050816;
+                            color: #fff;
+                            font-family: 'Montserrat', sans-serif;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
                             min-height: 100vh;
-                            background: #f8fafc;
-                            font-family: 'Georgia', serif;
                         }
-                        .certificate {
-                            width: 800px;
-                            height: 600px;
-                            padding: 40px;
-                            border: 20px double #fbbf24;
-                            background: #fff;
-                            text-align: center;
-                            box-shadow: 0 0 50px rgba(0,0,0,0.1);
+                        .certificate-container {
+                            width: 1000px;
+                            height: 700px;
+                            padding: 60px;
+                            background: radial-gradient(circle at center, #1e293b 0%, #050816 100%);
+                            border: 2px solid #fbbf24;
+                            border-radius: 4px;
                             position: relative;
+                            display: flex;
+                            flex-direction: column;
+                            align-items: center;
+                            text-align: center;
+                            box-shadow: 0 0 100px rgba(0,0,0,0.5);
+                            overflow: hidden;
                         }
-                        h1 { color: #1e293b; font-size: 3rem; margin-bottom: 10px; }
-                        h2 { color: #fbbf24; font-size: 1.5rem; text-transform: uppercase; letter-spacing: 4px; border-bottom: 2px solid #fbbf24; display: inline-block; padding-bottom: 10px; }
-                        .star-name { font-size: 4rem; margin: 40px 0; color: #1e1b4b; font-weight: bold; font-style: italic; }
-                        .date { font-size: 1.2rem; color: #64748b; margin-top: 20px; }
-                        .seal { position: absolute; bottom: 40px; right: 40px; width: 100px; height: 100px; background: #fbbf24; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: bold; transform: rotate(-15deg); box-shadow: 0 5px 15px rgba(251, 191, 36, 0.4); border: 2px dashed #fff; }
+                        .certificate-container::before {
+                            content: '';
+                            position: absolute;
+                            top: 0; left: 0; right: 0; bottom: 0;
+                            background: url('https://www.transparenttextures.com/patterns/stardust.png');
+                            opacity: 0.3;
+                            pointer-events: none;
+                        }
+                        .border-pattern {
+                            position: absolute;
+                            top: 15px; left: 15px; right: 15px; bottom: 15px;
+                            border: 1px solid rgba(251, 191, 36, 0.3);
+                            pointer-events: none;
+                        }
+                        header h2 {
+                            font-family: 'Cinzel', serif;
+                            color: #fbbf24;
+                            font-size: 1.2rem;
+                            letter-spacing: 8px;
+                            margin-bottom: 40px;
+                            text-transform: uppercase;
+                        }
+                        .cert-title {
+                            font-family: 'Cinzel', serif;
+                            font-size: 3.5rem;
+                            margin: 20px 0;
+                            background: linear-gradient(to bottom, #fff, #94a3b8);
+                            -webkit-background-clip: text;
+                            -webkit-text-fill-color: transparent;
+                        }
+                        .presentation {
+                            font-weight: 300;
+                            font-size: 1.2rem;
+                            color: #94a3b8;
+                            margin: 20px 0;
+                        }
+                        .star-name {
+                            font-family: 'Cinzel', serif;
+                            font-size: 5rem;
+                            color: #fbbf24;
+                            margin: 30px 0;
+                            text-shadow: 0 0 20px rgba(251, 191, 36, 0.4);
+                        }
+                        .registry-details {
+                            margin-top: 40px;
+                            border-top: 1px solid rgba(255,255,255,0.1);
+                            padding-top: 30px;
+                            width: 80%;
+                            display: flex;
+                            justify-content: space-around;
+                        }
+                        .detail-item h4 {
+                            font-size: 0.7rem;
+                            color: #fbbf24;
+                            text-transform: uppercase;
+                            letter-spacing: 2px;
+                            margin-bottom: 5px;
+                        }
+                        .detail-item p {
+                            font-size: 1rem;
+                            color: #fff;
+                        }
+                        .seal {
+                            position: absolute;
+                            bottom: 50px;
+                            right: 70px;
+                            width: 120px;
+                            height: 120px;
+                            border: 4px double #fbbf24;
+                            border-radius: 50%;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            color: #fbbf24;
+                            font-family: 'Cinzel', serif;
+                            font-weight: bold;
+                            font-size: 0.8rem;
+                            transform: rotate(-15deg);
+                            background: rgba(251, 191, 36, 0.05);
+                        }
+                        @media print {
+                            body { background: #fff !important; color: #000 !important; }
+                            .certificate-container { 
+                                border: 1px solid #000 !important;
+                                background: #fff !important;
+                                box-shadow: none !important;
+                                width: 100%; height: 100%;
+                            }
+                            .star-name, .cert-title, header h2, .seal { -webkit-text-fill-color: #000 !important; color: #000 !important; border-color: #000 !important; }
+                        }
                     </style>
                 </head>
                 <body>
-                    <div class="certificate">
-                        <h2>Certificate of Registry</h2>
-                        <h1>This certifies that the star</h1>
+                    <div class="certificate-container">
+                        <div class="border-pattern"></div>
+                        <header>
+                            <h2>The Official Celestial Registry</h2>
+                        </header>
+                        <div class="presentation">THIS ACCREDITATION CERTIFIES THAT</div>
+                        <h1 class="cert-title">The Star</h1>
                         <div class="star-name">${starName}</div>
-                        <h1>is officially recorded in the Celestial Registry</h1>
-                        <div class="date">Dated: ${date}</div>
-                        <div class="seal">OFFICIAL SEAL</div>
+                        <div class="presentation">IS OFFICIALLY RECORDED AND REGISTERED IN OUR PERMANENT ARCHIVES</div>
+                        
+                        <div class="registry-details">
+                            <div class="detail-item">
+                                <h4>Registry ID</h4>
+                                <p>${registryId}</p>
+                            </div>
+                            <div class="detail-item">
+                                <h4>Registration Date</h4>
+                                <p>${date}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="seal">OFFICIAL<br>REGISTRY<br>SEAL</div>
                     </div>
                     <script>
-                        window.onload = function() { window.print(); window.close(); }
+                        window.onload = function() { 
+                            setTimeout(() => {
+                                window.print(); 
+                                // window.close(); // Optional: close after print
+                            }, 1000);
+                        }
                     </script>
                 </body>
             </html>

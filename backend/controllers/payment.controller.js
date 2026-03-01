@@ -22,7 +22,9 @@ exports.createRazorpayOrder = async (req, res, next) => {
         };
 
         // Check if we should use mock (if keys are defaults or missing)
-        const isMockKey = !process.env.RAZORPAY_KEY_ID || process.env.RAZORPAY_KEY_ID.includes('Your') || process.env.RAZORPAY_KEY_ID.includes('test_Your');
+        const isMockKey = !process.env.RAZORPAY_KEY_ID ||
+            process.env.RAZORPAY_KEY_ID.includes('Your') ||
+            process.env.RAZORPAY_KEY_ID.includes('test_Your');
 
         if (isMockKey) {
             console.log('Using Mock Razorpay Order for development');
@@ -30,10 +32,12 @@ exports.createRazorpayOrder = async (req, res, next) => {
                 success: true,
                 isMock: true,
                 data: {
-                    id: `order_mock_${Date.now()}`,
+                    id: `order_mock_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
                     currency: 'INR',
                     amount: options.amount,
-                    receipt: options.receipt
+                    receipt: options.receipt,
+                    status: 'created',
+                    created_at: Math.floor(Date.now() / 1000)
                 }
             });
         }

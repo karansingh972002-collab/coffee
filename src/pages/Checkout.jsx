@@ -55,7 +55,8 @@ const Checkout = ({ items, clearCart }) => {
                 // Handle Mock Order for local testing
                 if (rzpResponse.isMock) {
                     console.log('Detected Mock Razorpay Order - Simulating success');
-                    await new Promise(resolve => setTimeout(resolve, 1500));
+                    // Add a small artificial delay for better UX
+                    await new Promise(resolve => setTimeout(resolve, 2000));
                     await createApplicationOrders('completed', 'razorpay-mock');
                     clearCart();
                     navigate('/success');

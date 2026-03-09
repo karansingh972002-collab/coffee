@@ -23,7 +23,6 @@ const Checkout = ({ items, clearCart }) => {
         postalCode: '400001',
         email: user?.email || '',
         // Payment Details
-        upiId: '',
         cardNumber: '',
         cardHolder: '',
         cardExpiry: '',
@@ -46,9 +45,7 @@ const Checkout = ({ items, clearCart }) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const isUpiValid = (vpa) => {
-        return /^[a-zA-Z0-9.\-_]{2,256}@[a-zA-Z]{2,64}$/.test(vpa);
-    };
+
 
 
     const handlePaymentSubmit = async () => {
@@ -130,7 +127,7 @@ const Checkout = ({ items, clearCart }) => {
             }
 
             // Client-side Validation
-            if (paymentMethod === 'upi' && !formData.upiId) throw new Error('Please enter your UPI ID');
+
             if (paymentMethod === 'netbanking' && !formData.selectedBank) throw new Error('Please select a galactic node bank');
             if (paymentMethod === 'card') {
                 if (!formData.cardNumber || !formData.cardHolder || !formData.cardExpiry || !formData.cardCvv) {
@@ -143,7 +140,6 @@ const Checkout = ({ items, clearCart }) => {
 
             // Prepare payment details metadata
             const paymentDetails = {};
-            if (paymentMethod === 'upi') paymentDetails.upiId = formData.upiId;
             if (paymentMethod === 'netbanking') paymentDetails.bankName = formData.selectedBank;
             if (paymentMethod === 'card') {
                 paymentDetails.cardHolder = formData.cardHolder;
@@ -316,9 +312,6 @@ const Checkout = ({ items, clearCart }) => {
                                     <div className={`payment-tab ${paymentMethod === 'razorpay' ? 'active' : ''}`} onClick={() => setPaymentMethod('razorpay')}>
                                         <span>⚡</span> Secure Online Pay
                                     </div>
-                                    <div className={`payment-tab ${paymentMethod === 'upi' ? 'active' : ''}`} onClick={() => setPaymentMethod('upi')}>
-                                        <span>📍</span> UPI Interface
-                                    </div>
                                     <div className={`payment-tab ${paymentMethod === 'card' ? 'active' : ''}`} onClick={() => setPaymentMethod('card')}>
                                         <span>💳</span> Stellar Cards
                                     </div>
@@ -361,43 +354,7 @@ const Checkout = ({ items, clearCart }) => {
                                         </div>
                                     )}
 
-                                    {paymentMethod === 'upi' && (
-                                        <div className="animate-fade-in">
-                                            <h5 className="payment-method-title"><span>📍</span> STELLAR UPI SYNC</h5>
-                                            <div className="payment-input-group">
-                                                <label className="payment-label" style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                                    VIRTUAL ADDRESS (VPA)
-                                                    {isUpiValid(formData.upiId) && <span style={{ color: '#10b981', fontSize: '11px', fontWeight: 800 }}>✓ VERIFIED SYNC</span>}
-                                                </label>
-                                                <div style={{ position: 'relative' }}>
-                                                    <input
-                                                        type="text"
-                                                        className="payment-input"
-                                                        name="upiId"
-                                                        value={formData.upiId}
-                                                        onChange={handleChange}
-                                                        placeholder="e.g. pilot@stellar"
-                                                        style={{ borderColor: isUpiValid(formData.upiId) ? '#10b981' : 'rgba(255,255,255,0.1)' }}
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div style={{ marginBottom: '32px' }}>
-                                                <p style={{ fontSize: '12px', color: isUpiValid(formData.upiId) ? '#94a3b8' : '#64748b' }}>
-                                                    {isUpiValid(formData.upiId)
-                                                        ? 'Universal address detected. Transmission ready.'
-                                                        : 'Please enter a valid stellar address (example@bank).'}
-                                                </p>
-                                            </div>
-                                            <button
-                                                className="btn-place-order"
-                                                onClick={handlePaymentSubmit}
-                                                disabled={!isUpiValid(formData.upiId)}
-                                                style={{ opacity: isUpiValid(formData.upiId) ? 1 : 0.5, cursor: isUpiValid(formData.upiId) ? 'pointer' : 'not-allowed' }}
-                                            >
-                                                {isUpiValid(formData.upiId) ? 'SYNC & AUTHORIZE' : 'WAITING FOR ADDRESS'}
-                                            </button>
-                                        </div>
-                                    )}
+
 
                                     {paymentMethod === 'card' && (
                                         <div className="animate-fade-in">

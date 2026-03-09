@@ -51,9 +51,9 @@ const Account = () => {
 
     const handlePrintCertificate = (order) => {
         const printWindow = window.open('', '_blank');
-        const starName = order.customization?.starName || 'Unnamed Star';
-        const date = order.customization?.dedicationDate || new Date().toLocaleDateString();
-        const registryId = order._id.toUpperCase();
+        const starName = order.starName || order.customization?.starName || 'Unnamed Star';
+        const date = order.dedicationDate || order.customization?.dedicationDate || new Date().toLocaleDateString();
+        const registryId = (order._id || 'unknown').toString().toUpperCase();
 
         printWindow.document.write(`
             <html>
@@ -378,15 +378,15 @@ const Account = () => {
                                                         className={`order-row ${expandedOrder === order._id ? 'expanded' : ''}`}
                                                         onClick={() => toggleOrderDetails(order._id)}
                                                     >
-                                                        <td className="order-id">#{order._id.slice(-6).toUpperCase()}</td>
+                                                        <td className="order-id">#{order._id?.slice(-6).toUpperCase() || 'N/A'}</td>
                                                         <td>{order.package?.name || 'Star Package'}</td>
-                                                        <td><strong>{order.customization?.starName || 'Unnamed Star'}</strong></td>
+                                                        <td><strong>{order.starName || order.customization?.starName || 'Unnamed Star'}</strong></td>
                                                         <td>
                                                             <span className={`badge-celestial ${order.paymentStatus}`}>
                                                                 {order.paymentStatus}
                                                             </span>
                                                         </td>
-                                                        <td className="order-price">₹{order.totalPrice.toLocaleString()}</td>
+                                                        <td className="order-price">₹{(order.totalAmount || order.totalPrice || 0).toLocaleString()}</td>
                                                         <td className="text-right">
                                                             <button className="btn-icon">
                                                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -402,9 +402,9 @@ const Account = () => {
                                                                     <div className="detail-grid">
                                                                         <div className="detail-section">
                                                                             <h5>Star Information</h5>
-                                                                            <p><strong>Name:</strong> {order.customization?.starName}</p>
-                                                                            <p><strong>Dedication:</strong> {order.customization?.dedicationMessage || 'No message'}</p>
-                                                                            <p><strong>Date:</strong> {order.customization?.dedicationDate || 'Universal Time'}</p>
+                                                                            <p><strong>Name:</strong> {order.starName || order.customization?.starName}</p>
+                                                                            <p><strong>Dedication:</strong> {order.dedicationMessage || order.customization?.dedicationMessage || 'No message'}</p>
+                                                                            <p><strong>Date:</strong> {order.dedicationDate || order.customization?.dedicationDate || 'Universal Time'}</p>
                                                                         </div>
                                                                         <div className="detail-section">
                                                                             <h5>Order Details</h5>
@@ -419,7 +419,7 @@ const Account = () => {
                                                                                 <div className="certificate-thumbnail glass">
                                                                                     <div className="cert-inner">
                                                                                         <h4>Certificate of Registry</h4>
-                                                                                        <p className="cert-star-name">{order.customization?.starName}</p>
+                                                                                        <p className="cert-star-name">{order.starName || order.customization?.starName}</p>
                                                                                         <div className="cert-footer">Official Seal</div>
                                                                                     </div>
                                                                                 </div>

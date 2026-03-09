@@ -63,6 +63,10 @@ const OrderSchema = new mongoose.Schema({
         enum: ['digital', 'physical'],
         default: 'digital'
     },
+    paymentDetails: {
+        type: Object,
+        default: {}
+    },
     createdAt: {
         type: Date,
         default: Date.now

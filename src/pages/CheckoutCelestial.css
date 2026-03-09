@@ -64,10 +64,13 @@
 .checkout-card::before {
     content: '';
     position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     border-radius: 24px;
     padding: 1px;
-    background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 100%);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 100%);
     -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
@@ -83,7 +86,7 @@
 
 .cart-item {
     padding: 32px;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     position: relative;
     transition: background 0.3s ease;
 }
@@ -100,15 +103,18 @@
     position: relative;
     border-radius: 20px;
     overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .cart-item-image-wrapper::after {
     content: '';
     position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
     pointer-events: none;
 }
 
@@ -156,7 +162,7 @@
 .price-row.total {
     font-weight: 800;
     font-size: 1.4rem;
-    border-top: 1px dashed rgba(255,255,255,0.15);
+    border-top: 1px dashed rgba(255, 255, 255, 0.15);
     padding-top: 24px;
     margin-top: 24px;
     color: #fff;
@@ -193,8 +199,11 @@
 .btn-place-order::before {
     content: '';
     position: absolute;
-    top: 0; left: -100%; width: 50%; height: 100%;
-    background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0) 100%);
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.3) 50%, rgba(255, 255, 255, 0) 100%);
     transform: skewX(-25deg);
     animation: shine 3s infinite;
 }
@@ -207,7 +216,7 @@
 
 .item-actions-footer {
     display: flex;
-    border-top: 1px solid rgba(255,255,255,0.05);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
     margin-top: 24px;
 }
 
@@ -215,7 +224,7 @@
     flex: 1;
     background: rgba(255, 255, 255, 0.02);
     border: none;
-    border-right: 1px solid rgba(255,255,255,0.05);
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
     color: var(--celestial-text-secondary);
     font-weight: 700;
     font-size: 0.8rem;
@@ -244,7 +253,7 @@
     padding: 80px 40px;
     max-width: 600px;
     margin: 40px auto;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
 }
 
 .empty-state-visual {
@@ -261,19 +270,41 @@
 }
 
 @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-15px); }
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-15px);
+    }
 }
 
 @keyframes shine {
-    0% { left: -100%; }
-    20% { left: 200%; }
-    100% { left: 200%; }
+    0% {
+        left: -100%;
+    }
+
+    20% {
+        left: 200%;
+    }
+
+    100% {
+        left: 200%;
+    }
 }
 
 @keyframes slideInUp {
-    from { opacity: 0; transform: translateY(40px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 @media (max-width: 1024px) {
@@ -284,5 +315,297 @@
     .checkout-right {
         width: 100%;
         position: static;
+    }
+}
+
+/* Payment Section Enhancements */
+.payment-wrapper {
+    display: flex;
+    background: rgba(30, 41, 59, 0.3);
+    border: 1px solid var(--celestial-border);
+    border-radius: 24px;
+    overflow: hidden;
+    min-height: 480px;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+}
+
+.payment-sidebar {
+    width: 260px;
+    background: rgba(15, 23, 42, 0.5);
+    border-right: 1px solid var(--celestial-border);
+    padding: 24px 0;
+}
+
+.payment-tab {
+    padding: 20px 28px;
+    cursor: pointer;
+    color: var(--celestial-text-secondary);
+    font-weight: 700;
+    font-size: 0.95rem;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    border-left: 4px solid transparent;
+    opacity: 0.7;
+}
+
+.payment-tab span {
+    font-size: 1.4rem;
+    transition: transform 0.3s ease;
+}
+
+.payment-tab:hover {
+    background: rgba(99, 102, 241, 0.05);
+    color: #fff;
+    opacity: 1;
+}
+
+.payment-tab:hover span {
+    transform: scale(1.2) rotate(5deg);
+}
+
+.payment-tab.active {
+    background: linear-gradient(to right, rgba(99, 102, 241, 0.15), transparent);
+    color: #fff;
+    border-left-color: var(--accent-celestial);
+    opacity: 1;
+    position: relative;
+}
+
+.payment-tab.active::after {
+    content: '';
+    position: absolute;
+    right: -1px;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 60%;
+    width: 2px;
+    background: var(--accent-celestial);
+    box-shadow: 0 0 20px var(--accent-celestial), 0 0 10px #fff;
+}
+
+.payment-content-area {
+    flex: 1;
+    padding: 48px;
+    background: radial-gradient(circle at top right, rgba(139, 92, 246, 0.1), transparent 70%);
+    display: flex;
+    flex-direction: column;
+}
+
+.payment-method-title {
+    font-size: 1.75rem;
+    font-weight: 900;
+    margin-bottom: 24px;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.payment-info-card {
+    background: rgba(99, 102, 241, 0.03);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    padding: 28px;
+    border-radius: 20px;
+    margin-bottom: 32px;
+    position: relative;
+    overflow: hidden;
+}
+
+.payment-info-card::before {
+    content: '';
+    position: absolute;
+    top: -50px;
+    left: -50px;
+    width: 150px;
+    height: 150px;
+    background: var(--accent-celestial);
+    filter: blur(80px);
+    opacity: 0.1;
+    pointer-events: none;
+}
+
+.payment-info-tag {
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: var(--accent-celestial);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.payment-info-text {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--celestial-text-secondary);
+    margin: 0;
+}
+
+.payment-input-group {
+    margin-bottom: 24px;
+}
+
+.payment-label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 10px;
+}
+
+.payment-input {
+    width: 100%;
+    background: rgba(15, 23, 42, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    padding: 16px 20px;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.payment-input:focus {
+    background: rgba(15, 23, 42, 0.8);
+    border-color: var(--accent-celestial);
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.15);
+    transform: translateY(-2px);
+    outline: none;
+}
+
+.bank-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 16px;
+    margin-top: 10px;
+}
+
+.bank-item {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    height: 90px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    gap: 12px;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(5px);
+}
+
+.bank-item::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.bank-item:hover {
+    background: rgba(99, 102, 241, 0.08);
+    border-color: rgba(99, 102, 241, 0.4);
+    transform: translateY(-8px) scale(1.02);
+    box-shadow:
+        0 15px 30px rgba(0, 0, 0, 0.3),
+        0 0 20px rgba(99, 102, 241, 0.2);
+}
+
+.bank-item:hover::before {
+    opacity: 1;
+}
+
+.bank-item.active {
+    background: rgba(99, 102, 241, 0.15);
+    border-color: var(--accent-celestial);
+    box-shadow:
+        0 0 30px rgba(99, 102, 241, 0.3),
+        inset 0 0 15px rgba(99, 102, 241, 0.2);
+}
+
+.bank-logo-placeholder {
+    width: 36px;
+    height: 36px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    font-size: 1.2rem;
+    color: var(--celestial-text-secondary);
+}
+
+.bank-item:hover .bank-logo-placeholder {
+    background: rgba(99, 102, 241, 0.2);
+    border-color: var(--accent-celestial);
+    color: #fff;
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+}
+
+.bank-name {
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: var(--celestial-text-secondary);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: color 0.3s ease;
+}
+
+.bank-item:hover .bank-name {
+    color: #fff;
+}
+
+@media (max-width: 768px) {
+    .payment-wrapper {
+        flex-direction: column;
+    }
+
+    .payment-sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid var(--celestial-border);
+        display: flex;
+        overflow-x: auto;
+        padding: 0;
+        scrollbar-width: none;
+    }
+
+    .payment-sidebar::-webkit-scrollbar {
+        display: none;
+    }
+
+    .payment-tab {
+        padding: 16px 20px;
+        white-space: nowrap;
+        border-left: none;
+        border-bottom: 3px solid transparent;
+    }
+
+    .payment-tab.active {
+        border-bottom-color: var(--accent-celestial);
+        background: transparent;
+    }
+
+    .payment-tab.active::after {
+        display: none;
+    }
+
+    .payment-content-area {
+        padding: 32px 24px;
     }
 }

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { api, isAuthenticated } from '../services/api';
+import { api, isAuthenticated, getStoredUser } from '../services/api';
 import CheckoutSteps from '../components/CheckoutSteps';
 import './CheckoutCelestial.css';
 
@@ -12,14 +12,23 @@ const Checkout = ({ items, clearCart }) => {
     const [paymentMethod, setPaymentMethod] = useState('cod');
 
     // Address State
+    const user = getStoredUser();
     const [selectedAddress, setSelectedAddress] = useState(0);
     const [showAddressForm, setShowAddressForm] = useState(false);
     const [formData, setFormData] = useState({
-        name: 'Karan Singh',
-        phone: '9876543210',
+        name: user?.name || 'Karan Singh',
+        phone: user?.phone || '9876543210',
         address: '123, Star Galaxy Apts, Space Road',
         city: 'Mumbai',
-        postalCode: '400001'
+        postalCode: '400001',
+        email: user?.email || '',
+        // Payment Details
+        upiId: '',
+        cardNumber: '',
+        cardHolder: '',
+        cardExpiry: '',
+        cardCvv: '',
+        selectedBank: ''
     });
 
     // Calculations
@@ -37,10 +46,6 @@ const Checkout = ({ items, clearCart }) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleAddressSubmit = (e) => {
-        e.preventDefault();
-        setStep('payment');
-    };
 
     const handlePaymentSubmit = async () => {
         setLoading(true);
@@ -52,22 +57,11 @@ const Checkout = ({ items, clearCart }) => {
                 const rzpResponse = await api.createRazorpayOrder({ amount: total });
                 if (!rzpResponse.success) throw new Error('Could not initialize payment gateway.');
 
-                // Handle Mock Order for local testing
-                if (rzpResponse.isMock) {
-                    console.log('Detected Mock Razorpay Order - Simulating success');
-                    // Add a small artificial delay for better UX
-                    await new Promise(resolve => setTimeout(resolve, 2000));
-                    await createApplicationOrders('completed', 'razorpay-mock');
-                    clearCart();
-                    navigate('/success');
-                    return;
-                }
-
-                const { id: order_id, amount: amountPaise, currency } = rzpResponse.data;
+                const { id: order_id, amount: amountPaise, currency, key } = rzpResponse.data;
 
                 // 2. Open Razorpay Checkout options
                 const options = {
-                    key: import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_YourTestKeyId',
+                    key: key || import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_YourTestKeyId',
                     amount: amountPaise,
                     currency: currency,
                     name: 'Star Naming',
@@ -87,9 +81,15 @@ const Checkout = ({ items, clearCart }) => {
 
                             if (verifyRes.success) {
                                 // 4. Create App Orders
-                                await createApplicationOrders('completed', 'razorpay');
+                                const orders = await createApplicationOrders('completed', 'razorpay');
+
+                                // Store the first order ID for the success page
+                                if (orders && orders.length > 0) {
+                                    sessionStorage.setItem('lastOrderId', orders[0].data._id || orders[0].data.id);
+                                }
+
                                 clearCart();
-                                navigate('/success');
+                                navigate('/order-success');
                             }
                         } catch (err) {
                             console.error('Payment verification failed:', err);
@@ -99,7 +99,7 @@ const Checkout = ({ items, clearCart }) => {
                     },
                     prefill: {
                         name: formData.name,
-                        email: '',
+                        email: formData.email,
                         contact: formData.phone
                     },
                     theme: {
@@ -121,12 +121,40 @@ const Checkout = ({ items, clearCart }) => {
                 return; // Let the Razorpay handler deal with completion
             }
 
+            // Client-side Validation
+            if (paymentMethod === 'upi' && !formData.upiId) throw new Error('Please enter your UPI ID');
+            if (paymentMethod === 'netbanking' && !formData.selectedBank) throw new Error('Please select a galactic node bank');
+            if (paymentMethod === 'card') {
+                if (!formData.cardNumber || !formData.cardHolder || !formData.cardExpiry || !formData.cardCvv) {
+                    throw new Error('Please fill all card transmission details');
+                }
+            }
+
             // Normal flow for cod, upi, netbanking mock
             await new Promise(resolve => setTimeout(resolve, 2000));
-            await createApplicationOrders(paymentMethod === 'cod' ? 'pending' : 'completed', paymentMethod);
+
+            // Prepare payment details metadata
+            const paymentDetails = {};
+            if (paymentMethod === 'upi') paymentDetails.upiId = formData.upiId;
+            if (paymentMethod === 'netbanking') paymentDetails.bankName = formData.selectedBank;
+            if (paymentMethod === 'card') {
+                paymentDetails.cardHolder = formData.cardHolder;
+                paymentDetails.last4 = formData.cardNumber.slice(-4);
+            }
+
+            const orders = await createApplicationOrders(
+                paymentMethod === 'cod' ? 'pending' : 'completed',
+                paymentMethod,
+                paymentDetails
+            );
+
+            // Store the first order ID for the success page
+            if (orders && orders.length > 0) {
+                sessionStorage.setItem('lastOrderId', orders[0].data._id || orders[0].data.id);
+            }
 
             clearCart();
-            navigate('/success');
+            navigate('/order-success');
         } catch (err) {
             console.error('Checkout error:', err);
             setError(err.message || 'Failed to place order. Please try again.');
@@ -134,18 +162,26 @@ const Checkout = ({ items, clearCart }) => {
         }
     };
 
-    const createApplicationOrders = async (paymentStatus, method) => {
+    const handleAddressSubmit = (e) => {
+        e.preventDefault();
+        setShowAddressForm(false);
+        // In a real app, we'd save this to a list. 
+        // For now, we update the main formData which is used for the order.
+        setSelectedAddress(0);
+    };
+
+    const createApplicationOrders = async (paymentStatus, method, paymentDetails = {}) => {
         const promises = items.map(item => {
             const orderPromises = [];
             for (let i = 0; i < item.quantity; i++) {
                 orderPromises.push(api.createOrder({
-                    packageId: item.id,
+                    packageId: item.id || item._id,
                     starName: item.customization?.starName || `Star #${Date.now()}-${i}`,
                     dedicationMessage: item.customization?.message || '',
                     dedicationDate: item.customization?.dedicationDate || new Date().toISOString(),
                     recipientInfo: {
                         name: formData.name,
-                        email: '',
+                        email: formData.email,
                         phone: formData.phone
                     },
                     shippingAddress: {
@@ -154,13 +190,15 @@ const Checkout = ({ items, clearCart }) => {
                         postalCode: formData.postalCode
                     },
                     paymentMethod: method,
-                    paymentStatus: paymentStatus
+                    paymentStatus: paymentStatus,
+                    paymentDetails: paymentDetails
                 }));
             }
             return Promise.all(orderPromises);
         });
 
-        await Promise.all(promises);
+        const results = await Promise.all(promises);
+        return results.flat();
     };
 
     if (items.length === 0) {
@@ -216,9 +254,18 @@ const Checkout = ({ items, clearCart }) => {
                                         <p style={{ color: '#94a3b8', margin: '0 0 12px', lineHeight: 1.6 }}>{formData.address}, {formData.city} - {formData.postalCode}</p>
                                         <div style={{ color: '#6366f1', fontWeight: 700 }}>Mobile: {formData.phone}</div>
 
-                                        {selectedAddress === 0 && (
-                                            <button className="btn-place-order" onClick={() => setStep('payment')} style={{ marginTop: '24px', maxWidth: '250px' }}>DELIVER TO THIS ADDRESS</button>
-                                        )}
+                                        <div style={{ marginTop: '24px' }}>
+                                            <button
+                                                className="btn-place-order"
+                                                onClick={() => {
+                                                    setStep('payment');
+                                                    window.scrollTo(0, 0);
+                                                }}
+                                                style={{ maxWidth: '280px', position: 'relative', zIndex: 10 }}
+                                            >
+                                                DELIVER TO THIS ADDRESS
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -259,7 +306,7 @@ const Checkout = ({ items, clearCart }) => {
                                         <span>💵</span> Cash On Delivery
                                     </div>
                                     <div className={`payment-tab ${paymentMethod === 'razorpay' ? 'active' : ''}`} onClick={() => setPaymentMethod('razorpay')}>
-                                        <span>⚡</span> Pay Online (Razorpay)
+                                        <span>⚡</span> Secure Online Pay
                                     </div>
                                     <div className={`payment-tab ${paymentMethod === 'upi' ? 'active' : ''}`} onClick={() => setPaymentMethod('upi')}>
                                         <span>📍</span> UPI Interface
@@ -268,76 +315,151 @@ const Checkout = ({ items, clearCart }) => {
                                         <span>💳</span> Stellar Cards
                                     </div>
                                     <div className={`payment-tab ${paymentMethod === 'netbanking' ? 'active' : ''}`} onClick={() => setPaymentMethod('netbanking')}>
-                                        <span>🏦</span> Galatic Banking
+                                        <span>🏦</span> Galactic Banking
                                     </div>
                                 </div>
 
-                                <div className="payment-content-area" style={{ background: 'transparent' }}>
+                                <div className="payment-content-area">
                                     {paymentMethod === 'cod' && (
-                                        <div>
-                                            <h5 style={{ fontWeight: 800, color: '#fff', marginBottom: '16px' }}>CASH ON ARRIVAL</h5>
-                                            <div style={{ background: 'rgba(99, 102, 241, 0.1)', border: '1px dashed #6366f1', padding: '20px', borderRadius: '16px', marginBottom: '32px' }}>
-                                                <p style={{ fontSize: '14px', color: '#fff', marginBottom: '8px', fontWeight: 700 }}>Verified Arrival</p>
-                                                <p style={{ fontSize: '12px', color: '#94a3b8', margin: 0 }}>You can fulfill the credits via Cash or Digital UPI when your celestial package arrives at the coordinates.</p>
+                                        <div className="animate-fade-in">
+                                            <h5 className="payment-method-title"><span>💵</span> CASH ON ARRIVAL</h5>
+                                            <div className="payment-info-card">
+                                                <span className="payment-info-tag">Physical Fulfill</span>
+                                                <p className="payment-info-text">You can provide the credits via Cash or Digital UPI when your celestial package arrives at yours coordinates. No advance fuel required.</p>
                                             </div>
-                                            <button className="btn-place-order" onClick={handlePaymentSubmit}>PLACE ORDER</button>
+                                            <button className="btn-place-order" onClick={handlePaymentSubmit}>CONFIRM ARRIVAL ORDER</button>
                                         </div>
                                     )}
 
                                     {paymentMethod === 'razorpay' && (
-                                        <div>
-                                            <h5 style={{ fontWeight: 800, color: '#fff', marginBottom: '16px' }}>SECURE ONLINE PAYMENT</h5>
-                                            <div style={{ background: 'rgba(99, 102, 241, 0.1)', border: '1px dashed #6366f1', padding: '20px', borderRadius: '16px', marginBottom: '32px' }}>
-                                                <p style={{ fontSize: '14px', color: '#fff', marginBottom: '8px', fontWeight: 700 }}>Stellar Gateway</p>
-                                                <p style={{ fontSize: '12px', color: '#94a3b8', margin: 0 }}>You will be redirected to our secure payment gateway to complete your transaction using Cards, UPI, Netbanking, or Wallets.</p>
+                                        <div className="animate-fade-in">
+                                            <h5 className="payment-method-title"><span>⚡</span> SECURE STELLAR GATEWAY</h5>
+                                            <div className="payment-info-card">
+                                                <span className="payment-info-tag">Encrypted Connection</span>
+                                                <p className="payment-info-text">Directly access the primary payment nodes via Razorpay. Support for 100+ galactic banks, cards, and wallets across the sector.</p>
                                             </div>
-                                            <button className="btn-place-order" onClick={handlePaymentSubmit}>PROCEED TO PAY</button>
+                                            <button className="btn-place-order" onClick={handlePaymentSubmit}>INITIATE SECURE PAY</button>
+
+                                            <button
+                                                className="btn btn-link mt-4"
+                                                style={{ color: '#818cf8', fontSize: '11px', textDecoration: 'none', fontWeight: 800, letterSpacing: '1px', width: '100%', opacity: 0.6 }}
+                                                onClick={() => {
+                                                    setPaymentMethod('test');
+                                                    handlePaymentSubmit();
+                                                }}
+                                            >
+                                                // DEV CONSOLE: FORCE INSTANT SYNC
+                                            </button>
                                         </div>
                                     )}
 
                                     {paymentMethod === 'upi' && (
-                                        <div>
-                                            <h5 style={{ fontWeight: 800, color: '#fff', marginBottom: '16px' }}>PAY VIA STELLAR UPI</h5>
-                                            <div className="mb-4">
-                                                <label style={{ fontSize: '12px', color: '#94a3b8', marginBottom: '8px', display: 'block', fontWeight: 700 }}>ENTER UPI ID</label>
-                                                <input type="text" className="payment-input" placeholder="e.g. pilot@stellar" />
+                                        <div className="animate-fade-in">
+                                            <h5 className="payment-method-title"><span>📍</span> STELLAR UPI SYNC</h5>
+                                            <div className="payment-input-group">
+                                                <label className="payment-label">VIRTUAL ADDRESS (VPA)</label>
+                                                <input
+                                                    type="text"
+                                                    className="payment-input"
+                                                    name="upiId"
+                                                    value={formData.upiId}
+                                                    onChange={handleChange}
+                                                    placeholder="e.g. pilot@stellar"
+                                                />
                                             </div>
-                                            <button className="btn-place-order" onClick={handlePaymentSubmit}>VERIFY & SYNC</button>
+                                            <div style={{ marginBottom: '32px' }}>
+                                                <p style={{ fontSize: '12px', color: '#64748b' }}>A request will be sent to your primary communication device.</p>
+                                            </div>
+                                            <button className="btn-place-order" onClick={handlePaymentSubmit}>SYNC & AUTHORIZE</button>
                                         </div>
                                     )}
 
                                     {paymentMethod === 'card' && (
-                                        <div>
-                                            <h5 style={{ fontWeight: 800, color: '#fff', marginBottom: '16px' }}>ENCRYPTED CARD CHANNEL</h5>
+                                        <div className="animate-fade-in">
+                                            <h5 className="payment-method-title"><span>💳</span> STELLAR CARD CHANNEL</h5>
                                             <div className="row g-3">
                                                 <div className="col-12">
-                                                    <input type="text" className="payment-input" placeholder="XXXX XXXX XXXX XXXX" />
+                                                    <div className="payment-input-group">
+                                                        <label className="payment-label">CARD NUMBER</label>
+                                                        <input
+                                                            type="text"
+                                                            className="payment-input"
+                                                            name="cardNumber"
+                                                            value={formData.cardNumber}
+                                                            onChange={handleChange}
+                                                            placeholder="XXXX XXXX XXXX XXXX"
+                                                        />
+                                                    </div>
                                                 </div>
                                                 <div className="col-12">
-                                                    <input type="text" className="payment-input" placeholder="Holder Name" />
+                                                    <div className="payment-input-group">
+                                                        <label className="payment-label">COMMANDER NAME</label>
+                                                        <input
+                                                            type="text"
+                                                            className="payment-input"
+                                                            name="cardHolder"
+                                                            value={formData.cardHolder}
+                                                            onChange={handleChange}
+                                                            placeholder="AS APPEARS ON CARD"
+                                                        />
+                                                    </div>
                                                 </div>
                                                 <div className="col-6">
-                                                    <input type="text" className="payment-input" placeholder="MM/YY" />
+                                                    <div className="payment-input-group">
+                                                        <label className="payment-label">EXPIRY</label>
+                                                        <input
+                                                            type="text"
+                                                            className="payment-input"
+                                                            name="cardExpiry"
+                                                            value={formData.cardExpiry}
+                                                            onChange={handleChange}
+                                                            placeholder="MM/YY"
+                                                        />
+                                                    </div>
                                                 </div>
                                                 <div className="col-6">
-                                                    <input type="password" className="payment-input" placeholder="CVV" />
+                                                    <div className="payment-input-group">
+                                                        <label className="payment-label">CVV</label>
+                                                        <input
+                                                            type="password"
+                                                            className="payment-input"
+                                                            name="cardCvv"
+                                                            value={formData.cardCvv}
+                                                            onChange={handleChange}
+                                                            placeholder="***"
+                                                        />
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <button className="btn-place-order" style={{ marginTop: '24px' }} onClick={handlePaymentSubmit}>FUSE PAYMENT</button>
+                                            <button className="btn-place-order" onClick={handlePaymentSubmit}>FUSE CARD CREDITS</button>
                                         </div>
                                     )}
 
                                     {paymentMethod === 'netbanking' && (
-                                        <div>
-                                            <h5 style={{ fontWeight: 800, color: '#fff', marginBottom: '16px' }}>SELECT NODE</h5>
+                                        <div className="animate-fade-in">
+                                            <h5 className="payment-method-title"><span>🏦</span> SELECT GALACTIC NODE</h5>
                                             <div className="bank-grid mb-4">
-                                                {['HDFC', 'ICICI', 'SBI', 'AXIS'].map(bank => (
-                                                    <div key={bank} className="bank-item" onClick={handlePaymentSubmit} style={{ background: 'rgba(255,255,255,0.03)', height: '70px' }}>
-                                                        <span style={{ fontWeight: 800, fontSize: '0.9rem' }}>{bank}</span>
+                                                {[
+                                                    { id: 'HDFC', icon: '🏦' },
+                                                    { id: 'ICICI', icon: '💎' },
+                                                    { id: 'SBI', icon: '🏛️' },
+                                                    { id: 'AXIS', icon: '💫' },
+                                                    { id: 'PNB', icon: '🛡️' },
+                                                    { id: 'BOB', icon: '💠' }
+                                                ].map(bank => (
+                                                    <div
+                                                        key={bank.id}
+                                                        className={`bank-item ${paymentMethod === 'netbanking' && formData.selectedBank === bank.id ? 'active' : ''}`}
+                                                        onClick={() => {
+                                                            setFormData({ ...formData, selectedBank: bank.id });
+                                                        }}
+                                                    >
+                                                        <div className="bank-logo-placeholder">{bank.icon}</div>
+                                                        <span className="bank-name">{bank.id}</span>
                                                     </div>
                                                 ))}
                                             </div>
-                                            <button className="btn-place-order" onClick={handlePaymentSubmit}>PROCEED TO GATEWAY</button>
+                                            <button className="btn-place-order" onClick={handlePaymentSubmit}>CONNECT TO NODE</button>
                                         </div>
                                     )}
                                 </div>

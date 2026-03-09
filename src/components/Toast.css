@@ -1,6 +1,6 @@
 .toast-notification {
     position: fixed;
-    top: 2rem;
+    bottom: 2rem;
     right: 2rem;
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(20px);

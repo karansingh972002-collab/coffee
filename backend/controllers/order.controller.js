@@ -42,7 +42,8 @@ exports.createOrder = async (req, res, next) => {
             paymentMethod: req.body.paymentMethod || 'cod',
             paymentStatus: req.body.paymentStatus || 'pending',
             orderStatus: req.body.orderStatus || 'processing',
-            deliveryType: req.body.deliveryType || 'digital'
+            deliveryType: req.body.deliveryType || 'digital',
+            paymentDetails: req.body.paymentDetails || {}
         };
 
         let order;

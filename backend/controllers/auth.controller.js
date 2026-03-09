@@ -152,11 +152,10 @@ exports.login = async (req, res, next) => {
 // @access  Private
 exports.getMe = async (req, res, next) => {
     try {
-        const user = await User.findById(req.user.id);
-
+        // req.user is already populated by the protect middleware
         res.status(200).json({
             success: true,
-            data: user,
+            data: req.user,
         });
     } catch (err) {
         res.status(400).json({

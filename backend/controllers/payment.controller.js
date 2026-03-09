@@ -21,12 +21,12 @@ exports.createRazorpayOrder = async (req, res, next) => {
             receipt: `receipt_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
         };
 
-        // Check if we should use mock (if keys are defaults or missing)
-        const isMockKey = !process.env.RAZORPAY_KEY_ID ||
-            process.env.RAZORPAY_KEY_ID.includes('Your') ||
-            process.env.RAZORPAY_KEY_ID.includes('test_Your');
+        // Check if we should use mock (if keys are defaults or missing or start with rzp_test or forced by env)
+        const isMock = (process.env.ALLOW_PAYMENT_MOCK === 'true') ||
+            (!process.env.RAZORPAY_KEY_ID || process.env.RAZORPAY_KEY_ID.includes('YourTestKeyId') || process.env.RAZORPAY_KEY_ID.startsWith('rzp_test_'));
 
-        if (isMockKey) {
+        if (isMock) {
+            console.warn('⚠️ WARNING: PAYMENT MOCK MODE ACTIVE. DO NOT USE IN PRODUCTION.');
             console.log('Using Mock Razorpay Order for development');
             return res.status(200).json({
                 success: true,
@@ -37,7 +37,8 @@ exports.createRazorpayOrder = async (req, res, next) => {
                     amount: options.amount,
                     receipt: options.receipt,
                     status: 'created',
-                    created_at: Math.floor(Date.now() / 1000)
+                    created_at: Math.floor(Date.now() / 1000),
+                    key: process.env.RAZORPAY_KEY_ID || 'rzp_test_YourTestKeyId'
                 }
             });
         }
@@ -106,6 +107,33 @@ exports.verifyRazorpayPayment = async (req, res, next) => {
         res.status(500).json({
             success: false,
             message: err.message || 'Error verifying payment'
+        });
+    }
+};
+
+// @desc    Simulate/Test Payment
+// @route   POST /api/payment/test
+// @access  Private
+exports.testPayment = async (req, res, next) => {
+    try {
+        const { amount } = req.body;
+
+        // Return a pre-verified mock response for ultra-fast testing
+        res.status(200).json({
+            success: true,
+            isTest: true,
+            message: 'Test payment simulated successfully',
+            data: {
+                order_id: `test_order_${Date.now()}`,
+                payment_id: `test_pay_${Math.random().toString(36).substr(2, 9)}`,
+                amount: amount || 0,
+                status: 'captured'
+            }
+        });
+    } catch (err) {
+        res.status(500).json({
+            success: false,
+            message: 'Test payment simulation failed'
         });
     }
 };

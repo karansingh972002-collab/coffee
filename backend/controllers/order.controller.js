@@ -112,12 +112,12 @@ exports.createOrder = async (req, res, next) => {
                     </div>
                 `;
 
-                await sendEmail({
+                sendEmail({
                     email: userEmail,
                     subject: 'Order Confirmation - Star Naming',
                     message: messageText,
                     html: messageHtml
-                });
+                }).catch(err => console.error('Failed to send order confirmation email async:', err));
             }
         } catch (err) {
             console.error('Failed to send order confirmation email:', err);

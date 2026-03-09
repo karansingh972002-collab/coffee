@@ -123,6 +123,7 @@ function App() {
             <Route path="/cart" element={<CartPage items={cartItems} onUpdateQuantity={updateQuantity} onRemove={removeFromCart} onAddToWishlist={addToWishlist} />} />
             <Route path="/checkout" element={<Checkout items={cartItems} clearCart={clearCart} />} />
             <Route path="/success" element={<OrderSuccess />} />
+            <Route path="/order-success" element={<OrderSuccess />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/wishlist" element={<Wishlist items={wishlistItems} onAddToCart={addToCart} onRemoveFromWishlist={removeFromWishlist} />} />
             <Route path="/account" element={<Account />} />

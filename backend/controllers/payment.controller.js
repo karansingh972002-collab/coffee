@@ -62,7 +62,12 @@ exports.createRazorpayOrder = async (req, res, next) => {
             }
         });
     } catch (err) {
-        console.error('Razorpay Error:', err);
+        console.error('Razorpay Order Creation Error:', {
+            message: err.message,
+            stack: err.stack,
+            options: options,
+            at: new Date().toISOString()
+        });
         res.status(500).json({
             success: false,
             message: err.message || 'Error communicating with Razorpay'

@@ -46,6 +46,10 @@ const Checkout = ({ items, clearCart }) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
+    const isUpiValid = (vpa) => {
+        return /^[a-zA-Z0-9.\-_]{2,256}@[a-zA-Z]{2,64}$/.test(vpa);
+    };
+
 
     const handlePaymentSubmit = async () => {
         setLoading(true);
@@ -55,7 +59,11 @@ const Checkout = ({ items, clearCart }) => {
             if (paymentMethod === 'razorpay') {
                 // 1. Create Razorpay Order
                 const rzpResponse = await api.createRazorpayOrder({ amount: total });
-                if (!rzpResponse.success) throw new Error('Could not initialize payment gateway.');
+                if (!rzpResponse.success) {
+                    const errorMsg = rzpResponse.message || 'Could not initialize payment gateway.';
+                    setError(errorMsg);
+                    throw new Error(errorMsg);
+                }
 
                 const { id: order_id, amount: amountPaise, currency, key } = rzpResponse.data;
 
@@ -89,7 +97,7 @@ const Checkout = ({ items, clearCart }) => {
                                 }
 
                                 clearCart();
-                                navigate('/order-success');
+                                navigate('/success');
                             }
                         } catch (err) {
                             console.error('Payment verification failed:', err);
@@ -154,7 +162,7 @@ const Checkout = ({ items, clearCart }) => {
             }
 
             clearCart();
-            navigate('/order-success');
+            navigate('/success');
         } catch (err) {
             console.error('Checkout error:', err);
             setError(err.message || 'Failed to place order. Please try again.');
@@ -357,20 +365,37 @@ const Checkout = ({ items, clearCart }) => {
                                         <div className="animate-fade-in">
                                             <h5 className="payment-method-title"><span>📍</span> STELLAR UPI SYNC</h5>
                                             <div className="payment-input-group">
-                                                <label className="payment-label">VIRTUAL ADDRESS (VPA)</label>
-                                                <input
-                                                    type="text"
-                                                    className="payment-input"
-                                                    name="upiId"
-                                                    value={formData.upiId}
-                                                    onChange={handleChange}
-                                                    placeholder="e.g. pilot@stellar"
-                                                />
+                                                <label className="payment-label" style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                                    VIRTUAL ADDRESS (VPA)
+                                                    {isUpiValid(formData.upiId) && <span style={{ color: '#10b981', fontSize: '11px', fontWeight: 800 }}>✓ VERIFIED SYNC</span>}
+                                                </label>
+                                                <div style={{ position: 'relative' }}>
+                                                    <input
+                                                        type="text"
+                                                        className="payment-input"
+                                                        name="upiId"
+                                                        value={formData.upiId}
+                                                        onChange={handleChange}
+                                                        placeholder="e.g. pilot@stellar"
+                                                        style={{ borderColor: isUpiValid(formData.upiId) ? '#10b981' : 'rgba(255,255,255,0.1)' }}
+                                                    />
+                                                </div>
                                             </div>
                                             <div style={{ marginBottom: '32px' }}>
-                                                <p style={{ fontSize: '12px', color: '#64748b' }}>A request will be sent to your primary communication device.</p>
+                                                <p style={{ fontSize: '12px', color: isUpiValid(formData.upiId) ? '#94a3b8' : '#64748b' }}>
+                                                    {isUpiValid(formData.upiId)
+                                                        ? 'Universal address detected. Transmission ready.'
+                                                        : 'Please enter a valid stellar address (example@bank).'}
+                                                </p>
                                             </div>
-                                            <button className="btn-place-order" onClick={handlePaymentSubmit}>SYNC & AUTHORIZE</button>
+                                            <button
+                                                className="btn-place-order"
+                                                onClick={handlePaymentSubmit}
+                                                disabled={!isUpiValid(formData.upiId)}
+                                                style={{ opacity: isUpiValid(formData.upiId) ? 1 : 0.5, cursor: isUpiValid(formData.upiId) ? 'pointer' : 'not-allowed' }}
+                                            >
+                                                {isUpiValid(formData.upiId) ? 'SYNC & AUTHORIZE' : 'WAITING FOR ADDRESS'}
+                                            </button>
                                         </div>
                                     )}
 

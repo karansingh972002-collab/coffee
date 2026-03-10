@@ -1,7 +1,7 @@
 // API Service for Star Naming Frontend
 // Copy this file to your React project: src/services/api.js
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
 
 // Helper function to get auth token from localStorage
 const getToken = () => localStorage.getItem('token');

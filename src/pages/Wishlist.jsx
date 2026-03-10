@@ -46,7 +46,7 @@ const Wishlist = ({ items = [], onAddToCart, onRemoveFromWishlist }) => {
                                     <img src={item.image} alt={item.name} className="item-image" />
                                     <div className="card-overlay">
                                         <button className="quick-add-btn" onClick={() => onAddToCart(item)}>
-                                            Add to Cart
+                                            Add to Bag
                                         </button>
                                     </div>
                                 </div>

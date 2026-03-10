@@ -94,7 +94,10 @@ const Shop = ({ onAddToCart, onAddToWishlist, minimal = false, limit = 0 }) => {
     };
 
     const renderProductCard = (product) => (
-        <div key={product._id} className="package-card" style={{ '--pkg-gradient': product.gradient }}>
+        <div key={product._id} className="package-card" style={{ '--pkg-gradient': product.gradient }} onClick={() => {
+            setSelectedPkg(product);
+            setIsModalOpen(true);
+        }}>
             {product.badge && (
                 <div className="package-badge" style={{ background: product.gradient }}>
                     {product.badge}
@@ -126,10 +129,6 @@ const Shop = ({ onAddToCart, onAddToWishlist, minimal = false, limit = 0 }) => {
             <div className="package-actions">
                 <button
                     className="btn btn-primary package-btn"
-                    onClick={() => {
-                        setSelectedPkg(product);
-                        setIsModalOpen(true);
-                    }}
                     style={{ background: product.gradient }}
                 >
                     Name Your Star

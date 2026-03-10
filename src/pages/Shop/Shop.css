@@ -492,6 +492,7 @@
     overflow: hidden;
     animation: pkg-fadeIn 0.7s ease-out both;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    cursor: pointer;
 }
 
 .package-card:nth-child(1) {
@@ -779,6 +780,14 @@
     border-radius: inherit;
 }
 
+.package-btn::after {
+    content: '';
+    position: absolute;
+    inset: -1000px;
+    /* Expands clickable area to cover entire relative parent (.package-card) */
+    z-index: 10;
+}
+
 .package-btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 14px 30px rgba(0, 0, 0, 0.3), 0 0 20px rgba(99, 102, 241, 0.2);
@@ -801,28 +810,49 @@
         padding: var(--spacing-xl) 0;
     }
 
-    .packages-grid {
-        grid-template-columns: 1fr;
-        gap: var(--spacing-lg);
-    }
-
     .package-card {
-        padding: 32px 24px;
-        border-radius: 24px;
-        animation: none !important;
+        padding: 30px 24px;
+        border-radius: 20px;
     }
 
-    .package-badge {
-        animation: none !important;
+    .package-price {
+        padding: var(--spacing-sm) 0;
+        margin-bottom: var(--spacing-md);
+    }
+
+    .amount {
+        font-size: 2.2rem;
     }
 
     .package-name {
         font-size: 1.5rem;
     }
 
-    .amount {
-        font-size: 2.5rem;
-    }
+    padding: var(--spacing-xl) 0;
+}
+
+.packages-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-lg);
+}
+
+.package-card {
+    padding: 32px 24px;
+    border-radius: 24px;
+    animation: none !important;
+}
+
+.package-badge {
+    animation: none !important;
+}
+
+.package-name {
+    font-size: 1.5rem;
+}
+
+.amount {
+    font-size: 2.5rem;
+}
 }
 
 .package-actions {

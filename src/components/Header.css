@@ -362,8 +362,11 @@
         margin-left: 15px;
     }
 
-    .profile-container,
-    .cart-toggle {
+    .profile-container {
+        display: none !important;
+    }
+
+    .profile-text {
         display: none !important;
     }
 

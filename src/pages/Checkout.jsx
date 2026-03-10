@@ -10,6 +10,7 @@ const Checkout = ({ items, clearCart }) => {
     const [error, setError] = useState('');
     const [step, setStep] = useState('address'); // 'address' or 'payment'
     const [paymentMethod, setPaymentMethod] = useState('cod');
+    const [paymentStatus, setPaymentStatus] = useState('idle'); // 'idle', 'sending', 'awaiting_approval'
 
     // Address State
     const user = getStoredUser();
@@ -23,6 +24,7 @@ const Checkout = ({ items, clearCart }) => {
         postalCode: '400001',
         email: user?.email || '',
         // Payment Details
+        upiId: '',
         cardNumber: '',
         cardHolder: '',
         cardExpiry: '',
@@ -40,6 +42,15 @@ const Checkout = ({ items, clearCart }) => {
             navigate('/auth?redirect=/checkout');
         }
     }, [navigate]);
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [step]);
+
+    const isUpiValid = (vpa) => {
+        return /^[a-zA-Z0-9.\-_]{2,256}@[a-zA-Z]{2,64}$/.test(vpa);
+    };
+
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -127,7 +138,7 @@ const Checkout = ({ items, clearCart }) => {
             }
 
             // Client-side Validation
-
+            if (paymentMethod === 'upi' && !formData.upiId) throw new Error('Please enter your UPI ID');
             if (paymentMethod === 'netbanking' && !formData.selectedBank) throw new Error('Please select a galactic node bank');
             if (paymentMethod === 'card') {
                 if (!formData.cardNumber || !formData.cardHolder || !formData.cardExpiry || !formData.cardCvv) {
@@ -135,17 +146,16 @@ const Checkout = ({ items, clearCart }) => {
                 }
             }
 
-            // Normal flow for cod, upi, netbanking mock
-            await new Promise(resolve => setTimeout(resolve, 2000));
-
             // Prepare payment details metadata
             const paymentDetails = {};
+            if (paymentMethod === 'upi') paymentDetails.upiId = formData.upiId;
             if (paymentMethod === 'netbanking') paymentDetails.bankName = formData.selectedBank;
             if (paymentMethod === 'card') {
                 paymentDetails.cardHolder = formData.cardHolder;
                 paymentDetails.last4 = formData.cardNumber.slice(-4);
             }
 
+            // 1. Create the orders FIRST to ensure data is captured before any state resets or delays
             const orders = await createApplicationOrders(
                 paymentMethod === 'cod' ? 'pending' : 'completed',
                 paymentMethod,
@@ -157,6 +167,19 @@ const Checkout = ({ items, clearCart }) => {
                 sessionStorage.setItem('lastOrderId', orders[0].data._id || orders[0].data.id);
             }
 
+            // 2. Handle visual delays/simulations
+            setPaymentStatus('sending');
+            if (paymentMethod === 'upi') {
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                setPaymentStatus('awaiting_approval');
+                await new Promise(resolve => setTimeout(resolve, 4000));
+            } else if (paymentMethod === 'card' || paymentMethod === 'netbanking') {
+                await new Promise(resolve => setTimeout(resolve, 3500));
+            } else {
+                await new Promise(resolve => setTimeout(resolve, 2000));
+            }
+
+            setPaymentStatus('idle'); // Reset after wait
             clearCart();
             navigate('/success');
         } catch (err) {
@@ -226,10 +249,65 @@ const Checkout = ({ items, clearCart }) => {
 
             {loading && (
                 <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(5, 8, 22, 0.9)', backdropFilter: 'blur(10px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
-                    <div style={{ textAlign: 'center' }}>
-                        <div className="spinner-border text-primary mb-4" role="status" style={{ width: '3rem', height: '3rem' }}></div>
-                        <h3 style={{ color: '#fff', fontWeight: 800, letterSpacing: '2px' }}>PROCESSING YOUR ORDER</h3>
-                        <p style={{ color: '#94a3b8' }}>Please do not close this window...</p>
+                    <div style={{ textAlign: 'center', maxWidth: '400px', padding: '0 20px' }}>
+                        {paymentMethod === 'upi' && paymentStatus === 'awaiting_approval' ? (
+                            <div className="animate-fade-in">
+                                <div style={{ width: '80px', height: '80px', borderRadius: '50%', background: 'rgba(99, 102, 241, 0.1)', border: '2px dashed #818cf8', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px', animation: 'pulse-slow 2s infinite' }}>
+                                    <span style={{ fontSize: '32px' }}>📱</span>
+                                </div>
+                                <h3 style={{ color: '#fff', fontWeight: 800, letterSpacing: '2px', marginBottom: '8px', textTransform: 'uppercase' }}>REQUEST SENT</h3>
+                                <div style={{ color: '#818cf8', fontWeight: 700, fontSize: '14px', marginBottom: '20px', background: 'rgba(129, 140, 248, 0.1)', padding: '8px 16px', borderRadius: '8px', display: 'inline-block' }}>{formData.upiId}</div>
+
+                                <div className="qr-container" style={{ marginBottom: '24px', padding: '12px', background: 'rgba(255, 255, 255, 0.03)', borderRadius: '16px', border: '1px solid rgba(255, 255, 255, 0.05)' }}>
+                                    <img src="/src/assets/stellar_upi_qr.png" alt="Stellar UPI QR" style={{ width: '180px', height: '180px', display: 'block', margin: '0 auto', borderRadius: '12px', filter: 'drop-shadow(0 0 15px rgba(99, 102, 241, 0.3))' }} />
+                                    <div style={{ marginTop: '12px', fontSize: '10px', color: '#64748b', fontWeight: 700, letterSpacing: '1px' }}>SCAN TO EXPEDITE SYNC</div>
+                                </div>
+
+                                <p style={{ color: '#94a3b8', lineHeight: 1.6 }}>Please open your UPI app and <strong>AUTHORIZE</strong> the celestial payment request to complete the registry.</p>
+                                <div style={{ marginTop: '24px', display: 'flex', gap: '8px', justifyContent: 'center' }}>
+                                    <div className="dot-pulse"></div>
+                                    <span style={{ color: '#6366f1', fontSize: '12px', fontWeight: 700 }}>WAITING FOR PERMISSION</span>
+                                </div>
+                            </div>
+                        ) : paymentMethod === 'card' && paymentStatus === 'sending' ? (
+                            <div className="animate-fade-in">
+                                <div className="card-animation-wrapper" style={{ position: 'relative', width: '200px', height: '120px', margin: '0 auto 40px', perspective: '1000px' }}>
+                                    <div style={{ width: '100%', height: '100%', background: 'linear-gradient(135deg, #1e1b4b 0%, #312e81 100%)', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', padding: '16px', textAlign: 'left', animation: 'card-hover 3s infinite ease-in-out', boxShadow: '0 20px 50px rgba(0,0,0,0.5)' }}>
+                                        <div style={{ width: '32px', height: '24px', background: 'linear-gradient(135deg, #fbbf24 0%, #b45309 100%)', borderRadius: '4px', marginBottom: '20px' }}></div>
+                                        <div style={{ color: 'rgba(255,255,255,0.3)', fontSize: '10px', letterSpacing: '2px' }}>•••• •••• •••• {formData.cardNumber?.slice(-4) || '7492'}</div>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '16px' }}>
+                                            <div style={{ width: '60px', height: '4px', background: 'rgba(255,255,255,0.1)', borderRadius: '2px' }}></div>
+                                            <div style={{ width: '30px', height: '4px', background: 'rgba(255,255,255,0.1)', borderRadius: '2px' }}></div>
+                                        </div>
+                                    </div>
+                                    <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '250px', height: '250px', background: 'radial-gradient(circle, rgba(99, 102, 241, 0.2) 0%, transparent 70%)', zIndex: -1 }}></div>
+                                </div>
+                                <h3 style={{ color: '#fff', fontWeight: 800, letterSpacing: '2px', marginBottom: '8px' }}>LINKING SECURE CARD</h3>
+                                <p style={{ color: '#94a3b8' }}>Encrypting transmission to stellar node...</p>
+                            </div>
+                        ) : paymentMethod === 'netbanking' && paymentStatus === 'sending' ? (
+                            <div className="animate-fade-in">
+                                <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', marginBottom: '40px' }}>
+                                    {[1, 2, 3].map(i => (
+                                        <div key={i} style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#818cf8', animation: `dot-pulse 1.5s infinite ${i * 0.2}s`, boxShadow: '0 0 15px #818cf8' }}></div>
+                                    ))}
+                                </div>
+                                <div style={{ background: 'rgba(255,255,255,0.03)', padding: '20px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)', marginBottom: '24px', display: 'inline-block' }}>
+                                    <div style={{ color: '#818cf8', fontWeight: 800, fontSize: '12px', letterSpacing: '1px', marginBottom: '4px', textTransform: 'uppercase' }}>SECURE GATEWAY</div>
+                                    <div style={{ color: '#fff', fontSize: '18px', fontWeight: 700 }}>{formData.selectedBank || 'GALACTIC BANKING'}</div>
+                                </div>
+                                <h3 style={{ color: '#fff', fontWeight: 800, letterSpacing: '2px', marginBottom: '8px' }}>SYNCING WITH NODE</h3>
+                                <p style={{ color: '#94a3b8' }}>Verifying celestial account credentials...</p>
+                            </div>
+                        ) : (
+                            <div>
+                                <div className="spinner-border text-primary mb-4" role="status" style={{ width: '3rem', height: '3rem' }}></div>
+                                <h3 style={{ color: '#fff', fontWeight: 800, letterSpacing: '2px' }}>
+                                    {paymentStatus === 'sending' ? 'SENDING SYNC REQUEST' : 'PROCESSING YOUR ORDER'}
+                                </h3>
+                                <p style={{ color: '#94a3b8' }}>Please do not close this window...</p>
+                            </div>
+                        )}
                     </div>
                 </div>
             )}
@@ -312,6 +390,9 @@ const Checkout = ({ items, clearCart }) => {
                                     <div className={`payment-tab ${paymentMethod === 'razorpay' ? 'active' : ''}`} onClick={() => setPaymentMethod('razorpay')}>
                                         <span>⚡</span> Secure Online Pay
                                     </div>
+                                    <div className={`payment-tab ${paymentMethod === 'upi' ? 'active' : ''}`} onClick={() => setPaymentMethod('upi')}>
+                                        <span>📍</span> UPI Interface
+                                    </div>
                                     <div className={`payment-tab ${paymentMethod === 'card' ? 'active' : ''}`} onClick={() => setPaymentMethod('card')}>
                                         <span>💳</span> Stellar Cards
                                     </div>
@@ -353,7 +434,43 @@ const Checkout = ({ items, clearCart }) => {
                                             </button>
                                         </div>
                                     )}
-
+                                    {paymentMethod === 'upi' && (
+                                        <div className="animate-fade-in">
+                                            <h5 className="payment-method-title"><span>📍</span> STELLAR UPI SYNC</h5>
+                                            <div className="payment-input-group">
+                                                <label className="payment-label" style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                                    VIRTUAL ADDRESS (VPA)
+                                                    {isUpiValid(formData.upiId) && <span style={{ color: '#10b981', fontSize: '11px', fontWeight: 800 }}>✓ VERIFIED SYNC</span>}
+                                                </label>
+                                                <div style={{ position: 'relative' }}>
+                                                    <input
+                                                        type="text"
+                                                        className="payment-input"
+                                                        name="upiId"
+                                                        value={formData.upiId}
+                                                        onChange={handleChange}
+                                                        placeholder="e.g. pilot@stellar"
+                                                        style={{ borderColor: isUpiValid(formData.upiId) ? '#10b981' : 'rgba(255,255,255,0.1)' }}
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div style={{ marginBottom: '32px' }}>
+                                                <p style={{ fontSize: '12px', color: isUpiValid(formData.upiId) ? '#94a3b8' : '#64748b' }}>
+                                                    {isUpiValid(formData.upiId)
+                                                        ? 'Universal address detected. Transmission ready.'
+                                                        : 'Please enter a valid stellar address (example@bank).'}
+                                                </p>
+                                            </div>
+                                            <button
+                                                className="btn-place-order"
+                                                onClick={handlePaymentSubmit}
+                                                disabled={!isUpiValid(formData.upiId)}
+                                                style={{ opacity: isUpiValid(formData.upiId) ? 1 : 0.5, cursor: isUpiValid(formData.upiId) ? 'pointer' : 'not-allowed' }}
+                                            >
+                                                {isUpiValid(formData.upiId) ? 'SYNC & AUTHORIZE' : 'WAITING FOR ADDRESS'}
+                                            </button>
+                                        </div>
+                                    )}
 
 
                                     {paymentMethod === 'card' && (

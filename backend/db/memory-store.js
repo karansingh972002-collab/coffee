@@ -14,7 +14,7 @@ const seedPackages = () => {
     db.packages = [
         // --- EXISTING PACKAGES ---
         {
-            _id: '1',
+            _id: '000000000000000000000001',
             name: 'Silvernova - Digital',
             subtitle: 'Our Entry Package',
             description: 'A meaningful gift at an unbeatable price – start your journey to the stars!',
@@ -36,7 +36,7 @@ const seedPackages = () => {
             createdAt: new Date()
         },
         {
-            _id: '2',
+            _id: '000000000000000000000002',
             name: 'Silvernova - Gift Pack',
             subtitle: 'Full Gift Set',
             description: 'Get the full experience with a printed certificate and folder.',
@@ -58,7 +58,7 @@ const seedPackages = () => {
             createdAt: new Date()
         },
         {
-            _id: '3',
+            _id: '000000000000000000000003',
             name: 'Supernova - Digital',
             subtitle: 'Our Most Popular Package',
             description: 'A best-selling gift that shines bright – perfect for any occasion!',
@@ -80,7 +80,7 @@ const seedPackages = () => {
             createdAt: new Date()
         },
         {
-            _id: '4',
+            _id: '000000000000000000000004',
             name: 'Supernova - Gift Pack',
             subtitle: 'Premium Gifting',
             description: 'The complete premium package for your loved ones.',
@@ -102,7 +102,7 @@ const seedPackages = () => {
             createdAt: new Date()
         },
         {
-            _id: '5',
+            _id: '000000000000000000000005',
             name: 'Duonova - Digital',
             subtitle: 'A Star Pair',
             description: 'A unique celestial bond – because some stars are meant to shine together!',
@@ -124,7 +124,7 @@ const seedPackages = () => {
             createdAt: new Date()
         },
         {
-            _id: '6',
+            _id: '000000000000000000000006',
             name: 'Duonova - Gift Pack',
             subtitle: 'Luxury Double Set',
             description: 'The ultimate romantic gesture with physical certificates for both.',
@@ -150,7 +150,7 @@ const seedPackages = () => {
 
         // 1. DIAMONDNOVA (Ultimate Luxury)
         {
-            _id: '7',
+            _id: '000000000000000000000007',
             name: 'Diamondnova - Digital',
             subtitle: 'The Ultimate Star',
             description: 'The brightest, most prestigious star naming experience available.',
@@ -172,7 +172,7 @@ const seedPackages = () => {
             createdAt: new Date()
         },
         {
-            _id: '8',
+            _id: '000000000000000000000008',
             name: 'Diamondnova - Gift Pack',
             subtitle: 'Prestige Collection',
             description: 'An elite gift box representing the pinnacle of celestial naming.',
@@ -196,7 +196,7 @@ const seedPackages = () => {
 
         // 2. ZODIAC STAR (Astrology)
         {
-            _id: '9',
+            _id: '000000000000000000000009',
             name: 'Zodiac Star - Digital',
             subtitle: 'Aligned with Destiny',
             description: 'Name a star within your specific Zodiac sign constellation.',
@@ -221,7 +221,7 @@ const seedPackages = () => {
 
         // 3. LITTLE STAR (Kids)
         {
-            _id: '11',
+            _id: '000000000000000000000011',
             name: 'Little Star - Digital',
             subtitle: 'For the Little Ones',
             description: 'A magical star naming experience designed specifically for children.',

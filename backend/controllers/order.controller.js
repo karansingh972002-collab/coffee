@@ -13,14 +13,22 @@ exports.createOrder = async (req, res, next) => {
         const userId = req.user._id || req.user.id;
         let pkg;
 
+        // Handle legacy single-digit IDs from local storage carts
+        let searchId = req.body.packageId;
+        if (searchId && searchId.length < 24) {
+            searchId = searchId.padStart(24, '0');
+        }
+
         // Try getting package from DB
         if (mongoose.connection.readyState === 1) {
-            pkg = await Package.findById(req.body.packageId);
+            if (mongoose.Types.ObjectId.isValid(req.body.packageId)) {
+                pkg = await Package.findById(req.body.packageId);
+            }
         }
 
         // Fallback to memory store
         if (!pkg) {
-            pkg = packageStore.getById(req.body.packageId);
+            pkg = packageStore.getById(searchId);
         }
 
         if (!pkg) {
@@ -32,7 +40,7 @@ exports.createOrder = async (req, res, next) => {
 
         const orderData = {
             user: userId,
-            package: req.body.packageId,
+            package: searchId,
             totalAmount: pkg.price,
             starName: req.body.starName || 'Unnamed Star',
             dedicationMessage: req.body.dedicationMessage || '',

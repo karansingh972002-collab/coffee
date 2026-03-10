@@ -395,3 +395,118 @@
         opacity: 1;
     }
 }
+
+/* UPI Enhanced Animations */
+@keyframes pulse-slow {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 1;
+        box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4);
+    }
+
+    50% {
+        transform: scale(1.05);
+        opacity: 0.8;
+        box-shadow: 0 0 20px 10px rgba(99, 102, 241, 0);
+    }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+.dot-pulse {
+    position: relative;
+    left: -9999px;
+    width: 6px;
+    height: 6px;
+    border-radius: 5px;
+    background-color: #6366f1;
+    color: #6366f1;
+    box-shadow: 9999px 0 0 0 #6366f1;
+    animation: dotPulse 1.5s infinite linear;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.dot-pulse::before,
+.dot-pulse::after {
+    content: '';
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    width: 6px;
+    height: 6px;
+    border-radius: 5px;
+    background-color: #6366f1;
+    color: #6366f1;
+}
+
+.dot-pulse::before {
+    box-shadow: 9984px 0 0 0 #6366f1;
+    animation: dotPulseBefore 1.5s infinite linear;
+}
+
+.dot-pulse::after {
+    box-shadow: 10014px 0 0 0 #6366f1;
+    animation: dotPulseAfter 1.5s infinite linear;
+}
+
+@keyframes dotPulseBefore {
+    0% {
+        box-shadow: 9984px 0 0 -5px #6366f1;
+    }
+
+    30% {
+        box-shadow: 9984px 0 0 2px #6366f1;
+    }
+
+    60%,
+    100% {
+        box-shadow: 9984px 0 0 -5px #6366f1;
+    }
+}
+
+@keyframes dotPulse {
+    0% {
+        box-shadow: 9999px 0 0 -5px #6366f1;
+    }
+
+    30% {
+        box-shadow: 9999px 0 0 2px #6366f1;
+    }
+
+    60%,
+    100% {
+        box-shadow: 9999px 0 0 -5px #6366f1;
+    }
+}
+
+@keyframes dotPulseAfter {
+    0% {
+        box-shadow: 10014px 0 0 -5px #6366f1;
+    }
+
+    30% {
+        box-shadow: 10014px 0 0 2px #6366f1;
+    }
+
+    60%,
+    100% {
+        box-shadow: 10014px 0 0 -5px #6366f1;
+    }
+}
+
+@keyframes card-hover {
+
+    0%,
+    100% {
+        transform: rotateY(0deg) translateY(0);
+    }
+
+    50% {
+        transform: rotateY(10deg) translateY(-10px);
+    }
+}

@@ -1,4 +1,4 @@
-# 🌟 Star Naming Website - Full Stack Application
+# 🌟 Star Naming Website - Full Stack Application 
 
 A beautiful, modern star naming website with a fully functional backend API.
 

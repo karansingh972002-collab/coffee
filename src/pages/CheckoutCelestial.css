@@ -573,6 +573,7 @@
 @media (max-width: 768px) {
     .payment-wrapper {
         flex-direction: column;
+        min-height: auto;
     }
 
     .payment-sidebar {
@@ -580,25 +581,24 @@
         border-right: none;
         border-bottom: 1px solid var(--celestial-border);
         display: flex;
-        overflow-x: auto;
+        flex-direction: column;
+        /* Stack vertically on small screens */
         padding: 0;
-        scrollbar-width: none;
-    }
-
-    .payment-sidebar::-webkit-scrollbar {
-        display: none;
     }
 
     .payment-tab {
         padding: 16px 20px;
-        white-space: nowrap;
-        border-left: none;
-        border-bottom: 3px solid transparent;
+        border-left: 4px solid transparent;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        display: flex;
+        justify-content: flex-start;
+        width: 100%;
     }
 
     .payment-tab.active {
-        border-bottom-color: var(--accent-celestial);
-        background: transparent;
+        border-left-color: var(--accent-celestial);
+        border-bottom-color: rgba(255, 255, 255, 0.05);
+        background: linear-gradient(to right, rgba(99, 102, 241, 0.15), transparent);
     }
 
     .payment-tab.active::after {

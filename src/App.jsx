@@ -20,6 +20,7 @@ import OrderSuccess from './pages/OrderSuccess';
 import Auth from './pages/Auth';
 import Wishlist from './pages/Wishlist';
 import Account from './pages/Account';
+import AdminDashboard from './pages/Admin/AdminDashboard';
 
 function App() {
   const [cartItems, setCartItems] = useState(() => {
@@ -128,6 +129,7 @@ function App() {
             <Route path="/wishlist" element={<Wishlist items={wishlistItems} onAddToCart={addToCart} onRemoveFromWishlist={removeFromWishlist} />} />
             <Route path="/account" element={<Account />} />
             <Route path="/dashboard" element={<Account />} />
+            <Route path="/admin" element={<AdminDashboard />} />
           </Routes>
         </main>
 

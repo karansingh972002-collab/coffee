@@ -1,8 +1,9 @@
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import './FloatingBag.css';
 
 const FloatingBag = ({ count, onOpenCart }) => {
     const navigate = useNavigate();
+    const location = useLocation();
 
     const handleClick = () => {
         if (window.innerWidth > 768) {
@@ -12,7 +13,8 @@ const FloatingBag = ({ count, onOpenCart }) => {
         }
     };
 
-    if (count === 0) return null;
+    // Hide the floating bag on Checkout, Cart, and Success pages to avoid overlap
+    if (count === 0 || location.pathname === '/checkout' || location.pathname === '/cart' || location.pathname === '/success') return null;
 
     return (
         <div className="floating-bag" onClick={handleClick} title="View Bag">

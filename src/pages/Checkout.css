@@ -306,6 +306,8 @@
 @media (max-width: 768px) {
     .checkout-page {
         padding: 2rem 0;
+        padding-bottom: 120px;
+        /* Space for the floating cart */
     }
 
     .checkout-page h2 {

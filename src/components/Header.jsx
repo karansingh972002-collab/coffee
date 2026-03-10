@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { isAuthenticated, logout } from '../services/api';
+import { isAuthenticated, logout, getStoredUser } from '../services/api';
 import Logo from './Logo';
 import './Header.css';
 
@@ -8,6 +8,7 @@ const Header = ({ cartCount, onCartClick }) => {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(false);
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -25,16 +26,19 @@ const Header = ({ cartCount, onCartClick }) => {
         if (isLoggedIn !== authStatus) {
             // eslint-disable-next-line react-hooks/set-state-in-effect
             setIsLoggedIn(authStatus);
+            if (authStatus) {
+                const user = getStoredUser();
+                setIsAdmin(user?.role === 'admin');
+            } else {
+                setIsAdmin(false);
+            }
         }
     }, [location, isLoggedIn]);
 
     // Close mobile menu on route change
     useEffect(() => {
-        if (isMobileMenuOpen) {
-            // eslint-disable-next-line react-hooks/set-state-in-effect
-            setIsMobileMenuOpen(false);
-        }
-    }, [location, isMobileMenuOpen]);
+        setIsMobileMenuOpen(false);
+    }, [location]);
 
     const handleLogout = () => {
         logout();
@@ -43,6 +47,7 @@ const Header = ({ cartCount, onCartClick }) => {
     };
 
     const handleLogoClick = (e) => {
+        setIsMobileMenuOpen(false);
         if (location.pathname === '/') {
             e.preventDefault();
             const heroSection = document.getElementById('hero');
@@ -72,6 +77,14 @@ const Header = ({ cartCount, onCartClick }) => {
                         <Link to="/wishlist" className="nav-link">Wishlist</Link>
                         {isLoggedIn && (
                             <Link to="/account" className="nav-link">Dashboard</Link>
+                        )}
+                        {isAdmin && (
+                            <Link to="/admin" className="nav-link" style={{ color: '#a5b4fc', fontWeight: 'bold' }}>Admin</Link>
+                        )}
+                        {isLoggedIn ? (
+                            <button onClick={handleLogout} className="nav-link mobile-only-link" style={{ background: 'transparent', border: 'none', color: '#ff3f6c', cursor: 'pointer', fontFamily: 'inherit', width: '100%' }}>Logout</button>
+                        ) : (
+                            <Link to="/auth" className="nav-link mobile-only-link" style={{ color: '#ec4899', fontWeight: 'bold' }}>Login / Signup</Link>
                         )}
                     </nav>
 
@@ -114,6 +127,15 @@ const Header = ({ cartCount, onCartClick }) => {
                                         <div className="profile-menu-item">
                                             Official Registry Help
                                         </div>
+
+                                        {isAdmin && (
+                                            <>
+                                                <div style={{ height: '1px', background: 'rgba(255,255,255,0.1)', margin: '8px 0' }}></div>
+                                                <Link to="/admin" className="profile-menu-item" style={{ color: '#a5b4fc' }}>
+                                                    Admin Control Center
+                                                </Link>
+                                            </>
+                                        )}
 
                                         <div style={{ height: '1px', background: 'rgba(255,255,255,0.1)', margin: '8px 0' }}></div>
 
@@ -165,7 +187,7 @@ const Header = ({ cartCount, onCartClick }) => {
                         </div>
 
                         <button
-                            className="mobile-menu-btn"
+                            className={`mobile-menu-btn ${isMobileMenuOpen ? 'open' : ''}`}
                             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                         >
                             <span></span>

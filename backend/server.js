@@ -17,6 +17,7 @@ connectDB();
 const auth = require('./routes/auth.routes');
 const packages = require('./routes/package.routes');
 const orders = require('./routes/order.routes');
+const admin = require('./routes/admin.routes');
 
 const app = express();
 
@@ -38,6 +39,7 @@ app.use(cors());
 app.use('/api/auth', auth);
 app.use('/api/packages', packages);
 app.use('/api/orders', orders);
+app.use('/api/admin', admin);
 app.use('/api/payment', require('./routes/payment.routes'));
 
 // Health check route
